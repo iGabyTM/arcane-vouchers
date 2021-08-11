@@ -1,0 +1,35 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
+}
+
+group 'me.gabytm.minecraft'
+version '2.0.0'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+
+    maven {
+        name 'Spigot'
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
+
+    implementation 'me.gabytm.util:actions-spigot:1.0.0-SNAPSHOT'
+    implementation 'me.gabytm.util:actions-core:1.0.0-SNAPSHOT'
+
+    compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
+}
+
+processResources {
+    eachFile { expand version: version }
+}
