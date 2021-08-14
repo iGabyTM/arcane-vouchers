@@ -9,5 +9,6 @@ author: GabyTM
 website: https://gabytm.me/
 
 softdepend:
+  - NBTAPI
   - PlaceholderAPI
   - Vault

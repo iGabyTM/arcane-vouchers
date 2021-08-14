@@ -24,6 +24,15 @@ repositories {
     maven {
         url 'https://repo.codemc.org/repository/maven-public/'
     }
+
+    maven {
+        url 'https://repo.mattstudios.me/artifactory/public/'
+    }
+
+    maven {
+        name 'HeadDatabase-API'
+        url 'https://mvn.intellectualsites.com/content/groups/public/'
+    }
 }
 
 dependencies {
@@ -32,9 +41,16 @@ dependencies {
     compileOnly 'me.gabytm.util:actions-core:1.0.0-SNAPSHOT'
     implementation('me.gabytm.util:actions-spigot:1.0.0-SNAPSHOT') { exclude group: 'com.google.guava' }
 
-    compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
+    compileOnly('com.github.MilkBowl:VaultAPI:1.7') { transitive false }
 
     compileOnly 'de.tr7zw:item-nbt-api-plugin:2.8.0'
+
+    implementation 'net.kyori:adventure-api:4.8.1'
+    implementation 'net.kyori:adventure-platform-bukkit:4.0.0-SNAPSHOT'
+    implementation 'net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT'
+
+    implementation 'dev.triumphteam:triumph-gui:3.0.3'
+    compileOnly 'me.arcaniax:HeadDatabase-API:1.2.0'
 }
 
 processResources {
@@ -46,6 +62,8 @@ shadowJar {
 
     [
             'me.gabytm.util.actions': 'actions',
+            'dev.triumphteam.gui'   : 'gui',
+            'net.kyori.adventure'   : 'adventure',
             'kotlin'                : 'kt'
     ].each { relocate(it.key, project.group + '.arcanevouchers.libs.' + it.value) }
 }
