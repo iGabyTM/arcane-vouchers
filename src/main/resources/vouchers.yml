@@ -1,0 +1,59 @@
+vouchers:
+  all:
+    item:
+      #
+      # Required
+      material: Material
+      #
+      # Optional
+      damage: byte # 0b
+      glow: boolean # false
+      name: String # empty
+      lore: List<String> # empty
+      customModelData: int # 0
+      skull: String (player name | base64 | hdb id) # empty
+      color: String 'red,gree,blue' # none
+      enchantments: List<String> 'Enchantment;level' # empty
+      flags: List<ItemFlag> # empty
+      unbreakable: boolean # false
+      banner:
+        patterns: List<String> 'PatternType;DyeColor' # empty
+    settings:
+      # Whether multiple vouchers can be opened at a time
+      bulkOpen: boolean # false
+      # Different messages for a certain vouchers
+      messages:
+        receive: String 'MessageType;message' # empty
+        redeem: String 'MessageType;message' # empty
+      # Whether the confirmation GUI is enabled
+      confirmation:
+        enabled: boolean # false
+      # How many copies of this voucher can be redeemed
+      limit:
+        enabled: boolean # false
+        type: LimitType # PERSONAL
+        limit: int # 0
+        message: String 'MessageType;message' # empty
+      # Permissions
+      permissions:
+        # The player must have any of these permissions to use the voucher
+        whitelist:
+          list: List<String> # empty
+          message: String 'MessageType;message' # empty
+        # If the player has any of these permissions they can't use the voucher
+        blacklist:
+          list: List<String> # empty
+          message: String 'MessageType;message' # empty
+      worlds:
+        # The player must be in one of these worlds to use the voucher
+        whitelist:
+          list: List<String> # empty
+          message: String 'MessageType;message' # empty
+        # If the player is in any of these worlds they can't use the voucher
+        blacklist:
+          list: List<String> # empty
+          message: String 'MessageType;message' # empty
+      # Whether only the receiver can use this voucher
+      bindToReceiver:
+        enabled: boolean # false
+        message: String 'MessageType;message' # empty
