@@ -5,6 +5,7 @@ import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.Consol
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.PlayerCommandAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.MessageAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.AddMoneyAction
+import me.gabytm.minecraft.arcanevouchers.actions.placeholders.PlayerNamePlaceholderProvider
 import me.gabytm.minecraft.arcanevouchers.permission.PermissionHandler
 import me.gabytm.util.actions.actions.Action
 import me.gabytm.util.actions.actions.implementations.DataAction
@@ -83,6 +84,9 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         if (setupEconomy()) {
             register("addmoney") { AddMoneyAction(it, handler, economy) }
         }
+
+        // '%player_name' is the only placeholder replaced in case PlaceholderAPI is not installed
+        placeholderManager.register(PlayerNamePlaceholderProvider())
     }
 
     private fun register(id: String, supplier: Action.Supplier<Player>) {
@@ -97,6 +101,14 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         val rsp = Bukkit.getServicesManager().getRegistration(Economy::class.java) ?: return false
         this.economy = rsp.provider
         return true
+    }
+
+    fun parseActions(actions: Collection<String>): List<ArcaneAction> {
+        return parse(Player::class.java, actions).map { it as ArcaneAction }
+    }
+
+    fun executeActions(player: Player, actions: List<ArcaneAction>, args: Map<String, String>) {
+        run(player, actions, true, args)
     }
 
 }
