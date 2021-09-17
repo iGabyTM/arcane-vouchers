@@ -3,14 +3,16 @@ package me.gabytm.minecraft.arcanevouchers.limit
 enum class LimitType {
 
     GLOBAL,
-    PERSONAL;
+    PERSONAL,
+    NONE;
 
     companion object {
 
         fun getLimit(string: String): LimitType {
             return when (string.uppercase()) {
                 "GLOBAL" -> GLOBAL
-                else -> PERSONAL
+                "PERSONAL" -> PERSONAL
+                else -> NONE
             }
         }
 
