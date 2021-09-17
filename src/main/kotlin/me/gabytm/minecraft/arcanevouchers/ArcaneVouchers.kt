@@ -3,6 +3,7 @@ package me.gabytm.minecraft.arcanevouchers
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.arcanevouchers.config.Config
 import me.gabytm.minecraft.arcanevouchers.functions.color
+import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
 import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
@@ -16,6 +17,7 @@ class ArcaneVouchers : JavaPlugin() {
     lateinit var vouchersConfig: Config private set
 
     lateinit var actionManager: ArcaneActionManager private set
+    lateinit var itemCreator: ItemCreator private set
     lateinit var voucherManager: VoucherManager private set
 
     private fun sendLogo() {
@@ -47,7 +49,15 @@ class ArcaneVouchers : JavaPlugin() {
         this.vouchersConfig = Config(this, "vouchers.yml")
 
         this.actionManager = ArcaneActionManager(this)
+        this.itemCreator = ItemCreator(this)
         this.voucherManager = VoucherManager(this)
+    }
+
+    fun reload() {
+        reloadConfig()
+        this.vouchersConfig.reload()
+        this.itemCreator.loadNbt()
+        this.voucherManager.loadVouchers()
     }
 
 }
