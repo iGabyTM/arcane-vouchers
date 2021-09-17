@@ -6,7 +6,7 @@ vouchers:
       material: Material
       #
       # Optional
-      damage: byte # 0b
+      damage: short # 0
       glow: boolean # false
       name: String # empty
       lore: List<String> # empty
@@ -57,3 +57,9 @@ vouchers:
       bindToReceiver:
         enabled: boolean # false
         message: String 'MessageType;message' # empty
+  #
+  # This voucher will have as display item a red leather chestplate, check vouchers-nbt.json
+  #
+  nbtExample:
+    item:
+      material: LEATHER_CHESTPLATE
