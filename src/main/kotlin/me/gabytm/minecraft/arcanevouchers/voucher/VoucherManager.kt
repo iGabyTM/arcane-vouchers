@@ -28,8 +28,10 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         plugin.logger.info("Loaded ${this.loadedVouchers.size} voucher(s): ${this.loadedVouchers.keys.joinToString(", ")}")
     }
 
+    fun getVoucher(id: String): Voucher? = this.loadedVouchers[id]
+
     fun giveVoucher(player: Player, id: String, amount: Int = 1, args: Array<String>) {
-        val voucher = this.loadedVouchers[id] ?: return
+        val voucher = this.getVoucher(id) ?: return
 
         val argsMap = args.toArgsMap()
         val nbt = NBTItem(voucher.item.clone())

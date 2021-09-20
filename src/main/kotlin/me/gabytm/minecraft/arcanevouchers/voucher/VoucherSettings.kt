@@ -1,7 +1,9 @@
 package me.gabytm.minecraft.arcanevouchers.voucher
 
+import me.gabytm.minecraft.arcanevouchers.functions.replace
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
 import me.gabytm.minecraft.arcanevouchers.message.Message
+import org.bukkit.World
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import kotlin.math.max
@@ -40,12 +42,20 @@ class VoucherSettings(
         val blacklistedMessage: Message = Message.NONE
     ) {
 
-        fun isWhitelisted(player: Player): Boolean {
-            return whitelistPermissions.isEmpty() || whitelistPermissions.any { player.hasPermission(it) }
+        fun isWhitelisted(player: Player, placeholders: Array<String>, values: Array<String>): Boolean {
+            if (this.whitelistPermissions.isEmpty()) {
+                return true
+            }
+
+            return this.whitelistPermissions.any { player.hasPermission(it.replace(placeholders, values)) }
         }
 
-        fun isBlacklisted(player: Player): Boolean {
-            return blacklistPermissions.any { player.hasPermission(it) }
+        fun isBlacklisted(player: Player, placeholders: Array<String>, values: Array<String>): Boolean {
+            if (this.blacklistPermissions.isEmpty()) {
+                return false
+            }
+
+            return this.blacklistPermissions.any { player.hasPermission(it.replace(placeholders, values)) }
         }
 
     }
@@ -57,12 +67,20 @@ class VoucherSettings(
         val blacklistedMessage: Message = Message.NONE
     ) {
 
-        fun isWhitelisted(player: Player): Boolean {
-            return whitelistedWorlds.isEmpty() || whitelistedWorlds.any { player.world.name == it }
+        fun isWhitelisted(world: World, placeholders: Array<String>, values: Array<String>): Boolean {
+            if (this.whitelistedWorlds.isEmpty()) {
+                return true
+            }
+
+            return this.whitelistedWorlds.any { world.name == it.replace(placeholders, values) }
         }
 
-        fun isBlacklisted(player: Player): Boolean {
-            return blacklistWorlds.any { player.world.name == it }
+        fun isBlacklisted(world: World, placeholders: Array<String>, values: Array<String>): Boolean {
+            if (this.blacklistWorlds.isEmpty()) {
+                return false
+            }
+
+            return this.blacklistWorlds.any { world.name == it.replace(placeholders, values) }
         }
 
     }
