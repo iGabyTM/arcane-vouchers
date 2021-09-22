@@ -2,8 +2,10 @@ package me.gabytm.minecraft.arcanevouchers.voucher
 
 import de.tr7zw.nbtapi.NBTItem
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
-import me.gabytm.minecraft.arcanevouchers.Constant.Nbt
+import me.gabytm.minecraft.arcanevouchers.Constant.NBT
+import me.gabytm.minecraft.arcanevouchers.functions.add
 import me.gabytm.minecraft.arcanevouchers.functions.toArgsMap
+import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -11,6 +13,8 @@ import org.bukkit.entity.Player
 class VoucherManager(private val plugin: ArcaneVouchers) {
 
     private val loadedVouchers = mutableMapOf<String, Voucher>()
+
+    val limitManager = LimitManager(plugin)
 
     fun loadVouchers() {
         loadedVouchers.clear()
@@ -37,11 +41,11 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         val nbt = NBTItem(voucher.item.clone())
 
         // Set the arguments and player's name inside the item
-        val compound = nbt.getCompound(Nbt.VOUCHER_COMPOUND)
-        val argumentsCompound = compound.getCompound(Nbt.ARGUMENTS_COMPOUND)
+        val compound = nbt.getCompound(NBT.VOUCHER_COMPOUND)
+        val argumentsCompound = compound.getCompound(NBT.ARGUMENTS_COMPOUND)
 
         argsMap.entries.forEach { (key, value) -> argumentsCompound.setString(key, value) }
-        compound.setString(Nbt.RECEIVER_NAME, player.name)
+        compound.setString(NBT.RECEIVER_NAME, player.name)
         // -----
 
         val item = nbt.item
@@ -70,7 +74,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         // Send the message to the player and also add the {amount} placeholder
         voucher.settings.messages.receiveMessage.send(
             plugin.audiences.player(player),
-            argsMap.also { it["{amount}"] = amount.toString() }
+            argsMap.add("{amount}", amount.toString())
         )
     }
 

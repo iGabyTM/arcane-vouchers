@@ -30,8 +30,8 @@ class VoucherSettings(
 
     data class Limit(
         val enabled: Boolean = false,
-        val type: LimitType = LimitType.PERSONAL,
-        val limit: Int = 0,
+        val type: LimitType = LimitType.NONE,
+        val limit: Long = 0L,
         val message: Message = Message.NONE
     )
 
@@ -112,7 +112,7 @@ class VoucherSettings(
             val limit = Limit(
                 config.getBoolean("limit.enabled"),
                 LimitType.getLimit(config.getString("limit.type") ?: ""),
-                config.getInt("limit.limit"),
+                config.getLong("limit.limit"),
                 Message.create(config.getString("limit.message") ?: "")
             )
 
