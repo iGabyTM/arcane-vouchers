@@ -50,6 +50,7 @@ dependencies {
     implementation 'net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT'
 
     implementation 'dev.triumphteam:triumph-gui:3.0.3'
+    implementation 'me.mattstudios.utils:matt-framework:1.4.6'
     compileOnly 'me.arcaniax:HeadDatabase-API:1.2.0'
 }
 
@@ -64,6 +65,12 @@ shadowJar {
             'me.gabytm.util.actions': 'actions',
             'dev.triumphteam.gui'   : 'gui',
             'net.kyori.adventure'   : 'adventure',
+            'me.mattstudios.mf'     : 'commands',
             'kotlin'                : 'kt'
     ].each { relocate(it.key, project.group + '.arcanevouchers.libs.' + it.value) }
+}
+
+task copyToServer(type: Copy) {
+    from shadowJar
+    into './server/plugins'
 }

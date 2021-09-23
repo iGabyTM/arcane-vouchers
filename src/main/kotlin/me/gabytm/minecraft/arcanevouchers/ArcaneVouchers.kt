@@ -1,9 +1,11 @@
 package me.gabytm.minecraft.arcanevouchers
 
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
+import me.gabytm.minecraft.arcanevouchers.commands.CommandManager
 import me.gabytm.minecraft.arcanevouchers.config.Config
 import me.gabytm.minecraft.arcanevouchers.functions.color
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
+import me.gabytm.minecraft.arcanevouchers.listeners.VoucherUseListener
 import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
@@ -43,7 +45,8 @@ class ArcaneVouchers : JavaPlugin() {
             return
         }
 
-        saveDefaultConfig()
+        // saveDefaultConfig()
+        saveResource("vouchers-nbt.json", false)
 
         this.audiences = BukkitAudiences.create(this)
         this.vouchersConfig = Config(this, "vouchers.yml")
@@ -51,10 +54,16 @@ class ArcaneVouchers : JavaPlugin() {
         this.actionManager = ArcaneActionManager(this)
         this.itemCreator = ItemCreator(this)
         this.voucherManager = VoucherManager(this)
+
+        CommandManager(this) // register the commands
+
+        sequenceOf(
+            VoucherUseListener(this)
+        ).forEach { server.pluginManager.registerEvents(it, this) }
     }
 
     fun reload() {
-        reloadConfig()
+        // reloadConfig()
         this.vouchersConfig.reload()
         this.itemCreator.loadNbt()
         this.voucherManager.loadVouchers()

@@ -52,11 +52,13 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
 
         val audience = audiences.player(this.player)
 
+        val bindToReceiver = settings.bindToReceiver
+
         // Bind to receiver is enabled
-        if (settings.bindToReceiver.enabled) {
+        if (bindToReceiver.enabled) {
             // If the receiver name is null it means that this voucher was crated before v2.0.0
             if (receiverName != null && receiverName != this.player.name) {
-                settings.bindToReceiver.message.send(audience, args.add("{player}", receiverName))
+                bindToReceiver.message.send(audience, args.add("{player}", receiverName))
                 return
             }
         }
@@ -75,28 +77,31 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
         }
 
         val world = this.player.world
+        val worlds = settings.worlds
 
         // Player's world is blacklisted
-        if (settings.worlds.isBlacklisted(world, placeholders, values)) {
-            settings.worlds.blacklistedMessage.send(audience, args.add("{world}", world.name))
+        if (worlds.isBlacklisted(world, placeholders, values)) {
+            worlds.blacklistedMessage.send(audience, args.add("{world}", world.name))
             return
         }
 
         // Player's world is not whitelisted
-        if (!settings.worlds.isWhitelisted(world, placeholders, values)) {
-            settings.worlds.notWhitelistedMessage.send(audience, args.add("{world}", world.name))
+        if (!worlds.isWhitelisted(world, placeholders, values)) {
+            worlds.notWhitelistedMessage.send(audience, args.add("{world}", world.name))
             return
         }
 
+        val permissions = settings.permissions
+
         // The player is blacklisted by permission
-        if (settings.permissions.isBlacklisted(this.player, placeholders, values)) {
-            settings.permissions.blacklistedMessage.send(audience, args)
+        if (permissions.isBlacklisted(this.player, placeholders, values)) {
+            permissions.blacklistedMessage.send(audience, args)
             return
         }
 
         // The player is not whitelisted
-        if (!settings.permissions.isWhitelisted(this.player, placeholders, values)) {
-            settings.permissions.notWhitelistedMessage.send(audience, args)
+        if (!permissions.isWhitelisted(this.player, placeholders, values)) {
+            permissions.notWhitelistedMessage.send(audience, args)
             return
         }
     }

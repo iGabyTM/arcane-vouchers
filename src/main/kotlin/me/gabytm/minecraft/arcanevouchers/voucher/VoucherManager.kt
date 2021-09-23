@@ -9,6 +9,7 @@ import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import java.lang.IllegalArgumentException
 
 class VoucherManager(private val plugin: ArcaneVouchers) {
 
@@ -34,9 +35,12 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
 
     fun getVoucher(id: String): Voucher? = this.loadedVouchers[id]
 
-    fun giveVoucher(player: Player, id: String, amount: Int = 1, args: Array<String>) {
-        val voucher = this.getVoucher(id) ?: return
+    fun giveVoucher(player: Player, id: String, amount: Int, args: Array<String>) {
+        val voucher = this.getVoucher(id) ?: throw IllegalArgumentException("Unknown voucher $id")
+        this.giveVoucher(player, voucher, amount, args)
+    }
 
+    fun giveVoucher(player: Player, voucher: Voucher, amount: Int, args: Array<String>) {
         val argsMap = args.toArgsMap()
         val nbt = NBTItem(voucher.item.clone())
 
