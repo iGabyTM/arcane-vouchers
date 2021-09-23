@@ -8,7 +8,9 @@ api-version: 1.13
 author: GabyTM
 website: https://gabytm.me/
 
-softdepend:
+depend:
   - NBTAPI
+
+softdepend:
   - PlaceholderAPI
   - Vault
