@@ -1,4 +1,4 @@
-package me.gabytm.minecraft.arcanevouchers.permission
+package me.gabytm.minecraft.arcanevouchers.actions.permission
 
 import net.milkbowl.vault.permission.Permission
 import org.bukkit.Bukkit

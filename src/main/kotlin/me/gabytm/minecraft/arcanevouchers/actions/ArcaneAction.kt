@@ -1,7 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.actions
 
-import me.gabytm.minecraft.arcanevouchers.permission.PermissionHandler
-import me.gabytm.minecraft.arcanevouchers.permission.PermissionMode
+import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
+import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionMode
 import me.gabytm.util.actions.actions.Action
 import me.gabytm.util.actions.actions.ActionMeta
 import org.bukkit.entity.Player

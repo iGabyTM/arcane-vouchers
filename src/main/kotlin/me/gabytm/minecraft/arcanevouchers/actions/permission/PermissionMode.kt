@@ -1,4 +1,4 @@
-package me.gabytm.minecraft.arcanevouchers.permission
+package me.gabytm.minecraft.arcanevouchers.actions.permission
 
 import org.bukkit.entity.Player
 import java.util.*

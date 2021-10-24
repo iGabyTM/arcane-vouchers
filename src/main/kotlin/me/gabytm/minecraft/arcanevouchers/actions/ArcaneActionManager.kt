@@ -6,9 +6,8 @@ import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.Player
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.MessageAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.AddMoneyAction
 import me.gabytm.minecraft.arcanevouchers.actions.placeholders.PlayerNamePlaceholderProvider
-import me.gabytm.minecraft.arcanevouchers.permission.PermissionHandler
+import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.util.actions.actions.Action
-import me.gabytm.util.actions.actions.implementations.DataAction
 import me.gabytm.util.actions.spigot.actions.SpigotActionManager
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
