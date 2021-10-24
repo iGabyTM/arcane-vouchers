@@ -19,10 +19,9 @@ class MessageAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arca
                 Bukkit.broadcastMessage(message)
             } else {
                 Bukkit.getOnlinePlayers()
-                    .filter { it.world == player.world }
+                    .filter { it.world.uid == player.world.uid }
                     .forEach { it.sendMessage(message) }
             }
-
         }
     }
 
