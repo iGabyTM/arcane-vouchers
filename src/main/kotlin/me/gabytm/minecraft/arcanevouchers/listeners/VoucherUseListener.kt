@@ -4,16 +4,23 @@ import de.tr7zw.nbtapi.NBTCompound
 import de.tr7zw.nbtapi.NBTItem
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant.NBT
+import me.gabytm.minecraft.arcanevouchers.ServerVersion
+import me.gabytm.minecraft.arcanevouchers.functions.add
 import me.gabytm.minecraft.arcanevouchers.functions.component1
 import me.gabytm.minecraft.arcanevouchers.functions.component2
-import me.gabytm.minecraft.arcanevouchers.functions.add
+import me.gabytm.minecraft.arcanevouchers.functions.item
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
+import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.EquipmentSlot
+import java.util.*
 
 class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
 
+    private val useActions = EnumSet.of(Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK)
     private val voucherManager = plugin.voucherManager
     private val limitManager = voucherManager.limitManager
     private val audiences = plugin.audiences
@@ -24,7 +31,19 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
 
     @EventHandler
     fun PlayerInteractEvent.onEvent() {
-        val item = this.item ?: return
+        if (!useActions.contains(this.action)) {
+            return
+        }
+
+        if (ServerVersion.HAS_OFF_HAND && this.hand != EquipmentSlot.HAND) {
+            return
+        }
+
+        val item = this.player.item()
+
+        if (item.type == Material.AIR) {
+            return
+        }
 
         // If the item doesn't have item meta therefore can't be a voucher
         if (!item.hasItemMeta()) {
@@ -42,6 +61,14 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
         val voucherId = compound.getString(NBT.VOUCHER_NAME)
         val voucher = voucherManager.getVoucher(voucherId) ?: return // it was probably removed from config
         val settings = voucher.settings
+
+        // TODO: 12/6/2021 finish API
+/*        val event = VoucherRedeemEvent(this.player, voucher)
+        Bukkit.getPluginManager().callEvent(event)
+
+        if (event.isCancelled) {
+            return
+        }*/
 
         this.isCancelled = true
 
@@ -104,6 +131,8 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             permissions.notWhitelistedMessage.send(audience, args)
             return
         }
+
+        voucher.redeem(player, item, plugin, settings.bulkOpen.enabled && player.isSneaking)
     }
 
 }
