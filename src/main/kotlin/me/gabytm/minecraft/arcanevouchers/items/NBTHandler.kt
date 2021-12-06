@@ -42,7 +42,7 @@ class NBTHandler(plugin: ArcaneVouchers) {
      * @return NBT string if found otherwise `null`
      */
     fun getNbt(id: String): String? {
-        return this.json.get(id)?.asString
+        return this.json.get(id)?.toString()
     }
 
 }
