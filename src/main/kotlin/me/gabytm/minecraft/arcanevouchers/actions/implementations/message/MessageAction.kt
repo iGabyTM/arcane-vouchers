@@ -1,8 +1,8 @@
 package me.gabytm.minecraft.arcanevouchers.actions.implementations.message
 
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
-import me.gabytm.minecraft.arcanevouchers.functions.color
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
+import me.gabytm.minecraft.arcanevouchers.functions.color
 import me.gabytm.util.actions.actions.ActionMeta
 import me.gabytm.util.actions.actions.Context
 import org.bukkit.Bukkit
@@ -13,7 +13,10 @@ class MessageAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arca
     override fun run(player: Player, context: Context<Player>) {
         execute(player) {
             val message = meta.getParsedData(player, context).color(true)
-            val broadcast = meta.properties["broadcast"] ?: kotlin.run { player.sendMessage(message) }
+            val broadcast = meta.properties["broadcast"] ?: kotlin.run {
+                player.sendMessage(message)
+                return@execute
+            }
 
             if (broadcast == "*") {
                 Bukkit.broadcastMessage(message)
