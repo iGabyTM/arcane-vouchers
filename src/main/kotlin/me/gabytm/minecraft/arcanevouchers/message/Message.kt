@@ -5,7 +5,7 @@ import net.kyori.adventure.audience.Audience
 
 abstract class Message(protected val string: String) {
 
-    abstract fun send(player: Audience, args: Map<String, String>)
+    abstract fun send(player: Audience, args: Map<String, String> = emptyMap())
 
     companion object {
 
