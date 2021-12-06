@@ -5,64 +5,14 @@ import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.Consol
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.PlayerCommandAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.MessageAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.AddMoneyAction
-import me.gabytm.minecraft.arcanevouchers.actions.placeholders.PlayerNamePlaceholderProvider
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
+import me.gabytm.minecraft.arcanevouchers.actions.placeholders.PlayerNamePlaceholderProvider
 import me.gabytm.util.actions.actions.Action
 import me.gabytm.util.actions.spigot.actions.SpigotActionManager
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-/*
-class ArcaneActionManager(
-    private val plugin: ArcaneVouchers
-) : ActionManager(SpigotTaskProcessor(plugin), 100.0) {
-
-    private val handler = PermissionHandler()
-
-    init {
-        register(Player::class.java, "data") { DataAction(it) }
-        register(Player::class.java, "console") { ConsoleCommandAction(it, handler) }
-        register(Player::class.java, "player") { PlayerCommandAction(it, handler) }
-    }
-
-    fun run(
-        player: Player,
-        actions: List<ArcaneAction>,
-        async: Boolean,
-        data: MutableMap<String, Any> = mutableMapOf()
-    ) {
-        val context = Context(actions, data)
-
-        for (action in context) {
-            val meta = action.meta
-
-            if (meta.hasChance() && random.nextDouble(0.0, maxChance) > meta.chance) {
-                continue
-            }
-
-            //action as ArcaneAction
-            val task = { action.run(player, context) }
-
-            if (meta.hasDelay()) {
-                if (async) {
-                    taskProcessor.runAsync(task, meta.delay)
-                } else {
-                    taskProcessor.runSync(task, meta.delay)
-                }
-
-                continue
-            }
-
-            if (async) {
-                taskProcessor.runAsync(task)
-            } else {
-                taskProcessor.runSync(task)
-            }
-        }
-    }
-
-}*/
 class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) {
 
     private val handler = PermissionHandler()
@@ -106,8 +56,10 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         return parse(Player::class.java, actions).map { it as ArcaneAction }
     }
 
-    fun executeActions(player: Player, actions: List<ArcaneAction>, args: Map<String, String>) {
-        run(player, actions, true, args)
+    fun executeActions(player: Player, actions: List<ArcaneAction>, args: Map<String, String> = mutableMapOf()) {
+        // TODO: 12/6/2021 find a way to run actions async
+        //  run sync by default and then async those that can be run async?
+        run(player, actions, false, args)
     }
 
 }
