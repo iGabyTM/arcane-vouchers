@@ -10,11 +10,13 @@ object ServerVersion {
 
     private val VERSION = getCurrentVersion()
 
-    private const val V_1_8 = 180
-    private const val V_1_13 = 1130
+    private const val V_1_8 = 1_8_0
+    private const val V_1_9 = 1_9_0
+    private const val V_1_13 = 1_13_0
 
     val IS_VERY_OLD = VERSION.toString().startsWith("17")
     val IS_ANCIENT = VERSION <= V_1_8
+    val HAS_OFF_HAND = VERSION >= V_1_9
     val IS_LEGACY = VERSION < V_1_13
 
     /**
