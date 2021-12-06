@@ -55,6 +55,7 @@ class ArcaneVouchers : JavaPlugin() {
         this.itemCreator = ItemCreator(this)
         this.voucherManager = VoucherManager(this)
 
+        reload()
         CommandManager(this) // register the commands
 
         sequenceOf(
