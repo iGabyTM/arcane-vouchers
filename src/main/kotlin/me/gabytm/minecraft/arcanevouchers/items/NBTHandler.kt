@@ -20,7 +20,7 @@ class NBTHandler(plugin: ArcaneVouchers) {
             try {
                 Files.createFile(this.jsonFilePath)
             } catch (e: IOException) {
-                plugin.logger.error("Could not create $jsonFilePath", e)
+                error("Could not create $jsonFilePath", e)
             }
         }
 

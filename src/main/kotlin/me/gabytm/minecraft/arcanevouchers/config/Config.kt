@@ -1,12 +1,12 @@
 package me.gabytm.minecraft.arcanevouchers.config
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
+import me.gabytm.minecraft.arcanevouchers.functions.error
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
-import java.util.logging.Level
 
 class Config(plugin: ArcaneVouchers, path: String, isResource: Boolean = true) {
 
@@ -22,7 +22,7 @@ class Config(plugin: ArcaneVouchers, path: String, isResource: Boolean = true) {
                 try {
                     file.createNewFile()
                 } catch (e: IOException) {
-                    plugin.logger.log(Level.SEVERE, "Could not create ${file.path}", e)
+                    error("Could not create ${file.path}", e)
                 }
             }
         }

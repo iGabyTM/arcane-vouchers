@@ -4,12 +4,13 @@ import de.tr7zw.nbtapi.NBTItem
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant.NBT
 import me.gabytm.minecraft.arcanevouchers.functions.add
+import me.gabytm.minecraft.arcanevouchers.functions.info
 import me.gabytm.minecraft.arcanevouchers.functions.toArgsMap
+import me.gabytm.minecraft.arcanevouchers.functions.warning
 import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.lang.IllegalArgumentException
 
 class VoucherManager(private val plugin: ArcaneVouchers) {
 
@@ -21,7 +22,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         loadedVouchers.clear()
 
         val vouchersSection = plugin.vouchersConfig.getSection("vouchers") ?: kotlin.run {
-            plugin.logger.warning("Could not find the 'vouchers' section")
+            warning("Could not find the 'vouchers' section")
             return
         }
 
@@ -30,7 +31,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
             this.loadedVouchers[it] = Voucher.from(section, plugin.actionManager, plugin.itemCreator)
         }
 
-        plugin.logger.info("Loaded ${this.loadedVouchers.size} voucher(s): ${this.loadedVouchers.keys.joinToString(", ")}")
+        info("Loaded ${this.loadedVouchers.size} voucher(s): ${this.loadedVouchers.keys.joinToString(", ")}")
     }
 
     fun getVoucher(id: String): Voucher? = this.loadedVouchers[id]

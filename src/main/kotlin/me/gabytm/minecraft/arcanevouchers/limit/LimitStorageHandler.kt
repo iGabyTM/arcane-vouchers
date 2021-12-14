@@ -29,7 +29,7 @@ class LimitStorageHandler(private val plugin: ArcaneVouchers) {
             try {
                 databaseFile.createNewFile()
             } catch (e: IOException) {
-                plugin.logger.error("Could not create ${databaseFile.path}", e)
+                error("Could not create ${databaseFile.path}", e)
                 return false
             }
         }
@@ -38,10 +38,10 @@ class LimitStorageHandler(private val plugin: ArcaneVouchers) {
             Class.forName("org.sqlite.JDBC")
             this.connection = DriverManager.getConnection("jdbc:sqlite:${databaseFile.path}")
         } catch (e: ClassNotFoundException) {
-            plugin.logger.error("Could not find class org.sqlite.JDBC", e)
+            error("Could not find class org.sqlite.JDBC", e)
             return false
         } catch (e: SQLException) {
-            plugin.logger.error("Could not establish database connection", e)
+            error("Could not establish database connection", e)
             return false
         }
 
@@ -54,7 +54,7 @@ class LimitStorageHandler(private val plugin: ArcaneVouchers) {
             Query.CREATE_GLOBAL_TABLE.prepare(connection).executeUpdate()
             Query.CREATE_PERSONAL_TABLE.prepare(connection).executeUpdate()
         } catch (e: SQLException) {
-            plugin.logger.error("Could not create tables", e)
+            error("Could not create tables", e)
         }
     }
 
@@ -72,7 +72,7 @@ class LimitStorageHandler(private val plugin: ArcaneVouchers) {
                 }
             }
         } catch (e: SQLException) {
-            plugin.logger.error("Could not load global limits", e)
+            error("Could not load global limits", e)
         }
 
         return limits
@@ -96,7 +96,7 @@ class LimitStorageHandler(private val plugin: ArcaneVouchers) {
                 }
             }
         } catch (e: SQLException) {
-            plugin.logger.error("Could not load personal limits", e)
+            error("Could not load personal limits", e)
         }
 
         return limits
@@ -114,7 +114,7 @@ class LimitStorageHandler(private val plugin: ArcaneVouchers) {
                 setLong(3, limit)
             }.executeUpdate()
         } catch (e: SQLException) {
-            plugin.logger.error("Could not update the global limit for voucher $voucher ($limit)", e)
+            error("Could not update the global limit for voucher $voucher ($limit)", e)
         }
     }
 
@@ -134,7 +134,7 @@ class LimitStorageHandler(private val plugin: ArcaneVouchers) {
                 setLong(5, limit)
             }.executeUpdate()
         } catch (e: SQLException) {
-            plugin.logger.error("Could not update $uuid's limit for voucher $voucher ($limit)", e)
+            error("Could not update $uuid's limit for voucher $voucher ($limit)", e)
         }
     }
 

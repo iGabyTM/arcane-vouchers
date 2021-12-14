@@ -1,8 +1,13 @@
 package me.gabytm.minecraft.arcanevouchers.functions
 
+import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
+import org.bukkit.plugin.java.JavaPlugin
 import java.util.logging.Level
-import java.util.logging.Logger
 
-fun Logger.error(message: String, exception: Throwable) {
-    log(Level.SEVERE, message, exception)
-}
+private val logger = JavaPlugin.getPlugin(ArcaneVouchers::class.java).logger
+
+fun error(message: String, exception: Throwable) = logger.log(Level.SEVERE, message, exception)
+
+fun info(message: String) = logger.info(message)
+
+fun warning(message: String) = logger.warning(message)
