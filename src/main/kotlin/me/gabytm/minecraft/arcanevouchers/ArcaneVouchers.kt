@@ -45,7 +45,7 @@ class ArcaneVouchers : JavaPlugin() {
             return
         }
 
-        // saveDefaultConfig()
+        saveDefaultConfig()
         saveResource("vouchers-nbt.json", false)
 
         this.audiences = BukkitAudiences.create(this)
@@ -64,7 +64,7 @@ class ArcaneVouchers : JavaPlugin() {
     }
 
     fun reload() {
-        // reloadConfig()
+        reloadConfig()
         this.vouchersConfig.reload()
         this.itemCreator.loadNbt()
         this.voucherManager.loadVouchers()
