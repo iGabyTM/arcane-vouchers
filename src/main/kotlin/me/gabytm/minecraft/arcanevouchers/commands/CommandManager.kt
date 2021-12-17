@@ -9,7 +9,7 @@ class CommandManager(plugin: ArcaneVouchers) {
         val manager = CommandManager(plugin, true)
 
         manager.register(
-            GiveCommand(plugin.voucherManager),
+            GiveCommand(plugin, plugin.voucherManager),
             ReloadCommand(plugin)
         )
     }
