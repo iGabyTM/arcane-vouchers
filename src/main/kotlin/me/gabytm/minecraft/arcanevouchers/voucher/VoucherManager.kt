@@ -34,6 +34,8 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         info("Loaded ${this.loadedVouchers.size} voucher(s): ${this.loadedVouchers.keys.joinToString(", ")}")
     }
 
+    fun getVoucherIds(): Set<String> = this.loadedVouchers.keys.toSet()
+
     fun getVoucher(id: String): Voucher? = this.loadedVouchers[id]
 
     fun giveVoucher(player: Player, id: String, amount: Int, args: Array<String>) {
