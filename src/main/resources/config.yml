@@ -1,0 +1,14 @@
+#
+# ArcaneVouchers v${version} by GabyTM (https://spigotmc.org/members/386419/ | https://mc-market.org/members/100752/)
+#
+# • Discord - https://gabytm.me/
+#
+
+settings:
+  #
+  # If enabled, people won't be able to craft items using vouchers
+  #
+  disabledCrafting: true
+  command: arcanevouchers
+  alias:
+    - av
