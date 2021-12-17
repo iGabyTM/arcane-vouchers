@@ -52,7 +52,7 @@ dependencies {
     compileOnly 'de.tr7zw:item-nbt-api-plugin:2.8.0'
 
     // Adventure
-    implementation 'net.kyori:adventure-api:4.9.2'
+    implementation 'net.kyori:adventure-api:4.9.3'
     implementation 'net.kyori:adventure-platform-bukkit:4.0.0'
     implementation 'net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT'
 
@@ -72,11 +72,12 @@ shadowJar {
     archiveName("ArcaneVouchers [${project.version}].jar")
 
     [
-            'me.gabytm.util.actions': 'actions',
-            'dev.triumphteam.gui'   : 'gui',
-            'net.kyori.adventure'   : 'adventure',
-            'me.mattstudios.mf'     : 'commands',
-            'kotlin'                : 'kt'
+            'org.codemc.worldguardwrapper': 'worldguardwrapper',
+            'me.gabytm.util.actions'      : 'actions',
+            'dev.triumphteam.gui'         : 'gui',
+            'net.kyori.adventure'         : 'adventure',
+            'me.mattstudios.mf'           : 'commands',
+            'kotlin'                      : 'kt'
     ].each { relocate(it.key, project.group + '.arcanevouchers.libs.' + it.value) }
 }
 
