@@ -1,13 +1,12 @@
 package me.gabytm.minecraft.arcanevouchers.compat.worldguard
 
-import com.sk89q.worldedit.bukkit.BukkitAdapter
-import com.sk89q.worldguard.WorldGuard
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin
 import org.bukkit.entity.Player
 
-class WorldGuard7Compat : WorldGuardCompat {
+class WorldGuard6Compat : WorldGuardCompat {
 
     private fun isInside(player: Player, regions: List<String>): Boolean {
-        return WorldGuard.getInstance().platform.regionContainer.createQuery().getApplicableRegions(BukkitAdapter.adapt(player.location))
+        return WorldGuardPlugin.inst().regionContainer.createQuery().getApplicableRegions(player.location)
             .any { regions.contains(it.id) }
     }
 
