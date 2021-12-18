@@ -121,15 +121,16 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
 
         if (compatHandler.hasWorldGuardSupport) {
             val regions = settings.regions
+            val worldGuardRegions = compatHandler.worldGuardCompat.getRegions(player.location)
 
             // The player is inside a blacklisted region
-            if (regions.isBlacklisted(player, compatHandler.worldGuardCompat, placeholders, values)) {
+            if (regions.isBlacklisted(worldGuardRegions, placeholders, values)) {
                 regions.blacklistedMessage.send(audience, args)
                 return
             }
 
             // The player is not inside a whitelisted region
-            if (!regions.isWhitelisted(player, compatHandler.worldGuardCompat, placeholders, values)) {
+            if (!regions.isWhitelisted(worldGuardRegions, placeholders, values)) {
                 regions.notWhitelistedMessage.send(audience, args)
                 return
             }
