@@ -1,5 +1,6 @@
 package me.gabytm.minecraft.arcanevouchers.voucher
 
+import me.gabytm.minecraft.arcanevouchers.compat.worldguard.WorldGuardCompat
 import me.gabytm.minecraft.arcanevouchers.functions.replace
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
 import me.gabytm.minecraft.arcanevouchers.message.Message
@@ -15,6 +16,7 @@ class VoucherSettings(
     val limit: Limit = Limit(),
     val permissions: Permissions = Permissions(),
     val worlds: Worlds = Worlds(),
+    val regions: Regions = Regions(),
     val bindToReceiver: BindToReceiver = BindToReceiver()
 ) {
 
@@ -85,6 +87,31 @@ class VoucherSettings(
 
     }
 
+    class Regions(
+        private val whitelistedRegions: List<String> = emptyList(),
+        val notWhitelistedMessage: Message = Message.NONE,
+        private val blacklistRegions: List<String> = emptyList(),
+        val blacklistedMessage: Message = Message.NONE
+    ) {
+
+        fun isWhitelisted(player: Player, worldGuardCompat: WorldGuardCompat, placeholders: Array<String>, values: Array<String>): Boolean {
+            if (this.whitelistedRegions.isEmpty()) {
+                return true
+            }
+
+            return worldGuardCompat.isWhitelisted(player, this.whitelistedRegions.map { it.replace(placeholders, values) })
+        }
+
+        fun isBlacklisted(player: Player, worldGuardCompat: WorldGuardCompat, placeholders: Array<String>, values: Array<String>): Boolean {
+            if (this.blacklistRegions.isEmpty()) {
+                return false
+            }
+
+            return worldGuardCompat.isBlacklisted(player, this.whitelistedRegions.map { it.replace(placeholders, values) })
+        }
+
+    }
+
     data class BindToReceiver(
         val enabled: Boolean = false,
         val message: Message = Message.NONE
@@ -130,12 +157,19 @@ class VoucherSettings(
                 Message.create(config.getString("worlds.blacklist.message") ?: "")
             )
 
+            val regions = Regions(
+                config.getStringList("regions.whitelist.list"),
+                Message.create(config.getString("regions.whitelist.message") ?: ""),
+                config.getStringList("regions.blacklist.list"),
+                Message.create(config.getString("regions.blacklist.message") ?: "")
+            )
+
             val bindToReceiver = BindToReceiver(
                 config.getBoolean("bindToReceiver.enabled"),
                 Message.create(config.getString("bindToReceiver.message") ?: "")
             )
 
-            return VoucherSettings(bulkOpen, messages, confirmationEnabled, limit, permissions, worlds, bindToReceiver)
+            return VoucherSettings(bulkOpen, messages, confirmationEnabled, limit, permissions, worlds, regions, bindToReceiver)
         }
 
     }

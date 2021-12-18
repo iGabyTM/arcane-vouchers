@@ -23,6 +23,7 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
     private val useActions = EnumSet.of(Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK)
     private val voucherManager = plugin.voucherManager
     private val limitManager = voucherManager.limitManager
+    private val compatHandler = plugin.compatHandler
     private val audiences = plugin.audiences
 
     private fun NBTCompound.getArgs(): MutableMap<String, String> {
@@ -116,6 +117,22 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
         if (!worlds.isWhitelisted(world, placeholders, values)) {
             worlds.notWhitelistedMessage.send(audience, args.add("{world}", world.name))
             return
+        }
+
+        if (compatHandler.hasWorldGuardSupport) {
+            val regions = settings.regions
+
+            // The player is inside a blacklisted region
+            if (regions.isBlacklisted(player, compatHandler.worldGuardCompat, placeholders, values)) {
+                regions.blacklistedMessage.send(audience, args)
+                return
+            }
+
+            // The player is not inside a whitelisted region
+            if (!regions.isWhitelisted(player, compatHandler.worldGuardCompat, placeholders, values)) {
+                regions.notWhitelistedMessage.send(audience, args)
+                return
+            }
         }
 
         val permissions = settings.permissions
