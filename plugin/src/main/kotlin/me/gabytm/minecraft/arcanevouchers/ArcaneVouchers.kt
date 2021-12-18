@@ -2,6 +2,10 @@ package me.gabytm.minecraft.arcanevouchers
 
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.arcanevouchers.commands.CommandManager
+import me.gabytm.minecraft.arcanevouchers.compat.CompatHandler
+import me.gabytm.minecraft.arcanevouchers.compat.worldguard.WorldGuard6Compat
+import me.gabytm.minecraft.arcanevouchers.compat.worldguard.WorldGuard7Compat
+import me.gabytm.minecraft.arcanevouchers.compat.worldguard.WorldGuardCompat
 import me.gabytm.minecraft.arcanevouchers.config.Config
 import me.gabytm.minecraft.arcanevouchers.functions.color
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
@@ -15,6 +19,7 @@ import java.util.regex.Pattern
 class ArcaneVouchers : JavaPlugin() {
 
     lateinit var audiences: BukkitAudiences private set
+    lateinit var compatHandler: CompatHandler private set
 
     lateinit var vouchersConfig: Config private set
 
@@ -49,6 +54,8 @@ class ArcaneVouchers : JavaPlugin() {
         saveResource("vouchers-nbt.json", false)
 
         this.audiences = BukkitAudiences.create(this)
+        this.compatHandler = CompatHandler(this)
+
         this.vouchersConfig = Config(this, "vouchers.yml")
 
         this.actionManager = ArcaneActionManager(this)

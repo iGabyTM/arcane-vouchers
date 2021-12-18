@@ -26,6 +26,7 @@ class Voucher private constructor(
 
         this.settings.messages.redeemMessage.send(plugin.audiences.player(player))
 
+        // TODO: 18-Dec-21 check settings.bulkOpen.limit
         if (isBulk) {
             if (limitManager.bypassLimit(player, this)) {
                 actionManager.executeActions(player, this.bulkActions, mutableMapOf("{amount}" to amount.toString()))
