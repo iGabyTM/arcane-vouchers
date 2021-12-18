@@ -14,11 +14,6 @@ repositories {
     maven {
         url 'https://repo.mattstudios.me/artifactory/public/'
     }
-
-    maven {
-        name 'HeadDatabase-API'
-        url 'https://mvn.intellectualsites.com/content/groups/public/'
-    }
 }
 
 dependencies {
@@ -44,18 +39,22 @@ dependencies {
 
     // Heads
     compileOnly('com.arcaniax:HeadDatabase-API:1.3.1') { transitive false }
+
+    // WorldGuard compatibility
+    implementation project(':worldguard_compat')
+    implementation project(':worldguard_compat_v6')
+    implementation project(':worldguard_compat_v7')
 }
 
 shadowJar {
     archiveName("ArcaneVouchers [${project.version}].jar")
 
     [
-            'org.codemc.worldguardwrapper': 'worldguardwrapper',
-            'me.gabytm.util.actions'      : 'actions',
-            'dev.triumphteam.gui'         : 'gui',
-            'net.kyori.adventure'         : 'adventure',
-            'me.mattstudios.mf'           : 'commands',
-            'kotlin'                      : 'kt'
+            'me.gabytm.util.actions': 'actions',
+            'dev.triumphteam.gui'   : 'gui',
+            'net.kyori.adventure'   : 'adventure',
+            'me.mattstudios.mf'     : 'commands',
+            'kotlin'                : 'kt'
     ].each { relocate(it.key, project.group + '.arcanevouchers.libs.' + it.value) }
 }
 
