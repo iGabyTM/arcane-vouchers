@@ -1,11 +1,9 @@
 package me.gabytm.minecraft.arcanevouchers.compat.worldguard
 
-import org.bukkit.entity.Player
+import org.bukkit.Location
 
 interface WorldGuardCompat {
 
-    fun isWhitelisted(player: Player, regions: List<String>): Boolean
-
-    fun isBlacklisted(player: Player, regions: List<String>): Boolean
+    fun getRegions(location: Location): Set<String>
 
 }
