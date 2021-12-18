@@ -1,4 +1,5 @@
 package me.gabytm.minecraft.arcanevouchers.voucher
+
 import me.gabytm.minecraft.arcanevouchers.functions.replace
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
 import me.gabytm.minecraft.arcanevouchers.message.Message
