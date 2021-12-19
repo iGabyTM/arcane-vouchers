@@ -19,61 +19,79 @@ class Voucher private constructor(
     val bulkActions: List<ArcaneAction>
 ) {
 
+    private fun redeem(player: Player, voucher: ItemStack, plugin: ArcaneVouchers, increaseLimit: Boolean, isBulk: Boolean, amount: Int) {
+        if (increaseLimit) {
+            plugin.voucherManager.limitManager.increaseLimit(player.uniqueId, this.id, amount)
+        }
+
+        if (isBulk) {
+            plugin.actionManager.executeActions(player, this.bulkActions, mutableMapOf("{amount}" to amount.toString()))
+        } else {
+            plugin.actionManager.executeActions(player, this.actions)
+        }
+
+        // Remove the item completely if it has the same amount as the amount of redeemed vouchers
+        if (voucher.amount == amount) {
+            voucher.type = Material.AIR
+        } else {
+            // Otherwise, subtract one
+            voucher.amount = voucher.amount - amount
+        }
+
+        this.settings.messages.redeemMessage.send(plugin.audiences.player(player), mapOf("{amount}" to amount.toString()))
+    }
+
     fun redeem(player: Player, voucher: ItemStack, plugin: ArcaneVouchers, isBulk: Boolean) {
         val limitManager = plugin.voucherManager.limitManager
-        val actionManager = plugin.actionManager
-        val amount = voucher.amount
+        val vouchers = voucher.amount
 
-        this.settings.messages.redeemMessage.send(plugin.audiences.player(player))
-
-        // TODO: 18-Dec-21 check settings.bulkOpen.limit
         if (isBulk) {
+            // The player bypasses the limit
             if (limitManager.bypassLimit(player, this)) {
-                actionManager.executeActions(player, this.bulkActions, mutableMapOf("{amount}" to amount.toString()))
-                voucher.type = Material.AIR
+                redeem(player, voucher, plugin, increaseLimit = false, isBulk = true, vouchers)
                 return
             }
 
+            // Get how many times the player has used this voucher
             val usages = limitManager.getUsages(player.uniqueId, this)
+            // Calculate the usages left
             val usagesLeft = (this.settings.limit.limit - usages).toInt()
 
-            if (usagesLeft >= amount) {
-                limitManager.increaseLimit(player.uniqueId, this.id, amount)
-                actionManager.executeActions(player, this.bulkActions, mutableMapOf("{amount}" to amount.toString()))
-                voucher.type = Material.AIR
+            // The player has more usages left than the amount of vouchers used now
+            if (usagesLeft >= vouchers) {
+                val bulkLimit = settings.bulkOpen.limit
+
+                // The bulkOpen limit is higher than the amount of vouchers used now
+                if (bulkLimit >= vouchers) {
+                    redeem(player, voucher, plugin, increaseLimit = true, isBulk = true, vouchers)
+                    return
+                }
+
+                // Redeem only 'bulkLimit' vouchers
+                redeem(player, voucher, plugin, true, isBulk = true, bulkLimit)
                 return
             }
 
-            limitManager.increaseLimit(player.uniqueId, this.id, usagesLeft)
-            actionManager.executeActions(player, this.bulkActions, mutableMapOf("{amount}" to usagesLeft.toString()))
-            item.amount = amount - usagesLeft
+            // Redeem only 'usagesLeft' vouchers
+            redeem(player, voucher, plugin, true, isBulk = true, usagesLeft)
             return
         }
 
+        // The player bypass the limit
         if (limitManager.bypassLimit(player, this)) {
-            actionManager.executeActions(player, this.actions)
-
-            if (amount == 1) {
-                item.type = Material.AIR
-            } else {
-                item.amount = amount - 1
-            }
+            redeem(player, voucher, plugin, false, isBulk = false, 1)
             return
         }
 
+        // Get how many times the player has used this voucher
         val usages = limitManager.getUsages(player.uniqueId, this)
+        // Calculate the usages left
         val usagesLeft = (this.settings.limit.limit - usages).toInt()
 
-        if (usagesLeft >= amount) {
-            limitManager.increaseLimit(player.uniqueId, this.id, amount)
-            actionManager.executeActions(player, this.actions)
-            item.type = Material.AIR
-            return
+        // The player can redeem more than 1 voucher
+        if (usagesLeft >= 1) {
+            redeem(player, voucher, plugin, true, isBulk = false, 1)
         }
-
-        limitManager.increaseLimit(player.uniqueId, this.id, usagesLeft)
-        actionManager.executeActions(player, this.actions)
-        item.amount = amount - usagesLeft
     }
 
     companion object {
