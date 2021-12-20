@@ -21,6 +21,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
     init {
         registerDefaults(Player::class.java)
+        componentParser.registerDefaults(Player::class.java)
 
         // Commands
         register("console") { ConsoleCommandAction(it, handler) }
