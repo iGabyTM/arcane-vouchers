@@ -1,6 +1,6 @@
 name: ArcaneVouchers
 version: ${version}
-main: ArcaneVouchers
+main: me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 description: The ultimate vouchers plugin
 
 api-version: 1.13
