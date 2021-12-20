@@ -84,7 +84,7 @@ enum class PermissionMode(val prefix: String) {
         fun getPermissionAndMode(permission: String): Pair<String, PermissionMode> {
             val prefix = permission.first().toString()
 
-            return when (val mode = VALUES.firstOrNull { prefix == it.prefix } ?: NONE) {
+            return when (val mode = VALUES.firstOrNull { prefix == it.prefix } ?: REQUIRE) {
                 NONE -> "" to mode
                 REQUIRE -> permission to mode
                 else -> permission.substring(1) to mode

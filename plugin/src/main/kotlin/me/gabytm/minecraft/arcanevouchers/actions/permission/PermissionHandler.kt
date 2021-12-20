@@ -27,11 +27,11 @@ class PermissionHandler {
     }
 
     fun add(player: Player, permission: String) {
-        this.permission.playerAdd(player, permission)
+        this.permission.playerAdd(null, player, permission)
     }
 
     fun remove(player: Player, permission: String) {
-        this.permission.playerRemove(player, permission)
+        this.permission.playerRemove(null, player, permission)
     }
 
 }
