@@ -25,7 +25,7 @@ class Voucher private constructor(
         }
 
         if (isBulk) {
-            plugin.actionManager.executeActions(player, this.bulkActions, mutableMapOf("{amount}" to amount.toString()))
+            plugin.actionManager.executeActions(player, this.bulkActions, mutableMapOf("%amount%" to amount.toString()))
         } else {
             plugin.actionManager.executeActions(player, this.actions)
         }
