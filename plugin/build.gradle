@@ -60,7 +60,7 @@ shadowJar {
 
 task copyToServer(type: Copy) {
     from shadowJar
-    into './server/plugins'
+    into '../server/plugins'
 }
 
 compileKotlin {
