@@ -14,7 +14,7 @@ abstract class ArcaneAction(meta: ActionMeta<Player>, private val handler: Permi
     init {
         val perm = meta.properties["permission"]
 
-        if (perm == null || !perm.contains('.')) {
+        if (perm == null) {
             this.permissionMode = PermissionMode.NONE
             this.permission = ""
         } else {
