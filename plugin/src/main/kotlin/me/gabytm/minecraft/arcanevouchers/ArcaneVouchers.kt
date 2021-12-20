@@ -6,6 +6,7 @@ import me.gabytm.minecraft.arcanevouchers.compat.CompatHandler
 import me.gabytm.minecraft.arcanevouchers.config.Config
 import me.gabytm.minecraft.arcanevouchers.functions.color
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
+import me.gabytm.minecraft.arcanevouchers.listeners.DisableActionsListener
 import me.gabytm.minecraft.arcanevouchers.listeners.VoucherUseListener
 import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
@@ -15,6 +16,8 @@ import java.nio.file.Files
 import java.util.regex.Pattern
 
 class ArcaneVouchers : JavaPlugin() {
+
+    lateinit var settings: Settings private set
 
     lateinit var audiences: BukkitAudiences private set
     lateinit var compatHandler: CompatHandler private set
@@ -49,6 +52,7 @@ class ArcaneVouchers : JavaPlugin() {
         }
 
         saveDefaultConfig()
+        this.settings = Settings(this.config)
 
         if (!Files.exists(dataFolder.toPath().resolve("vouchers-nbt.json"))) {
             saveResource("vouchers-nbt.json", false)
@@ -67,12 +71,14 @@ class ArcaneVouchers : JavaPlugin() {
         CommandManager(this) // register the commands
 
         sequenceOf(
+            DisableActionsListener(this),
             VoucherUseListener(this)
         ).forEach { server.pluginManager.registerEvents(it, this) }
     }
 
     fun reload() {
         reloadConfig()
+        this.settings.load(this.config)
         this.vouchersConfig.reload()
         this.itemCreator.loadNbt()
         this.voucherManager.loadVouchers()
