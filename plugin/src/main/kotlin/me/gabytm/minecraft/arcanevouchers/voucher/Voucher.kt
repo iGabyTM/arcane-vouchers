@@ -32,7 +32,7 @@ class Voucher private constructor(
 
         // Remove the item completely if it has the same amount as the amount of redeemed vouchers
         if (voucher.amount == amount) {
-            voucher.type = Material.AIR
+            voucher.amount = 0
         } else {
             // Otherwise, subtract one
             voucher.amount = voucher.amount - amount
