@@ -3,9 +3,6 @@ package me.gabytm.minecraft.arcanevouchers
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.arcanevouchers.commands.CommandManager
 import me.gabytm.minecraft.arcanevouchers.compat.CompatHandler
-import me.gabytm.minecraft.arcanevouchers.compat.worldguard.WorldGuard6Compat
-import me.gabytm.minecraft.arcanevouchers.compat.worldguard.WorldGuard7Compat
-import me.gabytm.minecraft.arcanevouchers.compat.worldguard.WorldGuardCompat
 import me.gabytm.minecraft.arcanevouchers.config.Config
 import me.gabytm.minecraft.arcanevouchers.functions.color
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
@@ -14,6 +11,7 @@ import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
+import java.nio.file.Files
 import java.util.regex.Pattern
 
 class ArcaneVouchers : JavaPlugin() {
@@ -51,7 +49,10 @@ class ArcaneVouchers : JavaPlugin() {
         }
 
         saveDefaultConfig()
-        saveResource("vouchers-nbt.json", false)
+
+        if (!Files.exists(dataFolder.toPath().resolve("vouchers-nbt.json"))) {
+            saveResource("vouchers-nbt.json", false)
+        }
 
         this.audiences = BukkitAudiences.create(this)
         this.compatHandler = CompatHandler(this)
