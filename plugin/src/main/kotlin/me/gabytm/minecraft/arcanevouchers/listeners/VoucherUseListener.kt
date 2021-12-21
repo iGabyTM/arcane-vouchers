@@ -10,6 +10,7 @@ import me.gabytm.minecraft.arcanevouchers.functions.component1
 import me.gabytm.minecraft.arcanevouchers.functions.component2
 import me.gabytm.minecraft.arcanevouchers.functions.item
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -76,17 +77,17 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
         val args = compound.getCompound(NBT.ARGUMENTS_COMPOUND).getArgs()
         val (placeholders, values) = args
 
-        val receiverName: String? = compound.getString(NBT.RECEIVER_NAME)
-
         val audience = audiences.player(this.player)
 
         val bindToReceiver = settings.bindToReceiver
 
         // Bind to receiver is enabled
         if (bindToReceiver.enabled) {
+            val receiverUuid: UUID? = compound.getUUID(NBT.RECEIVER_UUID)
+
             // If the receiver name is null it means that this voucher was crated before v2.0.0
-            if (receiverName != null && receiverName != this.player.name) {
-                bindToReceiver.message.send(audience, args.add("{player}", receiverName))
+            if (receiverUuid != null && receiverUuid != this.player.uniqueId) {
+                bindToReceiver.message.send(audience, args.add("{player}", Bukkit.getOfflinePlayer(receiverUuid).name ?: ""))
                 return
             }
         }

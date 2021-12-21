@@ -18,7 +18,7 @@ object Constant {
         const val ARGUMENTS_COMPOUND = "Arguments"
 
         // Receiver's name
-        const val RECEIVER_NAME = "Receiver"
+        const val RECEIVER_UUID = "Receiver"
 
         // Voucher's name
         const val VOUCHER_NAME = "Name"
