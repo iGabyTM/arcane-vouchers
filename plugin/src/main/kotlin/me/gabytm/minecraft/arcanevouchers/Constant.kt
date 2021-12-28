@@ -8,7 +8,7 @@ object Constant {
     val GSON = GsonBuilder().create()
     val MINI = MiniMessage.markdown()
     val SEPARATOR = Regex(";")
-    val NEW_LINE_SEPARATOR = Regex("\\n")
+    val NEW_LINE_SEPARATOR = Regex("<\\[nN]>")
 
     object NBT {
 
