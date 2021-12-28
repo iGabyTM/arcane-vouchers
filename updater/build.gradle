@@ -3,12 +3,11 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'me.gabytm.minecraft.arcanevouchers.upgrader.Main'
+mainClassName = 'me.gabytm.minecraft.arcanevouchers.updater.Main'
 sourceCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     implementation 'org.spongepowered:configurate-yaml:4.1.2'
     // Logging
-    implementation 'org.fusesource.jansi:jansi:2.4.0'
     implementation 'ch.qos.logback:logback-classic:1.2.10'
 }
