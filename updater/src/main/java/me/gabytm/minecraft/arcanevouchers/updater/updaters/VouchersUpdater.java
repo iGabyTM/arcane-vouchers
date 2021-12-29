@@ -1,6 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.updater.updaters;
 
 import me.gabytm.minecraft.arcanevouchers.updater.utils.Files;
+import me.gabytm.minecraft.arcanevouchers.updater.utils.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -85,20 +86,34 @@ public class VouchersUpdater {
     }
 
     private void updateItem(final CommentedConfigurationNode node) throws SerializationException {
-        final String material = node.node("material").getString();
+        node.node("material").act(materialNode -> {
+            if (materialNode.empty()) {
+                return;
+            }
 
-        if (material != null && material.startsWith("head;")) {
-            LOGGER.info("Replacing {} with PLAYER_HEAD (if you are on pre 1.13 you need SKULL_ITEM and 'damage:3') and setting the texture on its own key", material);
-            node.node("material").set("PLAYER_HEAD");
-            node.node("texture").set(material.split(";")[1]);
-        }
+            final String material = materialNode.getString();
+
+            if (material.startsWith("head;")) {
+                LOGGER.info("Replacing {} with PLAYER_HEAD (if you are on pre 1.13 you need SKULL_ITEM and 'damage:3') and setting the texture on its own key", material);
+                materialNode.set(material);
+                node.node("texture").set(material.split(";")[1]);
+            }
+        });
 
         final String itemName = node.node("display_name").getString();
 
         if (itemName != null) {
             node.removeChild("display_name");
-            node.node("name").set(itemName);
+            node.node("name").set(Strings.upgradeColorsFormat(itemName));
         }
+
+        node.node("lore").act(loreNode -> {
+            if (!loreNode.isList() || loreNode.empty()) {
+                return;
+            }
+
+           loreNode.set(Strings.upgradeColorsFormat(loreNode.getList(String.class)));
+        });
     }
 
     private void updateSettings(final CommentedConfigurationNode node) throws SerializationException {
@@ -126,7 +141,7 @@ public class VouchersUpdater {
 
             if (message != null) {
                 worldWhitelistNode.removeChild("message");
-                node.node("worlds", "whitelist", "message").set(message);
+                node.node("worlds", "whitelist", "message").set(Strings.upgradeColorsFormat(message));
             }
 
             node.removeChild("worldWhitelist");
@@ -137,7 +152,7 @@ public class VouchersUpdater {
     private List<String> updateActions(final List<String> actions) {
         final List<String> updatedActions = new ArrayList<>(actions.size());
 
-        for (final String action : actions) {
+        for (final String action : Strings.upgradeColorsFormat(actions)) {
             final Matcher matcher = this.actionPattern.matcher(action);
 
             if (!matcher.matches()) {
