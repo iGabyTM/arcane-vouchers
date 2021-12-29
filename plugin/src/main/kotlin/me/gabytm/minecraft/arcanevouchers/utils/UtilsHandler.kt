@@ -31,7 +31,7 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         yaml["bossBar.progress.min"] = BossBar.MIN_PROGRESS
         yaml["bossBar.progress.max"] = BossBar.MAX_PROGRESS
 
-        yaml["materials"] = Material.values().map { it.name }
+        yaml["materials"] = Material.values().map { it.name }.filter { !it.startsWith("LEGACY_") }
 
         try {
             yaml.save(file)
