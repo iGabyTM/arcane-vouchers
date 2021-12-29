@@ -177,7 +177,7 @@ class LimitStorageHandler(private val plugin: ArcaneVouchers) {
                 REPLACE INTO `personal_limits` (id, uuid, voucher, usages) 
                 VALUES (
                     (SELECT id FROM `global_limits` WHERE uuid = ? AND voucher = ?),
-                    ?
+                    ?,
                     ?,
                     ?
                 );
