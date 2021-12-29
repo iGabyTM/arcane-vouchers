@@ -2,6 +2,7 @@ package me.gabytm.minecraft.arcanevouchers.commands
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
+import me.gabytm.minecraft.arcanevouchers.message.Lang
 import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
 import me.mattstudios.mf.annotations.CompleteFor
 import me.mattstudios.mf.annotations.Permission
@@ -42,6 +43,7 @@ class GiveCommand(val plugin: ArcaneVouchers, private val manager: VoucherManage
 
         val arguments = if (args.size > 3) args.copyOfRange(ARGS, args.size) else arrayOf()
         this.manager.giveVoucher(receiver, voucher, amount, arguments)
+        Lang.GIVE__SENDER.send(sender, listOf(amount, receiver.name, voucher.id))
     }
 
     @CompleteFor("give")
