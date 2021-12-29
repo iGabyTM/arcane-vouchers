@@ -3,6 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.actions
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.ConsoleCommandAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.PlayerCommandAction
+import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.BossBarAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.MessageAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.AddMoneyAction
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
@@ -28,6 +29,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         register("player") { PlayerCommandAction(it, handler) }
 
         // Message
+        register("bossbar") { BossBarAction(it, handler) }
         register("message") { MessageAction(it, handler) }
 
         // Other

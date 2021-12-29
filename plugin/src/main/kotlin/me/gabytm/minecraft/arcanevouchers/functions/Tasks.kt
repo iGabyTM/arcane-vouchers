@@ -15,3 +15,7 @@ fun sync(task: Runnable) {
         Bukkit.getScheduler().runTask(plugin, task)
     }
 }
+
+fun sync(delay: Long, task: Runnable) {
+    Bukkit.getScheduler().runTaskLater(plugin, task, delay)
+}
