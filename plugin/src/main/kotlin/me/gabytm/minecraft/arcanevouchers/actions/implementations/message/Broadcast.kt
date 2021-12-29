@@ -1,5 +1,6 @@
 package me.gabytm.minecraft.arcanevouchers.actions.implementations.message
 
+import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.functions.audience
 import net.kyori.adventure.audience.Audience
 import org.bukkit.Bukkit
@@ -8,21 +9,22 @@ import org.bukkit.entity.Player
 class Broadcast private constructor(private val conditions: List<Condition<*>>) {
 
     fun broadcast(player: Player, action: (Audience) -> Unit) {
+        getPlayers(player).forEach { action(it.audience()) }
+    }
+
+    fun getPlayers(player: Player): Collection<Player> {
         if (conditions.isEmpty()) {
-            Bukkit.getOnlinePlayers().forEach { action(it.audience()) }
-            return
+            return Bukkit.getOnlinePlayers()
         }
 
-        Bukkit.getOnlinePlayers()
+        return Bukkit.getOnlinePlayers()
             .filter {
-                if (it.uniqueId != player.uniqueId) true else conditions.all { condition ->
-                    condition.check(
-                        player,
-                        it
-                    )
+                if (it.uniqueId != player.uniqueId) {
+                    true
+                } else {
+                    conditions.all { condition -> condition.check(player, it) }
                 }
             }
-            .forEach { action(it.audience()) }
     }
 
     companion object {
@@ -30,7 +32,7 @@ class Broadcast private constructor(private val conditions: List<Condition<*>>) 
         private val EVERYONE: Broadcast = Broadcast(emptyList())
 
         fun parse(string: String?): Broadcast {
-            if (string == null || string.trim().isEmpty()) {
+            if (string == null || string.equals("*") || string.trim().isEmpty()) {
                 return EVERYONE
             }
 
@@ -38,11 +40,18 @@ class Broadcast private constructor(private val conditions: List<Condition<*>>) 
 
             for (condition in string.split(",")) {
                 when {
-                    condition.equals("world", true) -> conditions.add(WorldCondition())
                     condition.startsWith("permission", true) -> {
-                        conditions.add(PermissionCondition(condition.split(":")[1]))
+                        PermissionCondition(condition.split(Constant.Separator.COLON)[1])
                     }
-                }
+
+                    condition.equals("radius", true) -> {
+                        condition.split(Constant.Separator.COLON)[1].toDoubleOrNull()?.let { RadiusCondition(it) }
+                    }
+
+                    condition.equals("world", true) -> WorldCondition()
+
+                    else -> null
+                }?.let { conditions.add(it) }
             }
 
             return Broadcast(conditions)
@@ -56,15 +65,22 @@ class Broadcast private constructor(private val conditions: List<Condition<*>>) 
 
     }
 
-    private class WorldCondition : Condition<Byte>(0) {
-
-        override fun check(player: Player, other: Player): Boolean = other.world.uid == player.world.uid
-
-    }
-
     private class PermissionCondition(t: String) : Condition<String>(t) {
 
         override fun check(player: Player, other: Player): Boolean = other.hasPermission(t)
+
+    }
+
+    private class RadiusCondition(t: Double) : Condition<Double>(t) {
+
+        override fun check(player: Player, other: Player): Boolean =
+            other.location.distanceSquared(player.location) <= t
+
+    }
+
+    private class WorldCondition : Condition<Unit>(Unit) {
+
+        override fun check(player: Player, other: Player): Boolean = other.world.uid == player.world.uid
 
     }
 
