@@ -1,14 +1,13 @@
 package me.gabytm.minecraft.arcanevouchers
 
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import net.kyori.adventure.text.minimessage.MiniMessage
 
 object Constant {
 
-    val GSON = GsonBuilder().create()
-    val MINI = MiniMessage.markdown()
-    val SEPARATOR = Regex(";")
-    val NEW_LINE_SEPARATOR = Regex("<\\[nN]>")
+    val GSON: Gson = GsonBuilder().create()
+    val MINI = MiniMessage.get()
 
     object NBT {
 
@@ -37,6 +36,15 @@ object Constant {
         const val LIMIT_BYPASS_ALL_PERSONAL = "$LIMIT_BYPASS.*.personal"
         const val LIMIT_BYPASS_GLOBAL = "$LIMIT_BYPASS.%s.global"
         const val LIMIT_BYPASS_PERSONAL = "$LIMIT_BYPASS.%s.personal"
+
+    }
+
+    object Separator {
+
+        val COLON = Regex(":")
+        val COMMA = Regex(",")
+        val NEW_LINE = Regex("<\\\\[nN]>")
+        val SEMICOLON = Regex(";")
 
     }
 

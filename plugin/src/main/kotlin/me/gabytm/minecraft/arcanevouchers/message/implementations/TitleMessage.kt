@@ -13,7 +13,7 @@ class TitleMessage(string: String) : Message(string) {
     private val subtitle: String
 
     init {
-        val parts = string.split(Constant.NEW_LINE_SEPARATOR, 2)
+        val parts = string.split(Constant.Separator.NEW_LINE, 2)
 
         title = parts[0]
         subtitle = if (parts.size == 2) parts[1] else ""

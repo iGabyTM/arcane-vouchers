@@ -27,7 +27,7 @@ interface SkullTextureProvider {
         }
 
         fun applyTexture(input: String): SkullBuilder {
-            val parts = input.split(Constant.SEPARATOR, 2)
+            val parts = input.split(Constant.Separator.COLON, 2)
 
             if (parts.size == 1) {
                 return Type.NONE.apply(parts[0])

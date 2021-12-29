@@ -18,7 +18,7 @@ abstract class Message(protected val string: String) {
                 return MessageType.NONE.create("")
             }
 
-            val parts = string.split(Constant.SEPARATOR, 2)
+            val parts = string.split(Constant.Separator.COLON, 2)
 
             if (parts.size == 1) {
                 return MessageType.CHAT.create(parts[0])
