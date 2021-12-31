@@ -29,18 +29,25 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
     LIMIT__TYPE_NONE("limit.typeNone", "{voucher}"),
     LIMIT__USAGE("limit.usage"),
 
-    LIMIT__MODIFY__VALUE("limit.modify.value"),
+    LIMIT__CHECK__GLOBAL("limit.check.global.message", "{limit}", "{usages}","{voucher}"),
+    LIMIT__CHECK__GLOBAL__REQUIRE_PLAYER("limit.check.global.requirePlayer"),
+    LIMIT__CHECK__PERSONAL("limit.check.personal.message", "{limit}", "{player}", "{usages}", "{voucher}"),
 
+    LIMIT__MODIFY__VALUE("limit.modify.value"),
     LIMIT__MODIFY__GLOBAL__CONFIRMATION(
         "limit.modify.global.confirmation",
         "{new_limit}", "{value}", "{voucher}"
     ),
-
     LIMIT__MODIFY__PERSONAL__CONFIRMATION(
         "limit.modify.player.confirmation",
         "{new_limit}", "{player}", "{value}", "{voucher}"
     ),
     LIMIT__MODIFY__PERSONAL__REQUIRE_PLAYER("limit.modify.personal.requirePlayer"),
+
+    LIMIT__SET__NEW_VALUE("limit.set.newValue"),
+    LIMIT__SET__GLOBAL__CONFIRMATION("limit.set.global.confirmation", "{new_value}", "{voucher}"),
+    LIMIT__SET__PERSONAL__CONFIRMATION("limit.set.personal.confirmation", "{new_value}", "{player}", "{voucher}"),
+    LIMIT__SET__PERSONAL__REQUIRE_PLAYER("limit.set.personal.requirePlayer"),
     //-----
 
     RELOAD("reload")
