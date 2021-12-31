@@ -102,7 +102,7 @@ class LimitStorageHandler(plugin: ArcaneVouchers) {
         return limits
     }
 
-    fun updateGlobalLimit(voucher: String, limit: Long) {
+    fun updateGlobalUsages(voucher: String, limit: Long) {
         if (!connected) {
             return
         }
@@ -118,7 +118,7 @@ class LimitStorageHandler(plugin: ArcaneVouchers) {
         }
     }
 
-    fun updatePersonalLimit(player: UUID, voucher: String, limit: Long) {
+    fun updatePersonalUsages(player: UUID, voucher: String, limit: Long) {
         if (!connected) {
             return
         }
