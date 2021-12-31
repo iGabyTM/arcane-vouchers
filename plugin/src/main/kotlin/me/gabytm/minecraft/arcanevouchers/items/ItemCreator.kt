@@ -46,7 +46,7 @@ class ItemCreator(private val plugin: ArcaneVouchers) {
 
         // Enchantments are saved in a list as 'Enchantment;level'
         val enchants = config.getStringList("enchantments")
-            .map { it.split(Constant.Separator.COLON, 2) }
+            .map { it.split(Constant.Separator.SEMICOLON, 2) }
             .mapNotNull { it.toEnchantmentPair() }.toMap()
 
         val customModelData = config.getInt("customModelData")
