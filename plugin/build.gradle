@@ -44,6 +44,9 @@ dependencies {
     implementation project(':worldguard_compat')
     implementation project(':worldguard_compat_v6')
     implementation project(':worldguard_compat_v7')
+
+    // bStats
+    implementation 'org.bstats:bstats-bukkit:2.2.1'
 }
 
 shadowJar {
@@ -54,6 +57,7 @@ shadowJar {
             'dev.triumphteam.gui'   : 'gui',
             'net.kyori.adventure'   : 'adventure',
             'me.mattstudios.mf'     : 'commands',
+            'org.bstats'            : 'bstats',
             'kotlin'                : 'kt'
     ].each { relocate(it.key, project.group + '.arcanevouchers.libs.' + it.value) }
 }
