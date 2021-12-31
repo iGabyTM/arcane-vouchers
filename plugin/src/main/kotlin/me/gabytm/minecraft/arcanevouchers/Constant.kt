@@ -43,7 +43,7 @@ object Constant {
 
         val COLON = Regex(":")
         val COMMA = Regex(",")
-        val NEW_LINE = Regex("<\\\\[nN]>")
+        val NEW_LINE = Regex("\\[[nN]]")
         val SEMICOLON = Regex(";")
 
     }
