@@ -21,7 +21,7 @@ class Voucher private constructor(
 
     private fun redeem(player: Player, voucher: ItemStack, plugin: ArcaneVouchers, increaseLimit: Boolean, isBulk: Boolean, amount: Int) {
         if (increaseLimit) {
-            plugin.voucherManager.limitManager.increaseLimit(player.uniqueId, this.id, amount)
+            plugin.voucherManager.limitManager.increaseUsages(player.uniqueId, this.id, amount.toLong())
         }
 
         if (isBulk) {

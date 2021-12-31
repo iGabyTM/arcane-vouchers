@@ -58,7 +58,7 @@ class LimitStorageHandler(plugin: ArcaneVouchers) {
         }
     }
 
-    fun loadGlobalLimits(): Map<String, Long> {
+    fun loadGlobalUsages(): Map<String, Long> {
         if (!connected) {
             return emptyMap()
         }
@@ -78,7 +78,7 @@ class LimitStorageHandler(plugin: ArcaneVouchers) {
         return limits
     }
 
-    fun loadPersonalLimits(): Table<UUID, String, Long> {
+    fun loadPersonalUsages(): Table<UUID, String, Long> {
         val limits = HashBasedTable.create<UUID, String, Long>()
 
         if (!connected) {
