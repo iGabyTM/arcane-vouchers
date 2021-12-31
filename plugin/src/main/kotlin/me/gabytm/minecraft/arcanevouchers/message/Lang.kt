@@ -3,12 +3,15 @@ package me.gabytm.minecraft.arcanevouchers.message
 import me.gabytm.minecraft.arcanevouchers.functions.audience
 import me.gabytm.minecraft.arcanevouchers.functions.mini
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.ComponentLike
 import org.bukkit.command.CommandSender
 import org.bukkit.configuration.file.YamlConfiguration
 import java.util.*
 import java.util.regex.Pattern
 
 enum class Lang(private val path: String, vararg stringPlaceholders: String) {
+
+    PREFIX("prefix"),
 
     // Messages used pretty much for all commands and not only
     GENERAL__INVALID__NUMBER__INTEGER("general.invalid.number.integer", "{input}"),
@@ -50,11 +53,19 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
     LIMIT__SET__PERSONAL__REQUIRE_PLAYER("limit.set.personal.requirePlayer"),
     //-----
 
+    // Messages for the list command
+    LIST__NO_VOUCHERS("list.noVouchers"),
+    LIST__PREFIX("list.prefix", "{amount}"),
+    LIST__SEPARATOR("list.separator"),
+    LIST__SUFFIX("list.suffix"),
+    LIST__VOUCHER("list.voucher", "{voucher}"),
+    //-----
+
     RELOAD("reload")
     ;
 
     private val placeholders: MutableList<Pattern> = mutableListOf()
-    private lateinit var component: Component
+    private var component: Component? = null
 
     init {
         for (placeholder in stringPlaceholders) {
@@ -62,17 +73,40 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
         }
     }
 
-    fun send(receiver: CommandSender, values: List<Any> = emptyList()) {
+    fun isEmpty(): Boolean = this.component == null || this.component == Component.empty()
+
+    fun format(values: List<Any> = emptyList()): Component? {
+        if (component == null) {
+            return null
+        }
+
         if (values.size != placeholders.size) {
             throw IllegalArgumentException("Expected ${placeholders.size} values for message $name but got only ${values.size}")
         }
 
-        var message = component
+        var message = component ?: return null
 
         for ((value, placeholder) in values.zip(placeholders)) {
-            message = message.replaceText { it.match(placeholder).replacement(value.toString()) }
+            message = message.replaceText {
+                it.match(placeholder)
+
+                if (value is ComponentLike) {
+                    it.replacement(value)
+                } else {
+                    it.replacement(value.toString())
+                }
+            }
         }
 
+        return message.replaceText { it.match(PREFIX_PATTERN).replacement(PREFIX.component ?: Component.empty()) }
+    }
+
+    fun format(first: Any): Component? = format(listOf(first))
+
+    fun format(first: Any, second: Any): Component? = format(listOf(first, second))
+
+    fun send(receiver: CommandSender, values: List<Any> = emptyList()) {
+        val message = format(values) ?: return
         receiver.audience().sendMessage(message)
     }
 
@@ -94,12 +128,12 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
 
     companion object {
 
+        private val PREFIX_PATTERN: Pattern = Pattern.compile("\\{prefix}", Pattern.CASE_INSENSITIVE)
         val VALUES: EnumSet<Lang> = EnumSet.allOf(Lang::class.java)
 
         fun load(lang: YamlConfiguration) {
             for (it in VALUES) {
-                val message = lang.getString(it.path) ?: continue
-                it.component = message.mini()
+                it.component = lang.getString(it.path)?.mini()
             }
         }
 
