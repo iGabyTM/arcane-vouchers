@@ -12,7 +12,7 @@ import java.sql.PreparedStatement
 import java.sql.SQLException
 import java.util.*
 
-class LimitStorageHandler(private val plugin: ArcaneVouchers) {
+class LimitStorageHandler(plugin: ArcaneVouchers) {
 
     private val databaseFile = File(plugin.dataFolder, "limits.sql.db")
     private var connected = false
@@ -176,7 +176,7 @@ class LimitStorageHandler(private val plugin: ArcaneVouchers) {
             """
                 REPLACE INTO `personal_limits` (id, uuid, voucher, usages) 
                 VALUES (
-                    (SELECT id FROM `global_limits` WHERE uuid = ? AND voucher = ?),
+                    (SELECT id FROM `personal_limits` WHERE uuid = ? AND voucher = ?),
                     ?,
                     ?,
                     ?
