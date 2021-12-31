@@ -10,9 +10,41 @@ import java.util.regex.Pattern
 
 enum class Lang(private val path: String, vararg stringPlaceholders: String) {
 
+    // Messages used pretty much for all commands and not only
+    GENERAL__INVALID__NUMBER__INTEGER("general.invalid.number.integer", "{input}"),
+    GENERAL__INVALID__NUMBER__LONG("general.invalid.number.long", "{input}"),
+
     GENERAL__NO_PERMISSION("general.noPermission"),
 
-    GIVE__SENDER("give.sender", "{amount}", "{receiver}", "{voucher}");
+    GENERAL__UNKNOWN__PLAYER("general.unknown.player", "{input}"),
+    GENERAL__UNKNOWN__VOUCHER("general.unknown.voucher", "{input}"),
+    //-----
+
+    // Messages for the give command
+    GIVE__SENDER("give.sender", "{amount}", "{receiver}", "{voucher}"),
+    GIVE__USAGE("give.usage"),
+    //-----
+
+    // Messages for the limit command
+    LIMIT__TYPE_NONE("limit.typeNone", "{voucher}"),
+    LIMIT__USAGE("limit.usage"),
+
+    LIMIT__MODIFY__VALUE("limit.modify.value"),
+
+    LIMIT__MODIFY__GLOBAL__CONFIRMATION(
+        "limit.modify.global.confirmation",
+        "{new_limit}", "{value}", "{voucher}"
+    ),
+
+    LIMIT__MODIFY__PERSONAL__CONFIRMATION(
+        "limit.modify.player.confirmation",
+        "{new_limit}", "{player}", "{value}", "{voucher}"
+    ),
+    LIMIT__MODIFY__PERSONAL__REQUIRE_PLAYER("limit.modify.personal.requirePlayer"),
+    //-----
+
+    RELOAD("reload")
+    ;
 
     private val placeholders: MutableList<Pattern> = mutableListOf()
     private lateinit var component: Component
@@ -25,7 +57,7 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
 
     fun send(receiver: CommandSender, values: List<Any> = emptyList()) {
         if (values.size != placeholders.size) {
-            throw IllegalArgumentException("")
+            throw IllegalArgumentException("Expected ${placeholders.size} values for message $name but got only ${values.size}")
         }
 
         var message = component
@@ -35,6 +67,22 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
         }
 
         receiver.audience().sendMessage(message)
+    }
+
+    fun send(receiver: CommandSender, first: Any) {
+        send(receiver, listOf(first))
+    }
+
+    fun send(receiver: CommandSender, first: Any, second: Any) {
+        send(receiver, listOf(first, second))
+    }
+
+    fun send(receiver: CommandSender, first: Any, second: Any, third: Any) {
+        send(receiver, listOf(first, second, third))
+    }
+
+    fun send(receiver: CommandSender, first: Any, second: Any, third: Any, forth: Any) {
+        send(receiver, listOf(first, second, third, forth))
     }
 
     companion object {
