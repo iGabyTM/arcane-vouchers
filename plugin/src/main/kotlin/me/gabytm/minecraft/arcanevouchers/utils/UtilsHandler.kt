@@ -3,8 +3,10 @@ package me.gabytm.minecraft.arcanevouchers.utils
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.functions.error
 import net.kyori.adventure.bossbar.BossBar
+import net.kyori.adventure.sound.Sound
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.Tag
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 import java.io.IOException
@@ -37,6 +39,8 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         yaml["bossBar.progress.max"] = BossBar.MAX_PROGRESS
 
         yaml["materials"] = Material.values().map { it.name }.filter { !it.startsWith("LEGACY_") }
+
+        yaml["sound.sources"] = Sound.Source.NAMES.keys().toList()
 
         try {
             yaml.save(file)

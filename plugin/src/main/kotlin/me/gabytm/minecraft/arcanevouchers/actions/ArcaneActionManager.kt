@@ -6,6 +6,7 @@ import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.Player
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.BossBarAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.MessageAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.AddMoneyAction
+import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.SoundAction
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.actions.placeholders.PlayerNamePlaceholderProvider
 import me.gabytm.util.actions.actions.Action
@@ -36,6 +37,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         if (setupEconomy()) {
             register("addmoney") { AddMoneyAction(it, handler, economy) }
         }
+        register("sound") { SoundAction(it, handler) }
 
         // '%player_name' is the only placeholder replaced in case PlaceholderAPI is not installed
         placeholderManager.register(PlayerNamePlaceholderProvider())
