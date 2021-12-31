@@ -11,6 +11,7 @@ import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import java.util.*
 
 class VoucherManager(private val plugin: ArcaneVouchers) {
 
@@ -35,6 +36,8 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
     }
 
     fun getVoucherIds(): Set<String> = this.loadedVouchers.keys.toSet()
+
+    fun getVouchers(): Set<Voucher> = Collections.unmodifiableSet(this.loadedVouchers.values.toSet())
 
     fun getVoucher(id: String): Voucher? = this.loadedVouchers[id]
 

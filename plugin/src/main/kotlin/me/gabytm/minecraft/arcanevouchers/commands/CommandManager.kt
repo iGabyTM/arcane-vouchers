@@ -3,6 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.commands
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.commands.commands.GiveCommand
 import me.gabytm.minecraft.arcanevouchers.commands.commands.LimitCommand
+import me.gabytm.minecraft.arcanevouchers.commands.commands.ListCommand
 import me.gabytm.minecraft.arcanevouchers.commands.commands.ReloadCommand
 import me.gabytm.minecraft.arcanevouchers.message.Lang
 import me.mattstudios.mf.base.CommandManager
@@ -18,6 +19,7 @@ class CommandManager(plugin: ArcaneVouchers) {
         manager.register(
             GiveCommand(plugin),
             LimitCommand(plugin),
+            ListCommand(plugin),
             ReloadCommand(plugin)
         )
     }

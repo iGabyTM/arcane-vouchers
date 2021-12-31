@@ -1,27 +1,37 @@
+#
+# Lang file generated for v${version}
+#
+
+#
+# Use {prefix} on any message to replace it with this value
+#
+prefix: '<dark_purple>A</dark_purple><light_purple>V</light_purple> <dark_gray>┃</dark_gray>'
+
 general:
-  craftingDisabled: '&5A&dV &8┃ &cSorry but vouchers can not be used to craft items.'
-  noPermission: '&5A&dV &8┃ &cYou can not use this command!'
-  reload: '&5A&dV &8┃ &dThe plugin has been reloaded!'
+  #
+  # {input} - player's input
+  #
+  invalid:
+    number:
+      integer: '{prefix} <red><u>{input}</u> is not an integer.</red>'
+      long: '{prefix} <red><u>{input}</u> is not a long.</red>'
+  noPermission: '{prefix} <red>You can not use this command.</red>'
+  #
+  # {input} - player's input
+  #
   unknown:
-    command: '&5A&dV &8┃ &7Unknown command &c&n{input}&7. Type &c/av help &7for help.'
-    player: '&5A&dV &8┃ &7Unknown player &c&n{input}&7.'
-    voucher: '&5A&dV &8┃ &7Unknown voucher &c&n{input}&7.'
+    player: '{prefix} <red>Unknown player <u>{input}</u>.</red>'
+    voucher: '{prefix} <red>Unknown voucher <u>{input}</u>.</red>'
 
-give:
-  all:
-    sender: '&5A&dV &8┃ &7You gave everyone &d{amount}&7x &d{voucher} &7voucher(s)'
-    usage: '&5A&dV &8┃ &7Invalid usage! &5/av giveall &d[voucher] [amount] &f(arguments)'
-  sender: '&5A&dV &8┃ &7You gave &d{receiver} {amount}&7x &d{voucher} &7vouchers'
-  usage: '&5A&dV &8┃ &7Invalid usage! &5/av give &d[player] [voucher] [amount] &f(arguments)'
-
-help: |-
-  &5Arcane&dVouchers &7v&f{version} &7Commands list
-    &5/av give &d[player] [voucher] [amount] &f(arguments) &8- &7Give a voucher
-    &5/av giveall &d[voucher] [amount] &f(arguments) &8- &7Give a voucher to all online players
-    &5/av help &8- &7Display the commands list
-    &5/av list &8- &7Receive a list of all loaded vouchers
-    &5/av reload &8- &7Reload the plugin
 list:
-  noVouchers: '&5A&dV &8┃ &c0 &7vouchers loaded.'
-  prefix: '&5A&dV &8┃ &5{amount} &7voucher(s) loaded: &d'
-  splitter: '&7, &d'
+  noVouchers: '{prefix} &c0 &7vouchers loaded.'
+  #
+  # {amount} - how many vouchers are loaded
+  #
+  prefix: '{prefix} <dark_purple>{amount}</dark_purple> <gray>voucher(s) loaded:</gray> '
+  separator: '<gray>,<gray> '
+  #
+  # {voucher} - the id of the voucher
+  #
+  voucher: '<light_purple>{voucher}</light_purple>'
+  suffix: '<gray>.</gray>'
