@@ -151,7 +151,13 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             return
         }
 
-        voucher.redeem(player, item, plugin, settings.bulkOpen.enabled && player.isSneaking)
+        val isBulk = settings.bulkOpen.enabled && player.isSneaking
+
+        if (settings.confirmationEnabled) {
+            voucherManager.openConfirmation(player, voucher, item, isBulk)
+        } else {
+            voucher.redeem(player, item, plugin, isBulk)
+        }
     }
 
 }

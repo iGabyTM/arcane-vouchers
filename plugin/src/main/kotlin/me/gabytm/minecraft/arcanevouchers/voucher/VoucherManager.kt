@@ -11,15 +11,18 @@ import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import java.util.*
 
 class VoucherManager(private val plugin: ArcaneVouchers) {
 
     private val loadedVouchers = mutableMapOf<String, Voucher>()
 
+    private val confirmationGui = ConfirmationGui(plugin)
     val limitManager = LimitManager(plugin)
 
-    fun loadVouchers() {
+    fun load() {
+        this.confirmationGui.load()
         loadedVouchers.clear()
 
         val vouchersSection = plugin.vouchersConfig.getSection("vouchers") ?: kotlin.run {
@@ -86,6 +89,10 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
             plugin.audiences.player(player),
             argsMap.add("{amount}", amount.toString())
         )
+    }
+
+    fun openConfirmation(player: Player, voucher: Voucher, voucherItem: ItemStack, isBulk: Boolean) {
+        this.confirmationGui.open(player, voucher, voucherItem, isBulk)
     }
 
 }

@@ -93,7 +93,7 @@ class ArcaneVouchers : JavaPlugin() {
         Lang.load(this.langFile.yaml)
         this.settings.load(this.config)
         this.itemCreator.loadNbt()
-        this.voucherManager.loadVouchers()
+        this.voucherManager.load()
     }
 
 }
