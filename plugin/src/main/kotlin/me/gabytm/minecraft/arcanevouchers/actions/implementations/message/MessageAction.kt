@@ -3,7 +3,6 @@ package me.gabytm.minecraft.arcanevouchers.actions.implementations.message
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
-import me.gabytm.minecraft.arcanevouchers.functions.audience
 import me.gabytm.minecraft.arcanevouchers.functions.mini
 import me.gabytm.util.actions.actions.ActionMeta
 import me.gabytm.util.actions.actions.Context

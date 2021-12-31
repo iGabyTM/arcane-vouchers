@@ -9,7 +9,6 @@ import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.util.*
 
 class UtilsHandler(plugin: ArcaneVouchers) {
