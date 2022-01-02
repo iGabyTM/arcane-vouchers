@@ -1,6 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.utils
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
+import me.gabytm.minecraft.arcanevouchers.ServerVersion
 import me.gabytm.minecraft.arcanevouchers.functions.error
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.sound.Sound
@@ -41,6 +42,10 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         yaml["materials"] = Material.values().map { it.name }.filter { !it.startsWith("LEGACY_") }
 
         yaml["sound.sources"] = Sound.Source.NAMES.keys().toList()
+
+        if (ServerVersion.HAS_KEYED) {
+            yaml["sound.sounds"] = org.bukkit.Sound.values().map { it.key.toString() }.toList()
+        }
 
         try {
             yaml.save(file)

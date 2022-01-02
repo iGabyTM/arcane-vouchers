@@ -20,6 +20,11 @@ object ServerVersion {
     val IS_LEGACY = VERSION < V_1_13
 
     /**
+     * Whether the current version has the [org.bukkit.Keyed] class
+     */
+    val HAS_KEYED = VERSION >= V_1_13
+
+    /**
      * Gets the current server version
      * @return A protocol like number representing the version, for example 1.16.5 - 1165
      */
