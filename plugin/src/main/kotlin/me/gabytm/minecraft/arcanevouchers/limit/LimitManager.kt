@@ -18,7 +18,7 @@ class LimitManager(plugin: ArcaneVouchers) {
 
     private val limitUpdateFunction: (Long, Long) -> Long = { a, b -> a + b }
 
-    private val storage = LimitStorageHandler(plugin)
+    private val storage = UsagesStorageHandler(plugin)
 
     init {
         this.globalUsages.putAll(this.storage.loadGlobalUsages())

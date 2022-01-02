@@ -14,7 +14,7 @@ import java.util.*
 
 class LimitStorageHandler(plugin: ArcaneVouchers) {
 
-    private val databaseFile = File(plugin.dataFolder, "limits.sql.db")
+    private val databaseFile = File(plugin.dataFolder, "usages.sql.db")
     private var connected = false
     private lateinit var connection: Connection
 
@@ -142,7 +142,7 @@ class LimitStorageHandler(plugin: ArcaneVouchers) {
 
         CREATE_GLOBAL_TABLE(
             """
-                CREATE TABLE IF NOT EXISTS `global_limits` (
+                CREATE TABLE IF NOT EXISTS `global_usages` (
                     id INTEGER PRIMARY KEY,
                     voucher VARCHAR(128),
                     usages INTEGER
@@ -152,7 +152,7 @@ class LimitStorageHandler(plugin: ArcaneVouchers) {
 
         CREATE_PERSONAL_TABLE(
             """
-                CREATE TABLE IF NOT EXISTS `personal_limits` (
+                CREATE TABLE IF NOT EXISTS `personal_usages` (
                     id INTEGER PRIMARY KEY,
                     uuid VARCHAR(36),
                     voucher VARCHAR(128),
@@ -163,9 +163,9 @@ class LimitStorageHandler(plugin: ArcaneVouchers) {
 
         INSERT_GLOBAL(
             """
-                REPLACE INTO `global_limits` (id, voucher, usages) 
+                REPLACE INTO `global_usages` (id, voucher, usages) 
                 VALUES (
-                    (SELECT id FROM `global_limits` WHERE voucher = ?),
+                    (SELECT id FROM `global_usages` WHERE voucher = ?),
                     ?,
                     ?
                 );
@@ -174,7 +174,7 @@ class LimitStorageHandler(plugin: ArcaneVouchers) {
 
         INSERT_PERSONAL(
             """
-                REPLACE INTO `personal_limits` (id, uuid, voucher, usages) 
+                REPLACE INTO `personal_usages` (id, uuid, voucher, usages) 
                 VALUES (
                     (SELECT id FROM `personal_limits` WHERE uuid = ? AND voucher = ?),
                     ?,
@@ -184,9 +184,9 @@ class LimitStorageHandler(plugin: ArcaneVouchers) {
             """.trimIndent()
         ),
 
-        SELECT_GLOBAL("SELECT voucher, usages FROM `global_limits`;"),
+        SELECT_GLOBAL("SELECT voucher, usages FROM `global_usages`;"),
 
-        SELECT_PERSONAL("SELECT uuid, voucher, usages FROM `personal_limits`;");
+        SELECT_PERSONAL("SELECT uuid, voucher, usages FROM `personal_usages`;");
 
         fun prepare(connection: Connection): PreparedStatement {
             return connection.prepareStatement(this.query)
