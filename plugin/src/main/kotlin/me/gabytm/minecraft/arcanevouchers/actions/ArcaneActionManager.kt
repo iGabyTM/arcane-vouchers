@@ -4,6 +4,7 @@ import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.ConsoleCommandAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.PlayerCommandAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.BossBarAction
+import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.ChatAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.MessageAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.AddMoneyAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.SoundAction
@@ -31,6 +32,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
         // Message
         register("bossbar") { BossBarAction(it, handler) }
+        register("chat") { ChatAction(it, handler) }
         register("message") { MessageAction(it, handler) }
 
         // Other
