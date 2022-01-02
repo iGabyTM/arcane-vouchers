@@ -52,6 +52,10 @@ dependencies {
     compileOnly fileTree(dir: './libs', includes: ['*.jar'])
 }
 
+processResources {
+    eachFile { expand version: project.version }
+}
+
 shadowJar {
     archiveName("ArcaneVouchers [${project.version}].jar")
 

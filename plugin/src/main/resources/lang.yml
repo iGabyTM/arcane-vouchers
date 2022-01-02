@@ -23,6 +23,15 @@ general:
     player: '{prefix} <red>Unknown player <u>{input}</u>.</red>'
     voucher: '{prefix} <red>Unknown voucher <u>{input}</u>.</red>'
 
+help: |-
+  <dark_purple>ArcaneVouchers</dark_purple> <gray>v</gray><white>{version}</white> <gray>Commands list</gray>
+    
+    <dark_purple>/av give</dark_purple> <light_purple>[player/*] [voucher] [amount]</light_purple> <white>(arguments)</white> <dark_gray>-</dark_gray> <gray>Give a voucher</gray>
+    <dark_purple>/av help</dark_purple> <dark_gray>-</dark_gray> <gray>Display the commands list</gray>
+    <dark_purple>/av list</dark_purple> <dark_gray>-</dark_gray> <gray>Receive a list of all loaded vouchers</gray>
+    <dark_purple>/av reload</dark_purple> <dark_gray>-</dark_gray> <gray>Reload the plugin</gray>
+    <dark_purple>/av usages</dark_purple> <light_purple>[voucher] [action]</light_purple> <white>(arguments)</white> <dark_gray>-</dark_gray> <gray>Give a voucher</gray>
+
 list:
   noVouchers: '{prefix} &c0 &7vouchers loaded.'
   #

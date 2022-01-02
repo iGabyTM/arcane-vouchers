@@ -27,6 +27,8 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
     GIVE__SENDER("give.sender", "{amount}", "{receiver}", "{voucher}"),
     GIVE__USAGE("give.usage"),
     //-----
+
+    HELP("help", "{version}"),
     
     // Messages for the list command
     LIST__NO_VOUCHERS("list.noVouchers"),
