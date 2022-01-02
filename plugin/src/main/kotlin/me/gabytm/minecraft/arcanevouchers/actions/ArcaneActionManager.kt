@@ -3,6 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.actions
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.ConsoleCommandAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.PlayerCommandAction
+import me.gabytm.minecraft.arcanevouchers.actions.implementations.crates.GiveCrateReloadedKeyAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.AddExpAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.AddMoneyAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.BossBarAction
@@ -31,14 +32,17 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         register("console") { ConsoleCommandAction(it, handler) }
         register("player") { PlayerCommandAction(it, handler) }
 
+        // Crates
+        register("CrateReloaded", GiveCrateReloadedKeyAction.ID) { GiveCrateReloadedKeyAction(it, handler) }
+
         // Message
         register("bossbar") { BossBarAction(it, handler) }
         register("chat") { ChatAction(it, handler) }
         register("message") { MessageAction(it, handler) }
 
         // Other
+        register("addexp") { AddExpAction(it, handler) }
         if (setupEconomy()) {
-            register("addexp") { AddExpAction(it, handler) }
             register("addmoney") { AddMoneyAction(it, handler, economy) }
         }
         register("sound") { SoundAction(it, handler) }
@@ -49,6 +53,12 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
     private fun register(id: String, supplier: Action.Supplier<Player>) {
         register(Player::class.java, id, supplier)
+    }
+
+    private fun register(plugin: String, id: String, supplier: Action.Supplier<Player>) {
+        if (Bukkit.getPluginManager().isPluginEnabled(plugin)) {
+            register(id, supplier)
+        }
     }
 
     private fun setupEconomy(): Boolean {

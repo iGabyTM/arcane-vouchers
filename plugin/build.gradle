@@ -47,6 +47,9 @@ dependencies {
 
     // bStats
     implementation 'org.bstats:bstats-bukkit:2.2.1'
+
+    // Other dependencies that don't have a repository or the release is old
+    compileOnly fileTree(dir: './libs', includes: ['*.jar'])
 }
 
 shadowJar {

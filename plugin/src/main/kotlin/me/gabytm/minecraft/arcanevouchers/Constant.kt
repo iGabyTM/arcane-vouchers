@@ -45,6 +45,7 @@ object Constant {
         val COMMA = Regex(",")
         val NEW_LINE = Regex("\\[[nN]]")
         val SEMICOLON = Regex(";")
+        val SPACE = Regex(" ")
 
     }
 
