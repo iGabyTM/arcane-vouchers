@@ -1,4 +1,4 @@
-package me.gabytm.minecraft.arcanevouchers.actions.implementations.other
+package me.gabytm.minecraft.arcanevouchers.actions.implementations.economy
 
 import com.google.common.primitives.Doubles
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction

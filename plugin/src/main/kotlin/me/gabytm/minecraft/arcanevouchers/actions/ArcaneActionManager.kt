@@ -3,10 +3,11 @@ package me.gabytm.minecraft.arcanevouchers.actions
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.ConsoleCommandAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.PlayerCommandAction
+import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.AddExpAction
+import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.AddMoneyAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.BossBarAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.ChatAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.MessageAction
-import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.AddMoneyAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.SoundAction
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.actions.placeholders.PlayerNamePlaceholderProvider
@@ -37,6 +38,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
         // Other
         if (setupEconomy()) {
+            register("addexp") { AddExpAction(it, handler) }
             register("addmoney") { AddMoneyAction(it, handler, economy) }
         }
         register("sound") { SoundAction(it, handler) }
