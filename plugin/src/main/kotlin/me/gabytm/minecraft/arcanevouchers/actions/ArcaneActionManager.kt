@@ -12,6 +12,7 @@ import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.Messag
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.SoundAction
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.actions.placeholders.PlayerNamePlaceholderProvider
+import me.gabytm.minecraft.arcanevouchers.functions.info
 import me.gabytm.util.actions.actions.Action
 import me.gabytm.util.actions.spigot.actions.SpigotActionManager
 import net.milkbowl.vault.economy.Economy
@@ -57,6 +58,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
     private fun register(plugin: String, id: String, supplier: Action.Supplier<Player>) {
         if (Bukkit.getPluginManager().isPluginEnabled(plugin)) {
+            info("Registering [$id] because $plugin is on the server")
             register(id, supplier)
         }
     }
