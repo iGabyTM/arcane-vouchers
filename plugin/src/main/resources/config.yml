@@ -13,3 +13,28 @@ settings:
   command: arcanevouchers
   alias:
     - av
+
+confirmationGui:
+  size: 3 # The number of rows, min 1 and max 6
+  title: 'Confirmation GUI' # The title
+  #
+  # All items listed below accept the same configuration
+  # options as the vouchers (see vouchers.yml)
+  #
+  items:
+    #
+    # The buttons must be here, otherwise the GUI won't work
+    #
+    buttons:
+      confirmation:
+        material: EMERALD_BLOCK
+        slot: 12
+        name: '<green><b>YES</b></green>'
+      cancel:
+        material: REDSTONE_BLOCK
+        slot: 14
+        display_name: '<red><b>NO</b><red>'
+    #
+    # Items listed here are only used for design
+    #
+    other: {}
