@@ -27,32 +27,7 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
     GIVE__SENDER("give.sender", "{amount}", "{receiver}", "{voucher}"),
     GIVE__USAGE("give.usage"),
     //-----
-
-    // Messages for the limit command
-    LIMIT__TYPE_NONE("limit.typeNone", "{voucher}"),
-    LIMIT__USAGE("limit.usage"),
-
-    LIMIT__CHECK__GLOBAL("limit.check.global.message", "{limit}", "{usages}","{voucher}"),
-    LIMIT__CHECK__GLOBAL__REQUIRE_PLAYER("limit.check.global.requirePlayer"),
-    LIMIT__CHECK__PERSONAL("limit.check.personal.message", "{limit}", "{player}", "{usages}", "{voucher}"),
-
-    LIMIT__MODIFY__VALUE("limit.modify.value"),
-    LIMIT__MODIFY__GLOBAL__CONFIRMATION(
-        "limit.modify.global.confirmation",
-        "{new_limit}", "{value}", "{voucher}"
-    ),
-    LIMIT__MODIFY__PERSONAL__CONFIRMATION(
-        "limit.modify.player.confirmation",
-        "{new_limit}", "{player}", "{value}", "{voucher}"
-    ),
-    LIMIT__MODIFY__PERSONAL__REQUIRE_PLAYER("limit.modify.personal.requirePlayer"),
-
-    LIMIT__SET__NEW_VALUE("limit.set.newValue"),
-    LIMIT__SET__GLOBAL__CONFIRMATION("limit.set.global.confirmation", "{new_value}", "{voucher}"),
-    LIMIT__SET__PERSONAL__CONFIRMATION("limit.set.personal.confirmation", "{new_value}", "{player}", "{voucher}"),
-    LIMIT__SET__PERSONAL__REQUIRE_PLAYER("limit.set.personal.requirePlayer"),
-    //-----
-
+    
     // Messages for the list command
     LIST__NO_VOUCHERS("list.noVouchers"),
     LIST__PREFIX("list.prefix", "{amount}"),
@@ -61,7 +36,32 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
     LIST__VOUCHER("list.voucher", "{voucher}"),
     //-----
 
-    RELOAD("reload")
+    RELOAD("reload"),
+
+    // Messages for the usages command
+    USAGES__TYPE_NONE("usages.typeNone", "{voucher}"),
+    USAGES__USAGE("usages.usage"),
+
+    USAGES__CHECK__GLOBAL("usages.check.global.message", "{limit}", "{usages}","{voucher}"),
+    USAGES__CHECK__PERSONAL("usages.check.personal.message", "{limit}", "{player}", "{usages}", "{voucher}"),
+    USAGES__CHECK__PERSONAL__REQUIRE_PLAYER("usages.check.personal.requirePlayer"),
+
+    USAGES__MODIFY__USAGE("usages.modify.usage"),
+    USAGES__MODIFY__GLOBAL__CONFIRMATION(
+        "usages.modify.global.confirmation",
+        "{new_limit}", "{value}", "{voucher}"
+    ),
+    USAGES__MODIFY__PERSONAL__CONFIRMATION(
+        "usages.modify.player.confirmation",
+        "{new_limit}", "{player}", "{value}", "{voucher}"
+    ),
+    USAGES__MODIFY__PERSONAL__REQUIRE_PLAYER("usages.modify.personal.requirePlayer"),
+
+    USAGES__SET__USAGE("usages.set.usage"),
+    USAGES__SET__GLOBAL__CONFIRMATION("usages.set.global.confirmation", "{new_value}", "{voucher}"),
+    USAGES__SET__PERSONAL__CONFIRMATION("usages.set.personal.confirmation", "{new_value}", "{player}", "{voucher}"),
+    USAGES__SET__PERSONAL__REQUIRE_PLAYER("usages.set.personal.requirePlayer")
+    //-----
     ;
 
     private val placeholders: MutableList<Pattern> = mutableListOf()

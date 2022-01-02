@@ -2,7 +2,7 @@ package me.gabytm.minecraft.arcanevouchers.commands
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.commands.commands.GiveCommand
-import me.gabytm.minecraft.arcanevouchers.commands.commands.LimitCommand
+import me.gabytm.minecraft.arcanevouchers.commands.commands.UsagesCommand
 import me.gabytm.minecraft.arcanevouchers.commands.commands.ListCommand
 import me.gabytm.minecraft.arcanevouchers.commands.commands.ReloadCommand
 import me.gabytm.minecraft.arcanevouchers.message.Lang
@@ -18,9 +18,9 @@ class CommandManager(plugin: ArcaneVouchers) {
 
         manager.register(
             GiveCommand(plugin),
-            LimitCommand(plugin),
             ListCommand(plugin),
-            ReloadCommand(plugin)
+            ReloadCommand(plugin),
+            UsagesCommand(plugin)
         )
     }
 
@@ -30,7 +30,7 @@ class CommandManager(plugin: ArcaneVouchers) {
             "cmd.no.permission" to Lang.GENERAL__NO_PERMISSION,
             // Plugin messages
             "command.give.usage" to Lang.GIVE__USAGE,
-            "command.limit.usage" to Lang.LIMIT__USAGE
+            "command.usages.usage" to Lang.USAGES__USAGE
         ).forEach { (key, message) -> handler.register(key, message::send) }
     }
 

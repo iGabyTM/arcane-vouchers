@@ -35,3 +35,37 @@ list:
   #
   voucher: '<light_purple>{voucher}</light_purple>'
   suffix: '<gray>.</gray>'
+
+reload: '{prefix} <green>The plugin has been reloaded.</green>'
+
+usages:
+  #
+  # {voucher} - the id of the voucher
+  #
+  typeNone: '{prefix} <red>Limit type of voucher <u>{voucher}</u> is NONE.</red>'
+  usage: |-
+    {prefix} <white>Usage:</white>
+    <dark_purple>/av usages</dark_purple> <light_purple>[voucher] check</light_purple> <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>-</dark_gray> <gray>Check the usages of a voucher</gray>
+    <dark_purple>/av usages</dark_purple> <light_purple>[voucher] modify [value]</light_purple> <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>-</dark_gray> <gray>Modify the usages of a voucher</gray>
+    <dark_purple>/av usages</dark_purple> <light_purple>[voucher] set [value]</light_purple> <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>-</dark_gray> <gray>Set the usages of a voucher</gray>
+  check:
+    global:
+      #
+      # {limit}   - the limit of the voucher
+      # {usages}  - the usages
+      # {voucher} - the id of the voucher
+      #
+      message: '{prefix} <white>Voucher <light_purple>{voucher}</light_purple> was used <light_purple>{usages}</light_purple> times <gray>(limit: {limit})</gray>.</white>'
+    personal:
+      #
+      # {limit}   - the limit of the voucher
+      # {player}  - the name of the player
+      # {usages}  - the usages
+      # {voucher} - the id of the voucher
+      #
+      message: '{prefix} <white><light_purple>{player}</light_purple> has used voucher <light_purple>{voucher} {usages}</light_purple> times <gray>(limit: {limit})</gray>.</white>'
+      requirePlayer: '{prefix} <red>A player name is required because the limit type is PERSONAL.</red>'
+  modify:
+    usage: '<dark_purple>/av usages</dark_purple> <light_purple>[voucher] modify [value]</light_purple> <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>-</dark_gray> <gray>Modify the usages of a voucher</gray>'
+  set:
+    usage: '<dark_purple>/av usages</dark_purple> <light_purple>[voucher] set [value]</light_purple> <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>-</dark_gray> <gray>Set the usages of a voucher</gray>'

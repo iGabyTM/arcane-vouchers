@@ -17,7 +17,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 
-class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
+class UsagesCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
 
     private val loadedActions = mutableMapOf(
         "check" to CheckAction(this, plugin.voucherManager.limitManager),
@@ -25,13 +25,13 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
         "set" to SetAction(this, plugin.voucherManager.limitManager)
     )
 
-    @WrongUsage("command.limit.usage")
+    @WrongUsage("command.usages.usage")
     @Permission(Constant.Permission.ADMIN)
-    @SubCommand("limit")
+    @SubCommand("usages")
     fun onCommand(sender: CommandSender, input: Array<String>) {
         // Even though only the first 2 arguments are required, 'limit' is also in the array
         if (input.size < 3) {
-            Lang.LIMIT__USAGE.send(sender)
+            Lang.USAGES__USAGE.send(sender)
             return
         }
 
@@ -45,7 +45,7 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
 
         // Let the sender know that the limit of this voucher is NONE
         if (voucher.settings.limit.type == LimitType.NONE) {
-            Lang.LIMIT__TYPE_NONE.send(sender, voucher.id)
+            Lang.USAGES__TYPE_NONE.send(sender, voucher.id)
             return
         }
 
@@ -53,14 +53,14 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
         this.loadedActions[args[1].lowercase()]?.execute(sender, voucher, args.copyOfRange(2, args.size))
     }
 
-    @CompleteFor("limit")
+    @CompleteFor("usages")
     fun tabCompletion(args: List<String>, player: Player): List<String> {
         return when (args.size) {
-            // /av limit [voucher]
+            // /av usages [voucher]
             1 -> createVoucherCompletion(args[0])
-            // /av limit [voucher] [action]
+            // /av usages [voucher] [action]
             2 -> StringUtil.copyPartialMatches(args[1], this.loadedActions.keys, mutableListOf())
-            // /av limit [voucher] [action] (other arguments)
+            // /av usages [voucher] [action] (other arguments)
             else -> {
                 val voucher = this.plugin.voucherManager.getVoucher(args[0]) ?: return mutableListOf()
                 val action = this.loadedActions[args[1].lowercase()] ?: return mutableListOf()
@@ -79,7 +79,7 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
     }
 
     /**
-     * Usage: /av limit `[voucher]` check (player, if limit.type is [LimitType.PERSONAL])
+     * Usage: /av usages `[voucher]` check (player, if limit.type is [LimitType.PERSONAL])
      */
     private class CheckAction(command: ArcaneCommand, manager: LimitManager) : LimitAction(command, manager) {
 
@@ -88,13 +88,13 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
 
             // Send the message for global limit
             if (limit.type == LimitType.GLOBAL) {
-                Lang.LIMIT__CHECK__GLOBAL.send(sender, limit.limit, manager.getGlobalUsages(voucher), voucher.id)
+                Lang.USAGES__CHECK__GLOBAL.send(sender, limit.limit, manager.getGlobalUsages(voucher), voucher.id)
                 return
             }
 
             // The action require a player name if the limit.type is PERSONAL
             if (args.isEmpty()) {
-                Lang.LIMIT__CHECK__GLOBAL__REQUIRE_PLAYER.send(sender)
+                Lang.USAGES__CHECK__PERSONAL__REQUIRE_PLAYER.send(sender)
                 return
             }
 
@@ -106,14 +106,14 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
                 return
             }
 
-            Lang.LIMIT__CHECK__PERSONAL.send(
+            Lang.USAGES__CHECK__PERSONAL.send(
                 sender,
                 limit.limit, player.name(args[0]), manager.getPersonalUsages(player.uniqueId, voucher), voucher.id
             )
         }
 
         override fun completion(player: Player, voucher: Voucher, args: List<String>): List<String> {
-            // /av limit [voucher] check (player)
+            // /av usages [voucher] check (player)
             if (args.size == 1 && voucher.settings.limit.type == LimitType.PERSONAL) {
                 return command.createPlayersCompletion(args[0])
             }
@@ -124,14 +124,14 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
     }
 
     /**
-     * Usage: /av limit `[voucher]` modify `[value]` (player, if limit.type is [LimitType.PERSONAL])
+     * Usage: /av usages `[voucher]` modify `[value]` (player, if limit.type is [LimitType.PERSONAL])
      */
     private class ModifyAction(command: ArcaneCommand, manager: LimitManager) : LimitAction(command, manager) {
 
         override fun execute(sender: CommandSender, voucher: Voucher, args: Array<String>) {
             // The action require a 'value' argument
             if (args.isEmpty()) {
-                Lang.LIMIT__MODIFY__VALUE.send(sender)
+                Lang.USAGES__MODIFY__USAGE.send(sender)
                 return
             }
 
@@ -144,13 +144,13 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
             // The limit.type is GLOBAL
             if (voucher.settings.limit.type == LimitType.GLOBAL) {
                 val newLimit = manager.modifyGlobalUsages(voucher.id, value, false)
-                Lang.LIMIT__MODIFY__GLOBAL__CONFIRMATION.send(sender, newLimit, value, voucher.id)
+                Lang.USAGES__MODIFY__GLOBAL__CONFIRMATION.send(sender, newLimit, value, voucher.id)
                 return
             }
 
             // If the limit.type is PERSONAL, the action require a player name
             if (args.size < 2) {
-                Lang.LIMIT__MODIFY__PERSONAL__REQUIRE_PLAYER.send(sender)
+                Lang.USAGES__MODIFY__PERSONAL__REQUIRE_PLAYER.send(sender)
                 return
             }
 
@@ -163,14 +163,14 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
             }
 
             val newLimit = this.manager.modifyPersonalUsages(player.uniqueId, voucher.id, value, false)
-            Lang.LIMIT__MODIFY__PERSONAL__CONFIRMATION.send(
+            Lang.USAGES__MODIFY__PERSONAL__CONFIRMATION.send(
                 sender,
                 newLimit, player.name(args[1]), value, voucher.id
             )
         }
 
         override fun completion(player: Player, voucher: Voucher, args: List<String>): List<String> {
-            // /av limit [voucher] modify [value] (player)
+            // /av usages [voucher] modify [value] (player)
             if (args.size == 2 && voucher.settings.limit.type == LimitType.PERSONAL) {
                 return command.createPlayersCompletion(args[1])
             }
@@ -181,14 +181,14 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
     }
 
     /**
-     * Usage: /av limit `[voucher]` set `[newValue]` (player, if limit.type is [LimitType.PERSONAL])
+     * Usage: /av usages `[voucher]` set `[newValue]` (player, if limit.type is [LimitType.PERSONAL])
      */
     private class SetAction(command: ArcaneCommand, manager: LimitManager) : LimitAction(command, manager) {
 
         override fun execute(sender: CommandSender, voucher: Voucher, args: Array<String>) {
             // The action require a 'newValue'
             if (args.isEmpty()) {
-                Lang.LIMIT__SET__NEW_VALUE.send(sender)
+                Lang.USAGES__SET__USAGE.send(sender)
                 return
             }
 
@@ -200,12 +200,12 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
 
             if (voucher.settings.limit.type == LimitType.GLOBAL) {
                 manager.modifyGlobalUsages(voucher.id, newValue, true)
-                Lang.LIMIT__SET__GLOBAL__CONFIRMATION.send(sender, newValue, voucher.id)
+                Lang.USAGES__SET__GLOBAL__CONFIRMATION.send(sender, newValue, voucher.id)
                 return
             }
 
             if (args.size < 2) {
-                Lang.LIMIT__SET__PERSONAL__REQUIRE_PLAYER.send(sender)
+                Lang.USAGES__SET__PERSONAL__REQUIRE_PLAYER.send(sender)
                 return
             }
 
@@ -217,11 +217,11 @@ class LimitCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
             }
 
             this.manager.modifyPersonalUsages(player.uniqueId, voucher.id, newValue, true)
-            Lang.LIMIT__SET__PERSONAL__CONFIRMATION.send(sender, newValue, player.name(args[1]), voucher.id)
+            Lang.USAGES__SET__PERSONAL__CONFIRMATION.send(sender, newValue, player.name(args[1]), voucher.id)
         }
 
         override fun completion(player: Player, voucher: Voucher, args: List<String>): List<String> {
-            // /av limit [voucher] set [newValue] (player)
+            // /av usages [voucher] set [newValue] (player)
             if (args.size == 2 && voucher.settings.limit.type == LimitType.PERSONAL) {
                 return command.createPlayersCompletion(args[1])
             }
