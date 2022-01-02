@@ -1,6 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.updater.updaters;
 
 import me.gabytm.minecraft.arcanevouchers.updater.utils.Files;
+import me.gabytm.minecraft.arcanevouchers.updater.utils.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -56,27 +57,29 @@ public class ConfigUpdater {
         });
 
         config.node("confirmationGui", "items").act(items -> {
-            items.node("buttons").act(buttons -> {
-                for (final CommentedConfigurationNode button : buttons.childrenMap().values()) {
-                    final String name = button.node("display_name").getString();
+            updateConfirmationGuiItems(items, "buttons");
+            updateConfirmationGuiItems(items, "other");
+        });
+    }
 
-                    if (name != null) {
-                        button.node("name").set(name);
-                        button.removeChild("display_name");
-                    }
+    private void updateConfirmationGuiItems(final CommentedConfigurationNode root, final String path) throws SerializationException {
+        root.node(path).act(node -> {
+            for (final CommentedConfigurationNode item : node.childrenMap().values()) {
+                final String name = item.node("display_name").getString();
+
+                if (name != null) {
+                    item.node("name").set(Strings.upgradeColorsFormat(name));
+                    item.removeChild("display_name");
                 }
-            });
 
-            items.node("other").act(other -> {
-                for (final CommentedConfigurationNode item : other.childrenMap().values()) {
-                    final String name = item.node("display_name").getString();
-
-                    if (name != null) {
-                        item.node("name").set(name);
-                        item.removeChild("display_name");
+                item.node("lore").act(loreNode -> {
+                    if (!loreNode.isList() || loreNode.empty()) {
+                        return;
                     }
-                }
-            });
+
+                    loreNode.set(Strings.upgradeColorsFormat(loreNode.getList(String.class)));
+                });
+            }
         });
     }
 
