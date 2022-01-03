@@ -9,6 +9,7 @@ abstract class Message(protected val string: String) {
 
     companion object {
 
+        /* no-op */
         val NONE = object : Message("") {
             override fun send(player: Audience, args: Map<String, String>) { }
         }
