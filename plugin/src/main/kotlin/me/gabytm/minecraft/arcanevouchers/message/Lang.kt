@@ -14,54 +14,63 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
     PREFIX("prefix"),
 
     // Messages used pretty much for all commands and not only
-    GENERAL__INVALID__NUMBER__INTEGER("general.invalid.number.integer", "{input}"),
-    GENERAL__INVALID__NUMBER__LONG("general.invalid.number.long", "{input}"),
+    GENERAL__INVALID__NUMBER__INTEGER("general.invalid.number.integer", Placeholder.INPUT),
+    GENERAL__INVALID__NUMBER__LONG("general.invalid.number.long", Placeholder.INPUT),
 
     GENERAL__NO_PERMISSION("general.noPermission"),
 
-    GENERAL__UNKNOWN__PLAYER("general.unknown.player", "{input}"),
-    GENERAL__UNKNOWN__VOUCHER("general.unknown.voucher", "{input}"),
+    GENERAL__UNKNOWN__PLAYER("general.unknown.player", Placeholder.INPUT),
+    GENERAL__UNKNOWN__VOUCHER("general.unknown.voucher", Placeholder.INPUT),
     //-----
 
     // Messages for the give command
-    GIVE__SENDER("give.sender", "{amount}", "{receiver}", "{voucher}"),
+    GIVE__SENDER("give.sender", Placeholder.AMOUNT, Placeholder.RECEIVER, Placeholder.VOUCHER),
     GIVE__USAGE("give.usage"),
     //-----
 
-    HELP("help", "{version}"),
-    
+    HELP("help", Placeholder.VERSION),
+
     // Messages for the list command
     LIST__NO_VOUCHERS("list.noVouchers"),
-    LIST__PREFIX("list.prefix", "{amount}"),
+    LIST__PREFIX("list.prefix", Placeholder.AMOUNT),
     LIST__SEPARATOR("list.separator"),
     LIST__SUFFIX("list.suffix"),
-    LIST__VOUCHER("list.voucher", "{voucher}"),
+    LIST__VOUCHER("list.voucher", Placeholder.VOUCHER),
     //-----
 
     RELOAD("reload"),
 
     // Messages for the usages command
-    USAGES__TYPE_NONE("usages.typeNone", "{voucher}"),
+    USAGES__TYPE_NONE("usages.typeNone", Placeholder.VOUCHER),
     USAGES__USAGE("usages.usage"),
 
-    USAGES__CHECK__GLOBAL("usages.check.global.message", "{limit}", "{usages}","{voucher}"),
-    USAGES__CHECK__PERSONAL("usages.check.personal.message", "{limit}", "{player}", "{usages}", "{voucher}"),
+    USAGES__CHECK__GLOBAL("usages.check.global.message", Placeholder.LIMIT, Placeholder.USAGES, Placeholder.VOUCHER),
+    USAGES__CHECK__PERSONAL(
+        "usages.check.personal.message",
+        Placeholder.LIMIT, Placeholder.PLAYER, Placeholder.USAGES, Placeholder.VOUCHER
+    ),
     USAGES__CHECK__PERSONAL__REQUIRE_PLAYER("usages.check.personal.requirePlayer"),
 
     USAGES__MODIFY__USAGE("usages.modify.usage"),
     USAGES__MODIFY__GLOBAL__CONFIRMATION(
         "usages.modify.global.confirmation",
-        "{new_limit}", "{value}", "{voucher}"
+        Placeholder.NEW_LIMIT, Placeholder.VALUE, Placeholder.VOUCHER
     ),
     USAGES__MODIFY__PERSONAL__CONFIRMATION(
         "usages.modify.player.confirmation",
-        "{new_limit}", "{player}", "{value}", "{voucher}"
+        Placeholder.NEW_LIMIT, Placeholder.PLAYER, Placeholder.VALUE, Placeholder.VOUCHER
     ),
     USAGES__MODIFY__PERSONAL__REQUIRE_PLAYER("usages.modify.personal.requirePlayer"),
 
     USAGES__SET__USAGE("usages.set.usage"),
-    USAGES__SET__GLOBAL__CONFIRMATION("usages.set.global.confirmation", "{new_value}", "{voucher}"),
-    USAGES__SET__PERSONAL__CONFIRMATION("usages.set.personal.confirmation", "{new_value}", "{player}", "{voucher}"),
+    USAGES__SET__GLOBAL__CONFIRMATION(
+        "usages.set.global.confirmation",
+        Placeholder.NEW_VALUE, Placeholder.VOUCHER
+    ),
+    USAGES__SET__PERSONAL__CONFIRMATION(
+        "usages.set.personal.confirmation",
+        Placeholder.NEW_VALUE, Placeholder.PLAYER, Placeholder.VOUCHER
+    ),
     USAGES__SET__PERSONAL__REQUIRE_PLAYER("usages.set.personal.requirePlayer")
     //-----
     ;
@@ -138,6 +147,29 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
                 it.component = lang.getString(it.path)?.mini()
             }
         }
+
+    }
+
+    private object Placeholder {
+
+        const val AMOUNT: String = "{amount}"
+
+        const val INPUT: String = "{input}"
+
+        const val LIMIT: String = "{limit}"
+
+        const val NEW_LIMIT: String = "{new_limit}"
+        const val NEW_VALUE: String = "{new_value}"
+
+        const val PLAYER: String = "{player}"
+
+        const val RECEIVER: String = "{receiver}"
+
+        const val USAGES: String = "{usages}"
+
+        const val VALUE: String = "{value}"
+        const val VERSION: String = "{version}"
+        const val VOUCHER: String = "{voucher}"
 
     }
 
