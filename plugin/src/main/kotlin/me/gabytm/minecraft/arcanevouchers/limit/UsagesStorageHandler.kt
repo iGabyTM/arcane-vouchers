@@ -4,59 +4,16 @@ import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.functions.error
-import java.io.File
-import java.io.IOException
+import me.gabytm.minecraft.arcanevouchers.sql.SqlQuery
+import me.gabytm.minecraft.arcanevouchers.sql.Storage
 import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.PreparedStatement
 import java.sql.SQLException
 import java.util.*
 
-class LimitStorageHandler(plugin: ArcaneVouchers) {
-
-    private val databaseFile = File(plugin.dataFolder, "usages.sql.db")
-    private var connected = false
-    private lateinit var connection: Connection
-
-    init {
-        if (connect()) {
-            createTables()
-        }
-    }
-
-    private fun connect(): Boolean {
-        if (!databaseFile.exists()) {
-            try {
-                databaseFile.createNewFile()
-            } catch (e: IOException) {
-                error("Could not create ${databaseFile.path}", e)
-                return false
-            }
-        }
-
-        try {
-            Class.forName("org.sqlite.JDBC")
-            this.connection = DriverManager.getConnection("jdbc:sqlite:${databaseFile.path}")
-        } catch (e: ClassNotFoundException) {
-            error("Could not find class org.sqlite.JDBC", e)
-            return false
-        } catch (e: SQLException) {
-            error("Could not establish database connection", e)
-            return false
-        }
-
-        this.connected = true
-        return true
-    }
-
-    private fun createTables() {
-        try {
-            Query.CREATE_GLOBAL_TABLE.prepare(connection).executeUpdate()
-            Query.CREATE_PERSONAL_TABLE.prepare(connection).executeUpdate()
-        } catch (e: SQLException) {
-            error("Could not create tables", e)
-        }
-    }
+class UsagesStorageHandler(plugin: ArcaneVouchers) : Storage<UsagesStorageHandler.Query>(
+    plugin, "/storage/usages.sql.db", setOf(Query.CREATE_GLOBAL_TABLE, Query.CREATE_PERSONAL_TABLE)
+) {
 
     fun loadGlobalUsages(): Map<String, Long> {
         if (!connected) {
@@ -138,7 +95,7 @@ class LimitStorageHandler(plugin: ArcaneVouchers) {
         }
     }
 
-    private enum class Query(private val query: String) {
+    enum class Query(private val query: String) : SqlQuery {
 
         CREATE_GLOBAL_TABLE(
             """
@@ -188,7 +145,7 @@ class LimitStorageHandler(plugin: ArcaneVouchers) {
 
         SELECT_PERSONAL("SELECT uuid, voucher, usages FROM `personal_usages`;");
 
-        fun prepare(connection: Connection): PreparedStatement {
+        override fun prepare(connection: Connection): PreparedStatement {
             return connection.prepareStatement(this.query)
         }
 
