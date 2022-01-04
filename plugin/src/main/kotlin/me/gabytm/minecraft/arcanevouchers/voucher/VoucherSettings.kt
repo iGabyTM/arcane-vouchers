@@ -1,11 +1,13 @@
 package me.gabytm.minecraft.arcanevouchers.voucher
 
+import me.gabytm.minecraft.arcanevouchers.functions.parseTime
 import me.gabytm.minecraft.arcanevouchers.functions.replace
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
 import me.gabytm.minecraft.arcanevouchers.message.Message
 import org.bukkit.World
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
+import java.util.concurrent.TimeUnit
 import kotlin.math.max
 
 class VoucherSettings(
@@ -13,6 +15,7 @@ class VoucherSettings(
     val messages: Messages = Messages(),
     val confirmationEnabled: Boolean = false,
     val limit: Limit = Limit(),
+    val cooldown: Cooldown = Cooldown(),
     val permissions: Permissions = Permissions(),
     val worlds: Worlds = Worlds(),
     val regions: Regions = Regions(),
@@ -35,6 +38,22 @@ class VoucherSettings(
         val limit: Long = 0L,
         val message: Message = Message.NONE
     )
+
+    data class Cooldown(
+        val cooldown: Long = 0L,
+        val allowBulkOpen: Boolean = true,
+        val message: Message = Message.NONE
+    ) {
+
+        fun has(): Boolean = this.cooldown >= MIN_COOLDOWN
+
+        companion object {
+
+            private const val MIN_COOLDOWN: Long = 1_000L // 1 second > 1,000 ms
+
+        }
+
+    }
 
     class Permissions(
         private val whitelistPermissions: List<String> = emptyList(),
@@ -142,6 +161,12 @@ class VoucherSettings(
                 Message.create(config.getString("limit.message") ?: "")
             )
 
+            val cooldown = Cooldown(
+                (config.getString("cooldown.cooldown") ?: "").parseTime(TimeUnit.MILLISECONDS),
+                config.getBoolean("cooldown.allowBulkOpen", true),
+                Message.create(config.getString("cooldown.message") ?: "")
+            )
+
             val permissions = Permissions(
                 config.getStringList("permissions.whitelist.list"),
                 Message.create(config.getString("permissions.whitelist.message") ?: ""),
@@ -168,7 +193,7 @@ class VoucherSettings(
                 Message.create(config.getString("bindToReceiver.message") ?: "")
             )
 
-            return VoucherSettings(bulkOpen, messages, confirmationEnabled, limit, permissions, worlds, regions, bindToReceiver)
+            return VoucherSettings(bulkOpen, messages, confirmationEnabled, limit, cooldown, permissions, worlds, regions, bindToReceiver)
         }
 
     }

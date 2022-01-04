@@ -31,6 +31,9 @@ object Constant {
 
         const val ADMIN = "$BASE.admin"
 
+        const val COOLDOWN_BYPASS_ALL = "$BASE.cooldownbypass"
+        const val COOLDOWN_BYPASS = "$COOLDOWN_BYPASS_ALL.%s"
+
         const val LIMIT_BYPASS = "$BASE.limitbypass"
         const val LIMIT_BYPASS_ALL_GLOBAL = "$LIMIT_BYPASS.*.global"
         const val LIMIT_BYPASS_ALL_PERSONAL = "$LIMIT_BYPASS.*.personal"

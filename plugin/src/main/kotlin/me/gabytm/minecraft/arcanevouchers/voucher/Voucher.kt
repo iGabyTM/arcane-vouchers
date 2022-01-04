@@ -38,6 +38,7 @@ class Voucher private constructor(
             voucher.amount = voucher.amount - amount
         }
 
+        plugin.voucherManager.cooldownManager.addCooldown(player.uniqueId, this.id, this.settings.cooldown.cooldown)
         this.settings.messages.redeemMessage.send(plugin.audiences.player(player), mapOf("{amount}" to amount.toString()))
     }
 

@@ -1,10 +1,13 @@
 package me.gabytm.minecraft.arcanevouchers
 
+import me.gabytm.minecraft.arcanevouchers.functions.parseTime
 import org.bukkit.configuration.file.FileConfiguration
+import java.util.concurrent.TimeUnit
 
 class Settings(config: FileConfiguration) {
 
     var disableCrafting: Boolean = false; private set
+    var cooldownSaveThreshold: Long = 30L; private set
 
     init {
         load(config)
@@ -12,6 +15,7 @@ class Settings(config: FileConfiguration) {
 
     fun load(config: FileConfiguration) {
         this.disableCrafting = config.getBoolean("settings.disable.crafting")
+        this.cooldownSaveThreshold = (config.getString("settings.cooldownSaveThreshold") ?: "").parseTime(TimeUnit.MILLISECONDS)
     }
 
 }

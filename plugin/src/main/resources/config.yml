@@ -13,6 +13,14 @@ settings:
   command: arcanevouchers
   alias:
     - av
+  #
+  # Any cooldown lower than the threshold won't be saved to database
+  # Set it to 0 to save all cooldowns. The value supports formatting with letters:
+  # h - hours
+  # m - minutes
+  # s - seconds
+  #
+  cooldownSaveThreshold: 1m
 
 confirmationGui:
   size: 3 # The number of rows, min 1 and max 6

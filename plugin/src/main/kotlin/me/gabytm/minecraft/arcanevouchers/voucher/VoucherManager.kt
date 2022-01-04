@@ -3,6 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.voucher
 import de.tr7zw.nbtapi.NBTItem
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant.NBT
+import me.gabytm.minecraft.arcanevouchers.cooldown.CooldownManager
 import me.gabytm.minecraft.arcanevouchers.functions.add
 import me.gabytm.minecraft.arcanevouchers.functions.info
 import me.gabytm.minecraft.arcanevouchers.functions.toArgsMap
@@ -19,6 +20,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
     private val loadedVouchers = mutableMapOf<String, Voucher>()
 
     private val confirmationGui = ConfirmationGui(plugin)
+    val cooldownManager = CooldownManager(plugin)
     val limitManager = LimitManager(plugin)
 
     fun load() {

@@ -14,6 +14,11 @@ repositories {
     maven {
         url 'https://repo.mattstudios.me/artifactory/public/'
     }
+
+    maven {
+        name 'TimeAPI'
+        url 'https://repo.piggypiglet.me/releases'
+    }
 }
 
 dependencies {
@@ -47,6 +52,9 @@ dependencies {
 
     // bStats
     implementation 'org.bstats:bstats-bukkit:2.2.1'
+
+    // TimeAPI - https://github.com/PiggyPiglet/TimeAPI
+    implementation 'me.piggypiglet:TimeAPI:+'
 
     // Other dependencies that don't have a repository or the release is old
     compileOnly fileTree(dir: './libs', includes: ['*.jar'])

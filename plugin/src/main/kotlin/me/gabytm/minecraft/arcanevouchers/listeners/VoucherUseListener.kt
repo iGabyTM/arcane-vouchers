@@ -105,6 +105,18 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             }
         }
 
+        // The voucher has a cooldown set
+        if (settings.cooldown.has()) {
+            val timeLeft = voucherManager.cooldownManager.getTimeLeft(player.uniqueId, voucher)
+
+            // The player is on cooldown, and they can't bypass it
+            if (timeLeft > 0L && !voucherManager.cooldownManager.bypassCooldown(player, voucherId)) {
+                // TODO: 1/4/2022 format time left
+                settings.cooldown.message.send(audience, args.add("{left}","${timeLeft / 1000}s"))
+                return
+            }
+        }
+
         val world = this.player.world
         val worlds = settings.worlds
 
@@ -151,7 +163,7 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             return
         }
 
-        val isBulk = settings.bulkOpen.enabled && player.isSneaking
+        val isBulk = settings.bulkOpen.enabled && player.isSneaking && settings.cooldown.allowBulkOpen
 
         if (settings.confirmationEnabled) {
             voucherManager.openConfirmation(player, voucher, item, isBulk)
