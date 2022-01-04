@@ -126,7 +126,7 @@ class ItemCreator(private val plugin: ArcaneVouchers) {
 
         // Decide what ItemBuilder implementation should be used
         val builder = if (material.isPlayerHead(damage)) {
-            SkullTextureProvider.applyTexture(config.getString("skull") ?: "")
+            SkullTextureProvider.applyTexture(config.getString("texture") ?: "")
         } else {
             ItemBuilder.from(ItemStack(material, 1, damage))
         }

@@ -27,10 +27,14 @@ interface SkullTextureProvider {
         }
 
         fun applyTexture(input: String): SkullBuilder {
+            if (input.isEmpty()) {
+                return Type.NONE.apply("")
+            }
+
             val parts = input.split(Constant.Separator.SEMICOLON, 2)
 
             if (parts.size == 1) {
-                return Type.NONE.apply(parts[0])
+                return Type.BASE_64.apply(parts[0])
             }
 
             return when (parts[0].lowercase()) {
