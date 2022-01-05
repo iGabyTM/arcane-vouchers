@@ -2,7 +2,6 @@ package me.gabytm.minecraft.arcanevouchers.actions.implementations.message
 
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.functions.audience
-import me.gabytm.minecraft.arcanevouchers.functions.info
 import net.kyori.adventure.audience.Audience
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -49,7 +48,7 @@ class Broadcast private constructor(private val conditions: List<Condition<*>>, 
                 return NO_BROADCAST
             }
 
-            if (string.equals("*") || string.trim().isEmpty()) {
+            if (string == "*" || string.trim().isEmpty()) {
                 return EVERYONE
             }
 
