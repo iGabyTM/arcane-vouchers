@@ -5,17 +5,19 @@ import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.Consol
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.PlayerCommandAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.crates.GiveCrateReloadedKeyAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.AddExpAction
-import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.AddMoneyAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.BossBarAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.ChatAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.MessageAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.SoundAction
+import me.gabytm.minecraft.arcanevouchers.actions.implementations.vault.AddMoneyAction
+import me.gabytm.minecraft.arcanevouchers.actions.implementations.vault.PermissionAction
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.actions.placeholders.PlayerNamePlaceholderProvider
 import me.gabytm.minecraft.arcanevouchers.functions.info
 import me.gabytm.util.actions.actions.Action
 import me.gabytm.util.actions.spigot.actions.SpigotActionManager
 import net.milkbowl.vault.economy.Economy
+import net.milkbowl.vault.permission.Permission
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -24,6 +26,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
     private val handler = PermissionHandler()
 
     private lateinit var economy: Economy
+    private lateinit var permission: Permission
 
     init {
         registerDefaults(Player::class.java)
@@ -43,10 +46,19 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
         // Other
         register("addexp") { AddExpAction(it, handler) }
+        register("sound") { SoundAction(it, handler) }
+
+        // Vault
         if (setupEconomy()) {
             register("addmoney") { AddMoneyAction(it, handler, economy) }
         }
-        register("sound") { SoundAction(it, handler) }
+
+        if (setupPermission()) {
+            register("permission") { PermissionAction(it, handler, permission) }
+        }
+        //-----
+
+        info("Loaded actions: ${actions.rowKeySet().sorted().joinToString(", ")}")
 
         // '%player_name' is the only placeholder replaced in case PlaceholderAPI is not installed
         placeholderManager.register(PlayerNamePlaceholderProvider())
@@ -70,6 +82,16 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
         val rsp = Bukkit.getServicesManager().getRegistration(Economy::class.java) ?: return false
         this.economy = rsp.provider
+        return true
+    }
+
+    private fun setupPermission(): Boolean {
+        if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+            return false
+        }
+
+        val rsp = Bukkit.getServicesManager().getRegistration(Permission::class.java) ?: return false
+        this.permission = rsp.provider
         return true
     }
 
