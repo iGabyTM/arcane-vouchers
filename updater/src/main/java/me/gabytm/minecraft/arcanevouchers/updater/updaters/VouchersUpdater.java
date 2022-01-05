@@ -201,6 +201,28 @@ public class VouchersUpdater {
                     break;
                 }
 
+                case "sound": {
+                    final String[] parts = data.split(" ", 3);
+
+                    switch (parts.length) {
+                        case 1: {
+                            updatedActions.add("[sound] " + parts[0]);
+                            break;
+                        }
+
+                        case 2: {
+                            updatedActions.add(format("{volume=%s} [sound] %s", parts[1], parts[0]));
+                        }
+
+                        case 3: {
+                            updatedActions.add(format("{volume=%s pitch=%s} [sound] %s", parts[1], parts[2], parts[0]));
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+
                 // addmoney, console, message, player
                 default: {
                     updatedActions.add(format("[%s] %s", id, data));
