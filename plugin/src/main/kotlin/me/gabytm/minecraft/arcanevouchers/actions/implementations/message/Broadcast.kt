@@ -56,7 +56,6 @@ class Broadcast private constructor(private val conditions: List<Condition<*>>, 
             val conditions = mutableListOf<Condition<*>>()
 
             for (condition in string.split(Constant.Separator.COMMA)) {
-                info(condition)
                 when {
                     condition.startsWith("permission", true) -> {
                         PermissionCondition(condition.split(Constant.Separator.COLON)[1])
@@ -69,10 +68,7 @@ class Broadcast private constructor(private val conditions: List<Condition<*>>, 
                     condition.equals("world", true) -> WorldCondition()
 
                     else -> null
-                }?.let {
-                    info(it.toString())
-                    conditions.add(it)
-                }
+                }?.let { conditions.add(it) }
             }
 
             return Broadcast(conditions)
