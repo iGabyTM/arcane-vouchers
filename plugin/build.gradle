@@ -72,6 +72,7 @@ shadowJar {
             'dev.triumphteam.gui'   : 'gui',
             'net.kyori.adventure'   : 'adventure',
             'me.mattstudios.mf'     : 'commands',
+            'sh.okx.timeapi'        : 'timeapi',
             'org.bstats'            : 'bstats',
             'kotlin'                : 'kt'
     ].each { relocate(it.key, project.group + '.arcanevouchers.libs.' + it.value) }
