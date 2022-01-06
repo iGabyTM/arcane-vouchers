@@ -8,12 +8,14 @@ import dev.triumphteam.gui.builder.item.ItemBuilder
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
+import me.gabytm.minecraft.arcanevouchers.functions.error
 import me.gabytm.minecraft.arcanevouchers.functions.isPlayerHead
 import me.gabytm.minecraft.arcanevouchers.functions.mini
 import me.gabytm.minecraft.arcanevouchers.functions.warning
 import me.gabytm.minecraft.arcanevouchers.items.skulls.SkullTextureProvider
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.configuration.ConfigurationSection
@@ -21,7 +23,7 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
-class ItemCreator(private val plugin: ArcaneVouchers) {
+class ItemCreator(plugin: ArcaneVouchers) {
 
     private val nbtHandler = NBTHandler(plugin)
 
@@ -51,12 +53,34 @@ class ItemCreator(private val plugin: ArcaneVouchers) {
     }
 
     /**
+     * Attempt to parse a [Color] from a string with format `red,green,blue`
+     * @return [Color] or null
+     */
+    private fun String.toColor(): Color? {
+        val parts = split(Constant.Separator.COMMA, 3)
+
+        if (parts.size != 3) {
+            return null
+        }
+
+        val red = parts[0].toIntOrNull(16) ?: return null
+        val green = parts[1].toIntOrNull(16) ?: return null
+        val blue = parts[2].toIntOrNull(16) ?: return null
+
+        return try {
+            Color.fromRGB(red, green, blue)
+        } catch (e: IllegalArgumentException) {
+            error("Could not parse color from '$this'", e)
+            null
+        }
+    }
+
+    /**
      * Set the general meta to the item and build it
      * @param isVoucher whether the item is a voucher
      * @param config the section from where values are read
      * @return an [ItemStack] created according to the specified values
      */
-    // TODO: 9/17/2021 add support for color
     private fun BaseItemBuilder<*>.setGeneralMeta(isVoucher: Boolean, config: ConfigurationSection): ItemStack {
         val flags = config.getStringList("flags")
             .mapNotNull { Enums.getIfPresent(ItemFlag::class.java, it.uppercase()).orNull() }
@@ -84,10 +108,12 @@ class ItemCreator(private val plugin: ArcaneVouchers) {
                 if (enchants.isEmpty()) {
                     glow(config.getBoolean("glow"))
                 }
+
+                config.getString("color")?.toColor()?.let { color(it) }
             }.build()
 
         if (isVoucher) {
-            // Get the voucher ID
+            // Get the JSON of this voucher
             val nbt = nbtHandler.getNbt(config.parent?.name ?: "") ?: return item
             return NBTItem(item).apply { mergeCompound(NBTContainer(nbt)) }.item
         }
