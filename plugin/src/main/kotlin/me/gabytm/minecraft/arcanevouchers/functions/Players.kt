@@ -19,6 +19,14 @@ fun Player.item(): ItemStack {
 }
 
 /**
+ * Add items to a player inventory and drop on the ground the leftovers
+ * @param items items to add
+ */
+fun Player.giveItems(vararg items: ItemStack) {
+    inventory.addItem(*items).values.forEach { world.dropItem(location, it) }
+}
+
+/**
  * Get the name of an [OfflinePlayer] and return a default value if it is null
  * @param default the default value returned in case the name is null
  * @return [OfflinePlayer.name] or `default` if it is null

@@ -5,6 +5,7 @@ import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.Consol
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.PlayerCommandAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.crates.GiveCrateReloadedKeyAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.AddExpAction
+import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.ItemAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.BossBarAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.ChatAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.MessageAction
@@ -35,18 +36,26 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         // Commands
         register("console") { ConsoleCommandAction(it, handler) }
         register("player") { PlayerCommandAction(it, handler) }
+        //-----
 
         // Crates
         register("CrateReloaded", GiveCrateReloadedKeyAction.ID) { GiveCrateReloadedKeyAction(it, handler) }
+        //-----
+
+        // Economy
+        register("addexp") { AddExpAction(it, handler) }
+        register("item") { ItemAction(it, handler) }
+        //-----
 
         // Message
         register("bossbar") { BossBarAction(it, handler) }
         register("chat") { ChatAction(it, handler) }
         register("message") { MessageAction(it, handler) }
+        //-----
 
         // Other
-        register("addexp") { AddExpAction(it, handler) }
         register("sound") { SoundAction(it, handler) }
+        //-----
 
         // Vault
         if (setupEconomy()) {
