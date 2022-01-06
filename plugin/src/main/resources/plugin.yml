@@ -12,6 +12,7 @@ depend:
   - NBTAPI
 
 softdepend:
+  - CrateReloaded
   - PlaceholderAPI
   - Vault
   - WorldGuard
