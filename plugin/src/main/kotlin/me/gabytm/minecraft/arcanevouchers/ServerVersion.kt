@@ -20,9 +20,9 @@ object ServerVersion {
     val IS_LEGACY = VERSION < V_1_13
 
     /**
-     * Whether the current version has the [org.bukkit.Keyed] class
+     * Whether the current version has the [org.bukkit.NamespacedKey] class
      */
-    val HAS_KEYED = VERSION >= V_1_13
+    val HAS_KEYS = VERSION >= V_1_13
 
     /**
      * Gets the current server version

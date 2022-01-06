@@ -6,9 +6,12 @@ import me.gabytm.minecraft.arcanevouchers.functions.error
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.sound.Sound
 import org.bukkit.Bukkit
+import org.bukkit.DyeColor
 import org.bukkit.Material
-import org.bukkit.Tag
+import org.bukkit.block.banner.PatternType
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.enchantments.Enchantment
+import org.bukkit.inventory.ItemFlag
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -39,12 +42,24 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         yaml["bossBar.progress.min"] = BossBar.MIN_PROGRESS
         yaml["bossBar.progress.max"] = BossBar.MAX_PROGRESS
 
+        yaml["dyeColors"] = DyeColor.values().map { it.name }
+
+        yaml["enchantments"] = if (ServerVersion.HAS_KEYS) {
+            Enchantment.values().map { it.key.toString() }
+        } else {
+            Enchantment.values().map { it.name }
+        }
+
+        yaml["itemFlags"] = ItemFlag.values().map { it.name }
+
         yaml["materials"] = Material.values().map { it.name }.filter { !it.startsWith("LEGACY_") }
+
+        yaml["patternTypes"] = PatternType.values().map { it.name }
 
         yaml["sound.sources"] = Sound.Source.NAMES.keys().toList()
 
-        if (ServerVersion.HAS_KEYED) {
-            yaml["sound.sounds"] = org.bukkit.Sound.values().map { it.key.toString() }.toList()
+        if (ServerVersion.HAS_KEYS) {
+            yaml["sound.sounds"] = org.bukkit.Sound.values().map { it.key.toString() }
         }
 
         try {
