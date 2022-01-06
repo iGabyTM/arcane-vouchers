@@ -1,14 +1,15 @@
 package me.gabytm.minecraft.arcanevouchers.actions.permission
 
+import me.gabytm.minecraft.arcanevouchers.Constant
 import org.bukkit.entity.Player
 import java.util.*
 
-enum class PermissionMode(val prefix: String) {
+enum class PermissionMode {
 
     /**
      * No permission mode
      */
-    NONE("") {
+    NONE {
         override fun execute(handler: PermissionHandler, player: Player, permission: String, action: () -> Unit) {
             action()
         }
@@ -17,7 +18,7 @@ enum class PermissionMode(val prefix: String) {
     /**
      * The permission is required for the action to run
      */
-    REQUIRE("") {
+    REQUIRE {
         override fun execute(handler: PermissionHandler, player: Player, permission: String, action: () -> Unit) {
             if (player.hasPermission(permission)) {
                 action()
@@ -28,11 +29,11 @@ enum class PermissionMode(val prefix: String) {
     /**
      * The permission is required for the action to run, and it will be removed after the fist execution
      */
-    REMOVE("-") {
+    REMOVE {
         override fun execute(handler: PermissionHandler, player: Player, permission: String, action: () -> Unit) {
             if (player.hasPermission(permission)) {
-                handler.remove(player, permission)
                 action()
+                handler.remove(player, permission)
             }
         }
     },
@@ -40,7 +41,7 @@ enum class PermissionMode(val prefix: String) {
     /**
      * The action will run only if the player doesn't have the permission
      */
-    NO_PERMISSION("!") {
+    NO_PERMISSION {
         override fun execute(handler: PermissionHandler, player: Player, permission: String, action: () -> Unit) {
             if (!player.hasPermission(permission)) {
                 action()
@@ -51,7 +52,7 @@ enum class PermissionMode(val prefix: String) {
     /**
      * The permission will be added after the first execution and the action won't run next time
      */
-    ADD("+") {
+    ADD {
         override fun execute(handler: PermissionHandler, player: Player, permission: String, action: () -> Unit) {
             if (!player.hasPermission(permission)) {
                 handler.add(player, permission)
@@ -63,7 +64,7 @@ enum class PermissionMode(val prefix: String) {
     /**
      * The permission will be added before the action is executed and removed afterwords
      */
-    ADD_TEMP("~") {
+    ADD_TEMP {
         override fun execute(handler: PermissionHandler, player: Player, permission: String, action: () -> Unit) {
             if (player.hasPermission(permission)) {
                 action()
@@ -82,13 +83,14 @@ enum class PermissionMode(val prefix: String) {
         private val VALUES = EnumSet.allOf(PermissionMode::class.java)
 
         fun getPermissionAndMode(permission: String): Pair<String, PermissionMode> {
-            val prefix = permission.first().toString()
+            val parts = permission.split(Constant.Separator.SEMICOLON)
 
-            return when (val mode = VALUES.firstOrNull { prefix == it.prefix } ?: REQUIRE) {
-                NONE -> "" to mode
-                REQUIRE -> permission to mode
-                else -> permission.substring(1) to mode
+            if (parts.size == 1) {
+                return parts[0] to REQUIRE
             }
+
+            val mode = VALUES.firstOrNull { parts[0].equals(it.name, true) } ?: REQUIRE
+            return parts[1] to mode
         }
 
     }
