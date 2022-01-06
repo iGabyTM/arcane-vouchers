@@ -7,12 +7,15 @@ import dev.triumphteam.gui.builder.item.BaseItemBuilder
 import dev.triumphteam.gui.builder.item.ItemBuilder
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
+import me.gabytm.minecraft.arcanevouchers.ServerVersion
 import me.gabytm.minecraft.arcanevouchers.functions.isPlayerHead
 import me.gabytm.minecraft.arcanevouchers.functions.mini
+import me.gabytm.minecraft.arcanevouchers.functions.warning
 import me.gabytm.minecraft.arcanevouchers.items.skulls.SkullTextureProvider
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
@@ -26,8 +29,23 @@ class ItemCreator(private val plugin: ArcaneVouchers) {
      * Turn a list with 2 elements into a Pair<[Enchantment], [Int]>
      * @return pair or null if the enchantment or level are null
      */
+    @Suppress("DEPRECATION")
     private fun List<String>.toEnchantmentPair(): Pair<Enchantment, Int>? {
-        val enchantment = Enchantment.getByName(first()) ?: return null
+        val enchantment = if (ServerVersion.HAS_KEYS) {
+            val parts = first().split(Constant.Separator.COLON, 2)
+
+            // The server has NamespacedKeys but this isn't one
+            if (parts.size != 2) {
+                Enchantment.getByName(parts[0])
+            }
+
+            Enchantment.getByKey(NamespacedKey(parts[0], parts[1]))
+        } else {
+            Enchantment.getByName(first())
+        } ?: kotlin.run {
+            warning("Unknown enchantment ${first()}")
+            return null
+        }
         val level = get(1).toIntOrNull() ?: return null
         return enchantment to level
     }
