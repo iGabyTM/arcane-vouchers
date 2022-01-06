@@ -40,20 +40,10 @@ class VoucherSettings(
     )
 
     data class Cooldown(
+        val enabled: Boolean = false,
         val cooldown: Long = 0L,
-        val allowBulkOpen: Boolean = true,
         val message: Message = Message.NONE
-    ) {
-
-        fun has(): Boolean = this.cooldown >= MIN_COOLDOWN
-
-        companion object {
-
-            private const val MIN_COOLDOWN: Long = 1_000L // 1 second > 1,000 ms
-
-        }
-
-    }
+    )
 
     class Permissions(
         private val whitelistPermissions: List<String> = emptyList(),
@@ -162,8 +152,8 @@ class VoucherSettings(
             )
 
             val cooldown = Cooldown(
-                (config.getString("cooldown.cooldown") ?: "").parseTime(TimeUnit.MILLISECONDS),
                 config.getBoolean("cooldown.allowBulkOpen", true),
+                (config.getString("cooldown.cooldown") ?: "").parseTime(TimeUnit.MILLISECONDS),
                 Message.create(config.getString("cooldown.message") ?: "")
             )
 
