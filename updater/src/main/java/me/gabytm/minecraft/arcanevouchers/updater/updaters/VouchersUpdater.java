@@ -96,7 +96,7 @@ public class VouchersUpdater {
             if (material.startsWith("head;")) {
                 LOGGER.info("Replacing {} with PLAYER_HEAD (if you are on pre 1.13 you need SKULL_ITEM and 'damage:3') and setting the texture on its own key", material);
                 materialNode.set(material);
-                node.node("texture").set(material.split(";")[1]);
+                node.node("texture").set("BASE64;" + material.split(";")[1]);
             }
         });
 
