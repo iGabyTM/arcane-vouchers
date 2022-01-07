@@ -25,7 +25,14 @@ class Voucher private constructor(
         }
 
         if (isBulk) {
-            plugin.actionManager.executeActions(player, this.bulkActions, mutableMapOf("%amount%" to amount.toString()))
+            // Execute actions n times (n = amount) if bulkActions is empty
+            if (this.bulkActions.isEmpty()) {
+                for (i in 1..amount) {
+                    plugin.actionManager.executeActions(player, this.actions)
+                }
+            } else {
+                plugin.actionManager.executeActions(player, this.bulkActions, mutableMapOf("%amount%" to amount.toString()))
+            }
         } else {
             plugin.actionManager.executeActions(player, this.actions)
         }
@@ -38,7 +45,11 @@ class Voucher private constructor(
             voucher.amount = voucher.amount - amount
         }
 
-        plugin.voucherManager.cooldownManager.addCooldown(player.uniqueId, this.id, this.settings.cooldown.cooldown)
+        // Set the voucher on cooldown if it is enabled and the player can't bypass it
+        if (this.settings.cooldown.enabled && !plugin.voucherManager.cooldownManager.bypassCooldown(player, this.id)) {
+            plugin.voucherManager.cooldownManager.addCooldown(player.uniqueId, this.id, this.settings.cooldown.cooldown)
+        }
+        
         this.settings.messages.redeemMessage.send(plugin.audiences.player(player), mapOf("{amount}" to amount.toString()))
     }
 
