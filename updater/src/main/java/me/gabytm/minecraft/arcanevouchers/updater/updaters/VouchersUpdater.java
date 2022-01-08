@@ -7,6 +7,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.NodePath;
 import org.spongepowered.configurate.loader.HeaderMode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.yaml.NodeStyle;
@@ -15,7 +16,9 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +27,16 @@ import static java.lang.String.format;
 public class VouchersUpdater {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VouchersUpdater.class);
+
+    private static final Set<NodePath> messagePaths = new HashSet<>();
+
+    static {
+        messagePaths.add(NodePath.path("messages", "receive"));
+        messagePaths.add(NodePath.path("messages", "redeem"));
+        messagePaths.add(NodePath.path("limit", "message"));
+        messagePaths.add(NodePath.path("permissions", "blacklist", "message"));
+        messagePaths.add(NodePath.path("permissions", "whitelist", "message"));
+    }
 
     private final Pattern actionPattern = Pattern.compile("\\[(?<id>\\w+)] (?<data>.*)");
     private final Pattern randomNumberTag = Pattern.compile("\\{random:(\\d+,\\d+)}");
@@ -97,7 +110,7 @@ public class VouchersUpdater {
 
             if (material.startsWith("head;")) {
                 LOGGER.info("Replacing {} with PLAYER_HEAD (if you are on pre 1.13 you need SKULL_ITEM and 'damage:3') and setting the texture on its own key", material);
-                materialNode.set(material);
+                materialNode.set("PLAYER_HEAD");
                 node.node("texture").set("BASE64;" + material.split(";")[1]);
             }
         });
@@ -149,6 +162,16 @@ public class VouchersUpdater {
             node.removeChild("worldWhitelist");
         }
         //-----
+
+        for (NodePath messagePath : messagePaths) {
+            node.node(messagePath).act(messageNode -> {
+                if (messageNode.empty()) {
+                    return;
+                }
+
+                messageNode.set(Strings.upgradeColorsFormat(messageNode.getString()));
+            });
+        }
     }
 
     private List<String> updateActions(final List<String> actions) {
