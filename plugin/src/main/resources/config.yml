@@ -7,7 +7,7 @@
 settings:
   disable:
     #
-    # If enabled, people won't be able to craft items using vouchers
+    # If 'true', people won't be able to craft items using vouchers
     #
     crafting: true
   command: arcanevouchers
