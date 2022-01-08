@@ -8,7 +8,7 @@ import dev.triumphteam.gui.builder.item.ItemBuilder
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
-import me.gabytm.minecraft.arcanevouchers.functions.error
+import me.gabytm.minecraft.arcanevouchers.functions.exception
 import me.gabytm.minecraft.arcanevouchers.functions.giveItems
 import me.gabytm.minecraft.arcanevouchers.functions.mini
 import me.gabytm.minecraft.arcanevouchers.functions.warning
@@ -97,7 +97,7 @@ class ItemAction(meta: ActionMeta<Player>, handler: PermissionHandler) : ArcaneA
                     try {
                         return NBTItem(builder.build()).apply { mergeCompound(NBTContainer(json)) }.item
                     } catch (e: NbtApiException) {
-                        error("Could not parse nbt '$json'", e)
+                        exception("Could not parse nbt '$json'", e)
                     }
                 }
 

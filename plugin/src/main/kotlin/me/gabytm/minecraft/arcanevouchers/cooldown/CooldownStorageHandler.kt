@@ -3,7 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.cooldown
 import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
-import me.gabytm.minecraft.arcanevouchers.functions.error
+import me.gabytm.minecraft.arcanevouchers.functions.exception
 import me.gabytm.minecraft.arcanevouchers.functions.info
 import me.gabytm.minecraft.arcanevouchers.sql.SqlQuery
 import me.gabytm.minecraft.arcanevouchers.sql.Storage
@@ -29,7 +29,7 @@ class CooldownStorageHandler(plugin: ArcaneVouchers) : Storage<CooldownStorageHa
             }.executeUpdate()
             info("Deleted $deletedCooldowns expired cooldowns")
         } catch (e: SQLException) {
-            error("Could not delete expired cooldowns", e)
+            exception("Could not delete expired cooldowns", e)
         }
 
         try {
@@ -43,7 +43,7 @@ class CooldownStorageHandler(plugin: ArcaneVouchers) : Storage<CooldownStorageHa
                 }
             }
         } catch (e: SQLException) {
-            error("Could not load the cooldowns", e)
+            exception("Could not load the cooldowns", e)
         }
 
         return table
@@ -65,7 +65,7 @@ class CooldownStorageHandler(plugin: ArcaneVouchers) : Storage<CooldownStorageHa
                 setLong(5, expiration)
             }.executeUpdate()
         } catch (e: SQLException) {
-            error("Could not insert $player's cooldown for voucher $voucher", e)
+            exception("Could not insert $player's cooldown for voucher $voucher", e)
         }
     }
 

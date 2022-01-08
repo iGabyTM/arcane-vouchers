@@ -2,7 +2,7 @@ package me.gabytm.minecraft.arcanevouchers.utils
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
-import me.gabytm.minecraft.arcanevouchers.functions.error
+import me.gabytm.minecraft.arcanevouchers.functions.exception
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.sound.Sound
 import org.bukkit.Bukkit
@@ -29,7 +29,7 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         try {
             file.createNewFile()
         } catch (e: IOException) {
-            error("Could not create ${file.path}", e)
+            exception("Could not create ${file.path}", e)
         }
 
         val time = SimpleDateFormat("dd MMM yyyy, HH:mm z").format(Date())
@@ -65,7 +65,7 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         try {
             yaml.save(file)
         } catch (e: IOException) {
-            error("Could not save ${file.path}", e)
+            exception("Could not save ${file.path}", e)
         }
     }
 

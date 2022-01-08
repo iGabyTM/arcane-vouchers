@@ -1,7 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.sql
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
-import me.gabytm.minecraft.arcanevouchers.functions.error
+import me.gabytm.minecraft.arcanevouchers.functions.exception
 import java.io.File
 import java.io.IOException
 import java.sql.Connection
@@ -32,7 +32,7 @@ abstract class Storage<Q: SqlQuery>(
             try {
                 databaseFile.createNewFile()
             } catch (e: IOException) {
-                error("Could not create $databaseFile", e)
+                exception("Could not create $databaseFile", e)
                 return false
             }
         }
@@ -41,10 +41,10 @@ abstract class Storage<Q: SqlQuery>(
             Class.forName("org.sqlite.JDBC")
             this.connection = DriverManager.getConnection("jdbc:sqlite:$databaseFile")
         } catch (e: ClassNotFoundException) {
-            error("Could not find class org.sqlite.JDBC", e)
+            exception("Could not find class org.sqlite.JDBC", e)
             return false
         } catch (e: SQLException) {
-            error("Could not establish database connection", e)
+            exception("Could not establish database connection", e)
             return false
         }
 
@@ -56,7 +56,7 @@ abstract class Storage<Q: SqlQuery>(
         try {
             this.tables.forEach { it.prepare(this.connection).execute() }
         } catch (e: IOException) {
-            error("Encountered an error while creating table(s)", e)
+            exception("Encountered an error while creating table(s)", e)
         }
     }
 

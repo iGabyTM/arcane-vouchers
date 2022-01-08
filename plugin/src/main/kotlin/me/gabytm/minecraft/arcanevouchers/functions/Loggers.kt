@@ -6,7 +6,7 @@ import java.util.logging.Level
 
 private val logger = JavaPlugin.getPlugin(ArcaneVouchers::class.java).logger
 
-fun error(message: String, exception: Throwable) = logger.log(Level.SEVERE, message, exception)
+fun exception(message: String, exception: Throwable) = logger.log(Level.SEVERE, message, exception)
 
 fun info(message: String) = logger.info(message)
 

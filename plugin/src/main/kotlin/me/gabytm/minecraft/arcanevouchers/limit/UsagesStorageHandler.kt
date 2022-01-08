@@ -3,7 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.limit
 import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
-import me.gabytm.minecraft.arcanevouchers.functions.error
+import me.gabytm.minecraft.arcanevouchers.functions.exception
 import me.gabytm.minecraft.arcanevouchers.sql.SqlQuery
 import me.gabytm.minecraft.arcanevouchers.sql.Storage
 import java.sql.Connection
@@ -29,7 +29,7 @@ class UsagesStorageHandler(plugin: ArcaneVouchers) : Storage<UsagesStorageHandle
                 }
             }
         } catch (e: SQLException) {
-            error("Could not load global limits", e)
+            exception("Could not load global limits", e)
         }
 
         return limits
@@ -53,7 +53,7 @@ class UsagesStorageHandler(plugin: ArcaneVouchers) : Storage<UsagesStorageHandle
                 }
             }
         } catch (e: SQLException) {
-            error("Could not load personal limits", e)
+            exception("Could not load personal limits", e)
         }
 
         return limits
@@ -71,7 +71,7 @@ class UsagesStorageHandler(plugin: ArcaneVouchers) : Storage<UsagesStorageHandle
                 setLong(3, limit)
             }.executeUpdate()
         } catch (e: SQLException) {
-            error("Could not update the global limit for voucher $voucher ($limit)", e)
+            exception("Could not update the global limit for voucher $voucher ($limit)", e)
         }
     }
 
@@ -91,7 +91,7 @@ class UsagesStorageHandler(plugin: ArcaneVouchers) : Storage<UsagesStorageHandle
                 setLong(5, limit)
             }.executeUpdate()
         } catch (e: SQLException) {
-            error("Could not update $uuid's limit for voucher $voucher ($limit)", e)
+            exception("Could not update $uuid's limit for voucher $voucher ($limit)", e)
         }
     }
 

@@ -3,7 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.actions.implementations.other
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.Broadcast
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
-import me.gabytm.minecraft.arcanevouchers.functions.error
+import me.gabytm.minecraft.arcanevouchers.functions.exception
 import me.gabytm.util.actions.actions.ActionMeta
 import me.gabytm.util.actions.actions.Context
 import net.kyori.adventure.key.InvalidKeyException
@@ -29,7 +29,7 @@ class SoundAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arcane
                 val sound = Sound.sound(key, source, volume, pitch)
                 broadcast.broadcast(player) { it.playSound(sound) }
             } catch (e: InvalidKeyException) {
-                error("Could not parse namespace key from '$parsed' (sound, ${meta.rawData})", e)
+                exception("Could not parse namespace key from '$parsed' (sound, ${meta.rawData})", e)
             }
         }
     }

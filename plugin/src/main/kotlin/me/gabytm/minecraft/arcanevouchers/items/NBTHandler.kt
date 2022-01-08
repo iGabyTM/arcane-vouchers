@@ -3,7 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.items
 import com.google.gson.JsonObject
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
-import me.gabytm.minecraft.arcanevouchers.functions.error
+import me.gabytm.minecraft.arcanevouchers.functions.exception
 import java.io.IOException
 import java.nio.file.Files
 
@@ -20,7 +20,7 @@ class NBTHandler(plugin: ArcaneVouchers) {
             try {
                 Files.createFile(this.jsonFilePath)
             } catch (e: IOException) {
-                error("Could not create $jsonFilePath", e)
+                exception("Could not create $jsonFilePath", e)
             }
         }
 

@@ -1,7 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.config
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
-import me.gabytm.minecraft.arcanevouchers.functions.error
+import me.gabytm.minecraft.arcanevouchers.functions.exception
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
@@ -22,7 +22,7 @@ class Config(plugin: ArcaneVouchers, path: String, isResource: Boolean = true) {
                 try {
                     file.createNewFile()
                 } catch (e: IOException) {
-                    error("Could not create ${file.path}", e)
+                    exception("Could not create ${file.path}", e)
                 }
             }
         }

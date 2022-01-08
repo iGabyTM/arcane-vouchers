@@ -8,7 +8,7 @@ import dev.triumphteam.gui.builder.item.ItemBuilder
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
-import me.gabytm.minecraft.arcanevouchers.functions.error
+import me.gabytm.minecraft.arcanevouchers.functions.exception
 import me.gabytm.minecraft.arcanevouchers.functions.isPlayerHead
 import me.gabytm.minecraft.arcanevouchers.functions.mini
 import me.gabytm.minecraft.arcanevouchers.functions.warning
@@ -70,7 +70,7 @@ class ItemCreator(plugin: ArcaneVouchers) {
         return try {
             Color.fromRGB(red, green, blue)
         } catch (e: IllegalArgumentException) {
-            error("Could not parse color from '$this'", e)
+            exception("Could not parse color from '$this'", e)
             null
         }
     }
