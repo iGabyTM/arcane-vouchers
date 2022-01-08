@@ -17,6 +17,7 @@ import me.gabytm.minecraft.arcanevouchers.actions.placeholders.PlayerNamePlaceho
 import me.gabytm.minecraft.arcanevouchers.functions.info
 import me.gabytm.util.actions.actions.Action
 import me.gabytm.util.actions.spigot.actions.SpigotActionManager
+import me.gabytm.util.actions.spigot.placeholders.PlaceholderAPIProvider
 import net.milkbowl.vault.economy.Economy
 import net.milkbowl.vault.permission.Permission
 import org.bukkit.Bukkit
@@ -71,6 +72,10 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
         // '%player_name' is the only placeholder replaced in case PlaceholderAPI is not installed
         placeholderManager.register(PlayerNamePlaceholderProvider())
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            placeholderManager.register(PlaceholderAPIProvider())
+        }
     }
 
     private fun register(id: String, supplier: Action.Supplier<Player>) {
