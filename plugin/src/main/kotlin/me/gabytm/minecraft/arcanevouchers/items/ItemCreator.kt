@@ -156,7 +156,7 @@ class ItemCreator(plugin: ArcaneVouchers) {
         val material = if (materialString.isEmpty()) {
             defaultMaterial
         } else {
-            Material.matchMaterial(materialString, false)
+            Material.matchMaterial(materialString)
         }
 
         // If the material specified is null return a fallback item
