@@ -63,7 +63,7 @@ class ConfirmationGui(private val plugin: ArcaneVouchers) {
         }
     }
 
-    fun open(player: Player, voucher: Voucher, voucherItem: ItemStack, isBulk: Boolean) {
+    fun open(player: Player, voucher: Voucher, voucherItem: ItemStack, args: MutableMap<String, String>, isBulk: Boolean) {
         val gui = Gui.gui()
             .title(this.title)
             .rows(this.size)
@@ -75,7 +75,7 @@ class ConfirmationGui(private val plugin: ArcaneVouchers) {
         gui.setItem(this.cancelButton.slots, this.cancelButton.item)
         gui.setItem(this.confirmationButton.slots, GuiItem(this.confirmationButton.item) {
             it.whoClicked.closeInventory()
-            voucher.redeem(player, voucherItem, plugin, isBulk)
+            voucher.redeem(player, voucherItem, args, plugin, isBulk)
         })
         gui.open(player)
     }

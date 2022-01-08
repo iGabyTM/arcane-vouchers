@@ -11,8 +11,50 @@ import me.mattstudios.mf.annotations.WrongUsage
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import java.util.regex.Pattern
 
 class GiveCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
+
+    private val argumentsRegex = Pattern.compile("([^\"]\\S*|\".+?\")\\s*")
+
+    /**
+     * Process the extra command arguments by removing the first 3 ('give', 'voucher', 'amount'), then join by space to
+     * a string in order to process multi-word arguments surrounded by `" "` as a single arguments.
+     *
+     * Example: `FirstArgument "Second Argument"` becomes `[FirstArgument, Second Argument]`
+     * @param commandArgs the arguments received from command
+     * @return arguments processed
+     */
+    private fun processArguments(commandArgs: Array<String>): Array<String> {
+        // There's no arguments to process, the array contains only the required arguments for the /give command
+        if (commandArgs.size < ARGS_START_INDEX) {
+            return arrayOf()
+        }
+
+        // Remove the first 3 arguments because they are used on the actual command
+        val string = commandArgs.copyOfRange(ARGS_START_INDEX, commandArgs.size).joinToString(" ")
+
+        // If the string doesn't contain a quote then the regex won't match, so we just return the original arguments
+        if (!string.contains("\"")) {
+            return commandArgs
+        }
+
+        val arguments = mutableListOf<String>()
+        val matcher = argumentsRegex.matcher(string)
+
+        while (matcher.find()) {
+            val trimmed = matcher.group().trimEnd()
+
+            // The regex also give the " " that are around the string, so we need to remove them
+            if (trimmed.startsWith("\"") && trimmed.startsWith("\"")) {
+                arguments.add(trimmed.substring(1, trimmed.length - 1))
+            } else {
+                arguments.add(trimmed)
+            }
+        }
+
+        return arguments.toTypedArray()
+    }
 
     @WrongUsage("command.give.usage")
     @Permission(Constant.Permission.ADMIN)
@@ -46,7 +88,7 @@ class GiveCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
             return
         }
 
-        val arguments = if (args.size > 3) args.copyOfRange(ARGS_START_INDEX, args.size) else arrayOf()
+        val arguments = processArguments(args)
 
         if (giveToEveryone) {
             Bukkit.getOnlinePlayers().map { this.plugin.voucherManager.giveVoucher(it, voucher, amount, arguments) }

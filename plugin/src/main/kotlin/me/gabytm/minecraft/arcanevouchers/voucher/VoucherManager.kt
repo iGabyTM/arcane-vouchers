@@ -4,10 +4,7 @@ import de.tr7zw.nbtapi.NBTItem
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant.NBT
 import me.gabytm.minecraft.arcanevouchers.cooldown.CooldownManager
-import me.gabytm.minecraft.arcanevouchers.functions.add
-import me.gabytm.minecraft.arcanevouchers.functions.info
-import me.gabytm.minecraft.arcanevouchers.functions.toArgsMap
-import me.gabytm.minecraft.arcanevouchers.functions.warning
+import me.gabytm.minecraft.arcanevouchers.functions.*
 import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
@@ -87,14 +84,11 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
             player.world.dropItemNaturally(player.location, it)
         }
         // Send the message to the player and also add the {amount} placeholder
-        voucher.settings.messages.receiveMessage.send(
-            plugin.audiences.player(player),
-            argsMap.add("{amount}", amount.toString())
-        )
+        voucher.settings.messages.receiveMessage.send(player.audience(), argsMap.add("{amount}", amount.toString()))
     }
 
-    fun openConfirmation(player: Player, voucher: Voucher, voucherItem: ItemStack, isBulk: Boolean) {
-        this.confirmationGui.open(player, voucher, voucherItem, isBulk)
+    fun openConfirmation(player: Player, voucher: Voucher, voucherItem: ItemStack, args: MutableMap<String, String>, isBulk: Boolean) {
+        this.confirmationGui.open(player, voucher, voucherItem, args, isBulk)
     }
 
 }

@@ -5,6 +5,8 @@ import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant.NBT
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
+import me.gabytm.minecraft.arcanevouchers.functions.add
+import me.gabytm.minecraft.arcanevouchers.functions.audience
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
 import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
@@ -19,7 +21,13 @@ class Voucher private constructor(
     val bulkActions: List<ArcaneAction>
 ) {
 
-    private fun redeem(player: Player, voucher: ItemStack, plugin: ArcaneVouchers, increaseLimit: Boolean, isBulk: Boolean, amount: Int) {
+    private fun redeem(player: Player, voucher: ItemStack, args: MutableMap<String, String>,
+                       plugin: ArcaneVouchers, increaseLimit: Boolean,
+                       isBulk: Boolean, amount: Int
+    ) {
+        val actionManager = plugin.actionManager
+        val voucherManager = plugin.voucherManager
+
         if (increaseLimit) {
             plugin.voucherManager.limitManager.increaseUsages(player.uniqueId, this.id, amount.toLong())
         }
@@ -28,13 +36,13 @@ class Voucher private constructor(
             // Execute actions n times (n = amount) if bulkActions is empty
             if (this.bulkActions.isEmpty()) {
                 for (i in 1..amount) {
-                    plugin.actionManager.executeActions(player, this.actions)
+                    actionManager.executeActions(player, this.actions, args)
                 }
             } else {
-                plugin.actionManager.executeActions(player, this.bulkActions, mutableMapOf("%amount%" to amount.toString()))
+                actionManager.executeActions(player, this.bulkActions, args.add("%amount%", amount.toString()))
             }
         } else {
-            plugin.actionManager.executeActions(player, this.actions)
+            actionManager.executeActions(player, this.actions, args)
         }
 
         // Remove the item completely if it has the same amount as the amount of redeemed vouchers
@@ -46,21 +54,21 @@ class Voucher private constructor(
         }
 
         // Set the voucher on cooldown if it is enabled and the player can't bypass it
-        if (this.settings.cooldown.enabled && !plugin.voucherManager.cooldownManager.bypassCooldown(player, this.id)) {
-            plugin.voucherManager.cooldownManager.addCooldown(player.uniqueId, this.id, this.settings.cooldown.cooldown)
+        if (this.settings.cooldown.enabled && !voucherManager.cooldownManager.bypassCooldown(player, this.id)) {
+            voucherManager.cooldownManager.addCooldown(player.uniqueId, this.id, this.settings.cooldown.cooldown)
         }
-        
-        this.settings.messages.redeemMessage.send(plugin.audiences.player(player), mapOf("{amount}" to amount.toString()))
+
+        this.settings.messages.redeemMessage.send(player.audience(), args.add("{amount}", amount.toString()))
     }
 
-    fun redeem(player: Player, voucher: ItemStack, plugin: ArcaneVouchers, isBulk: Boolean) {
+    fun redeem(player: Player, voucher: ItemStack, args: MutableMap<String, String>, plugin: ArcaneVouchers, isBulk: Boolean) {
         val limitManager = plugin.voucherManager.limitManager
         val vouchers = voucher.amount
 
         if (isBulk) {
             // The player bypasses the limit
             if (limitManager.bypassLimit(player, this)) {
-                redeem(player, voucher, plugin, increaseLimit = false, isBulk = true, vouchers)
+                redeem(player, voucher, args, plugin, increaseLimit = false, isBulk = true, vouchers)
                 return
             }
 
@@ -75,23 +83,23 @@ class Voucher private constructor(
 
                 // The bulkOpen limit is higher than the amount of vouchers used now
                 if (bulkLimit >= vouchers) {
-                    redeem(player, voucher, plugin, increaseLimit = true, isBulk = true, vouchers)
+                    redeem(player, voucher, args, plugin, increaseLimit = true, isBulk = true, vouchers)
                     return
                 }
 
                 // Redeem only 'bulkLimit' vouchers
-                redeem(player, voucher, plugin, true, isBulk = true, bulkLimit)
+                redeem(player, voucher, args, plugin, true, isBulk = true, bulkLimit)
                 return
             }
 
             // Redeem only 'usagesLeft' vouchers
-            redeem(player, voucher, plugin, true, isBulk = true, usagesLeft)
+            redeem(player, voucher, args, plugin, true, isBulk = true, usagesLeft)
             return
         }
 
         // The player bypass the limit
         if (limitManager.bypassLimit(player, this)) {
-            redeem(player, voucher, plugin, false, isBulk = false, 1)
+            redeem(player, voucher, args, plugin, false, isBulk = false, 1)
             return
         }
 
@@ -102,7 +110,7 @@ class Voucher private constructor(
 
         // The player can redeem more than 1 voucher
         if (usagesLeft >= 1) {
-            redeem(player, voucher, plugin, true, isBulk = false, 1)
+            redeem(player, voucher, args, plugin, true, isBulk = false, 1)
         }
     }
 

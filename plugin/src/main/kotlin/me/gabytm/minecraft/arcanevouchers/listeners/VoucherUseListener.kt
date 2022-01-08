@@ -1,5 +1,6 @@
 package me.gabytm.minecraft.arcanevouchers.listeners
 
+import com.google.common.base.Strings
 import de.tr7zw.nbtapi.NBTCompound
 import de.tr7zw.nbtapi.NBTItem
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
@@ -10,6 +11,7 @@ import me.gabytm.minecraft.arcanevouchers.functions.component1
 import me.gabytm.minecraft.arcanevouchers.functions.component2
 import me.gabytm.minecraft.arcanevouchers.functions.item
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
+import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
@@ -28,7 +30,7 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
     private val audiences = plugin.audiences
 
     private fun NBTCompound.getArgs(): MutableMap<String, String> {
-        return keys.associateBy { this.getString(it) }.toMutableMap()
+        return keys.associateWith { getString(it) }.toMutableMap()
     }
 
     @EventHandler
@@ -166,9 +168,9 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
         val isBulk = settings.bulkOpen.enabled && player.isSneaking
 
         if (settings.confirmationEnabled) {
-            voucherManager.openConfirmation(player, voucher, item, isBulk)
+            voucherManager.openConfirmation(player, voucher, item, args, isBulk)
         } else {
-            voucher.redeem(player, item, plugin, isBulk)
+            voucher.redeem(player, item, args, plugin, isBulk)
         }
     }
 
