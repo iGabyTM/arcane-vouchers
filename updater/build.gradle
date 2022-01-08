@@ -24,3 +24,17 @@ dependencies {
     // SQLite
     implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
 }
+
+shadowJar {
+    archiveFileName.set("Updater-${project.version}.jar")
+
+    doLast {
+        def directory = new File(buildDir, '/libs/start-scripts')
+        directory.mkdirs()
+
+        def jarFile = archiveFileName.getOrNull()
+
+        new File(directory, 'start.bat').text = "java -jar $jarFile\nPAUSE"
+        new File(directory, 'start.sh').text = "#!/bin/sh\nexec java -jar $jarFile"
+    }
+}
