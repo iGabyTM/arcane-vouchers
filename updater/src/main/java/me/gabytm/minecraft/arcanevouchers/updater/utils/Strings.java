@@ -9,12 +9,15 @@ import java.util.stream.Collectors;
 
 public final class Strings {
 
-    private static final Pattern legacyRegex = Pattern.compile("&(?<code>[0-9a-fk-r])", Pattern.CASE_INSENSITIVE);
+    private static final Pattern legacyColorsRegex = Pattern.compile("&(?<code>[0-9a-fk-r])", Pattern.CASE_INSENSITIVE);
+    private static final Pattern argsRegex = Pattern.compile("\\{(args(?:\\[\\d+])?)}");
 
     private Strings() { }
 
     public static String upgradeColorsFormat(String string) {
-        if (legacyRegex.matcher(string).find()) {
+        string = argsRegex.matcher(string).replaceAll("%$1%");
+
+        if (legacyColorsRegex.matcher(string).find()) {
             return MiniMessage.get().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(string));
         }
 

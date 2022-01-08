@@ -80,9 +80,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         // -----
 
         // Add the voucher to player's inventory and drop the leftovers on the ground
-        player.inventory.addItem(item).values.forEach {
-            player.world.dropItemNaturally(player.location, it)
-        }
+        player.giveItems(item)
         // Send the message to the player and also add the {amount} placeholder
         voucher.settings.messages.receiveMessage.send(player.audience(), argsMap.add("{amount}", amount.toString()))
     }

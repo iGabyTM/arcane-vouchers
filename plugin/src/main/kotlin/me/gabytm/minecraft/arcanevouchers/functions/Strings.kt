@@ -22,9 +22,9 @@ fun String.replace(placeholders: Array<String>, values: Array<String>): String {
 fun String.mini(): Component = Constant.MINI.parse(this)
 
 fun Array<String>.toArgsMap(): MutableMap<String, String> {
-    val map = mutableMapOf("{args}" to joinToString(" "))
+    val map = mutableMapOf("%args%" to joinToString(" "))
 
-    withIndex().forEach { (index, it) -> map["{args[${index + 1}]}"] = it }
+    withIndex().forEach { (index, it) -> map["%args[${index + 1}]%"] = it }
     return map
 }
 
