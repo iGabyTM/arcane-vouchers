@@ -2,6 +2,8 @@ package me.gabytm.minecraft.arcanevouchers.updater.updaters;
 
 import me.gabytm.minecraft.arcanevouchers.updater.utils.Files;
 import me.gabytm.minecraft.arcanevouchers.updater.utils.Strings;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -176,6 +178,13 @@ public class VouchersUpdater {
 
                 case "chat": {
                     updatedActions.add("{type=PLAYER} [message] " + data);
+                    break;
+                }
+
+                case "json": {
+                    // First serialize the GSON and then deserialize to string using Mini
+                    final String mini = MiniMessage.get().serialize(GsonComponentSerializer.gson().deserialize(data));
+                    updatedActions.add("[message] " + mini);
                     break;
                 }
 
