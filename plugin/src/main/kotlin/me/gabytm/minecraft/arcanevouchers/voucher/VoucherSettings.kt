@@ -71,9 +71,9 @@ class VoucherSettings(
     }
 
     class Worlds(
-        private val whitelistedWorlds: List<String> = emptyList(),
+        private val whitelistedWorlds: OptionHolder = OptionHolder(),
         val notWhitelistedMessage: Message = Message.NONE,
-        private val blacklistWorlds: List<String> = emptyList(),
+        private val blacklistWorlds: OptionHolder = OptionHolder(),
         val blacklistedMessage: Message = Message.NONE
     ) {
 
@@ -82,7 +82,7 @@ class VoucherSettings(
                 return true
             }
 
-            return this.whitelistedWorlds.any { world.name == it.replace(placeholders, values) }
+            return this.whitelistedWorlds.any(world.name, placeholders, values)
         }
 
         fun isBlacklisted(world: World, placeholders: Array<String>, values: Array<String>): Boolean {
@@ -90,7 +90,7 @@ class VoucherSettings(
                 return false
             }
 
-            return this.blacklistWorlds.any { world.name == it.replace(placeholders, values) }
+            return this.blacklistWorlds.any(world.name, placeholders, values)
         }
 
     }
@@ -165,9 +165,9 @@ class VoucherSettings(
             )
 
             val worlds = Worlds(
-                config.getStringList("worlds.whitelist.list"),
+                OptionHolder.from(config.getStringList("worlds.whitelist.list")),
                 Message.create(config.getString("worlds.whitelist.message") ?: ""),
-                config.getStringList("worlds.blacklist.list"),
+                OptionHolder.from(config.getStringList("worlds.blacklist.list")),
                 Message.create(config.getString("worlds.blacklist.message") ?: "")
             )
 
