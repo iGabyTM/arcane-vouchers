@@ -57,7 +57,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         val argumentsCompound = compound.getCompound(NBT.ARGUMENTS_COMPOUND)
 
         argsMap.entries.forEach { (key, value) -> argumentsCompound.setString(key, value) }
-        compound.setUUID(NBT.RECEIVER_UUID, player.uniqueId)
+        compound.setReceiverUUID(player.uniqueId)
         // -----
 
         val item = nbt.item

@@ -25,6 +25,11 @@ object ServerVersion {
     val HAS_KEYS = VERSION >= V_1_13
 
     /**
+     * Whether in the current version [java.util.UUID] can be stored on NBT
+     */
+    val HAS_UUID_NBT_COMPOUND = VERSION >= 1_16_1
+
+    /**
      * Gets the current server version
      * @return A protocol like number representing the version, for example 1.16.5 - 1165
      */

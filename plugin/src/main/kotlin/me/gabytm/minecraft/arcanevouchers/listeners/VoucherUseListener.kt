@@ -1,17 +1,12 @@
 package me.gabytm.minecraft.arcanevouchers.listeners
 
-import com.google.common.base.Strings
 import de.tr7zw.nbtapi.NBTCompound
 import de.tr7zw.nbtapi.NBTItem
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant.NBT
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
-import me.gabytm.minecraft.arcanevouchers.functions.add
-import me.gabytm.minecraft.arcanevouchers.functions.component1
-import me.gabytm.minecraft.arcanevouchers.functions.component2
-import me.gabytm.minecraft.arcanevouchers.functions.item
+import me.gabytm.minecraft.arcanevouchers.functions.*
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
-import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
@@ -85,7 +80,7 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
 
         // Bind to receiver is enabled
         if (bindToReceiver.enabled) {
-            val receiverUuid: UUID? = compound.getUUID(NBT.RECEIVER_UUID)
+            val receiverUuid: UUID? = compound.getReceiverUUID()
 
             // If the receiver name is null it means that this voucher was crated before v2.0.0
             if (receiverUuid != null && receiverUuid != this.player.uniqueId) {
