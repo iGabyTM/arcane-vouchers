@@ -17,6 +17,12 @@ object ServerVersion {
     val IS_VERY_OLD = VERSION.toString().startsWith("17")
     val IS_ANCIENT = VERSION <= V_1_8
     val HAS_OFF_HAND = VERSION >= V_1_9
+
+    /**
+     * Whether setting an [org.bukkit.inventory.ItemStack] amount to 0 would remove it (>= 1.11.2)
+     */
+    val ITEMS_WITH_ZERO_AMOUNT_ARE_REMOVED = VERSION >= 1_11_2
+
     val IS_LEGACY = VERSION < V_1_13
 
     /**
