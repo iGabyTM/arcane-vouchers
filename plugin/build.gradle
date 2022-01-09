@@ -60,6 +60,12 @@ dependencies {
     compileOnly fileTree(dir: './libs', includes: ['*.jar'])
 }
 
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
 processResources {
     eachFile { expand version: project.version }
 }
@@ -79,12 +85,11 @@ shadowJar {
 }
 
 task copyToServer(type: Copy) {
-    from shadowJar
-    into '../server/plugins'
-}
-
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
+    if (testServerVersion == '') {
+        from shadowJar
+        into '../server/plugins'
+    } else {
+        from shadowJar
+        into '../server/.' + testServerVersion + '/plugins'
     }
 }
