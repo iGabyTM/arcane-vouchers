@@ -32,11 +32,12 @@ class GiveCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
         }
 
         // Remove the first 3 arguments because they are used on the actual command
-        val string = commandArgs.copyOfRange(ARGS_START_INDEX, commandArgs.size).joinToString(" ")
+        val copy = commandArgs.copyOfRange(ARGS_START_INDEX, commandArgs.size)
+        val string = copy.joinToString(" ")
 
         // If the string doesn't contain a quote then the regex won't match, so we just return the original arguments
         if (!string.contains("\"")) {
-            return commandArgs
+            return copy
         }
 
         val arguments = mutableListOf<String>()
