@@ -9,6 +9,7 @@ import java.util.regex.Pattern
 object ServerVersion {
 
     private val VERSION = getCurrentVersion()
+    private val NMS_VERSION = Bukkit.getServer().javaClass.`package`.name.substringAfterLast('.')
 
     private const val V_1_8 = 1_8_0
     private const val V_1_9 = 1_9_0
@@ -49,6 +50,16 @@ object ServerVersion {
                 append(matcher.group("patch")?.replace(".", "") ?: "0")
             }
         }.toIntOrNull() ?: throw IllegalArgumentException("Could not retrieve server version!")
+    }
+
+    /**
+     * Gets a NMS class by its name
+     * @return class
+     * @throws ClassNotFoundException if the class wasn't found
+     */
+    @Throws(ClassNotFoundException::class)
+    fun getCraftClass(name: String): Class<*> {
+        return Class.forName("org.bukkit.craftbukkit.$NMS_VERSION.$name")
     }
 
 }

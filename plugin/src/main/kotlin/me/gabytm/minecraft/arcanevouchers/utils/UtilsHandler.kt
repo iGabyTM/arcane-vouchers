@@ -29,7 +29,7 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         try {
             file.createNewFile()
         } catch (e: IOException) {
-            exception("Could not create ${file.path}", e)
+            exception("Could not create $file", e)
         }
 
         val time = SimpleDateFormat("dd MMM yyyy, HH:mm z").format(Date())
@@ -56,16 +56,30 @@ class UtilsHandler(plugin: ArcaneVouchers) {
 
         yaml["patternTypes"] = PatternType.values().map { it.name }
 
+        yaml["sound.sounds"] = getSounds()
         yaml["sound.sources"] = Sound.Source.NAMES.keys().toList()
-
-        if (ServerVersion.HAS_KEYS) {
-            yaml["sound.sounds"] = org.bukkit.Sound.values().map { it.key.toString() }
-        }
 
         try {
             yaml.save(file)
         } catch (e: IOException) {
             exception("Could not save ${file.path}", e)
+        }
+    }
+
+    private fun getSounds(): List<String> {
+        return if (ServerVersion.HAS_KEYS) {
+            org.bukkit.Sound.values().map { it.key.toString() }
+        } else {
+            try {
+                val craftSound = ServerVersion.getCraftClass("CraftSound")
+                val field = craftSound.getDeclaredField("minecraftKey")
+                field.isAccessible = true
+
+                craftSound.enumConstants.map { field.get(it) as String }
+            } catch (e: ReflectiveOperationException) {
+                exception("Could not retrieve sounds", e)
+                emptyList()
+            }
         }
     }
 
