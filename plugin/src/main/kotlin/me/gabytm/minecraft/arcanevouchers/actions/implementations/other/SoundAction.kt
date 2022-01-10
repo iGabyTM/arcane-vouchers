@@ -4,11 +4,13 @@ import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.Broadcast
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.functions.exception
+import me.gabytm.minecraft.arcanevouchers.functions.info
 import me.gabytm.util.actions.actions.ActionMeta
 import me.gabytm.util.actions.actions.Context
 import net.kyori.adventure.key.InvalidKeyException
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
+import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 
 class SoundAction(meta: ActionMeta<Player>, handler: PermissionHandler) : ArcaneAction(meta, handler) {
@@ -17,8 +19,8 @@ class SoundAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arcane
     private val source: Sound.Source = meta.getProperty("source", Sound.Source.MASTER) {
         Sound.Source.NAMES.value(it.lowercase())
     }
-    private val volume: Float = meta.getProperty("volume", 0f) { it.toFloatOrNull() }
-    private val pitch: Float = meta.getProperty("pitch", 0f) { it.toFloatOrNull() }
+    private val volume: Float = meta.getProperty("volume", 1f) { it.toFloatOrNull() }
+    private val pitch: Float = meta.getProperty("pitch", 1f) { it.toFloatOrNull() }
 
     override fun run(player: Player, context: Context<Player>) {
         execute(player) {
