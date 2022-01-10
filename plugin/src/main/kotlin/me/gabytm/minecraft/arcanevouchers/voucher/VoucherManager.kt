@@ -81,8 +81,12 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
 
         // Add the voucher to player's inventory and drop the leftovers on the ground
         player.giveItems(item)
-        // Send the message to the player and also add the {amount} placeholder
-        voucher.settings.messages.receiveMessage.send(player.audience(), argsMap.add("{amount}", amount.toString()))
+
+        with (player.audience()) {
+            // Send the message to the player and also add the {amount} placeholder
+            voucher.settings.messages.receiveMessage.send(this, argsMap.add("{amount}", amount.toString()))
+            voucher.settings.sounds.receiveSound.play(this)
+        }
     }
 
     fun openConfirmation(player: Player, voucher: Voucher, voucherItem: ItemStack, args: MutableMap<String, String>, isBulk: Boolean) {

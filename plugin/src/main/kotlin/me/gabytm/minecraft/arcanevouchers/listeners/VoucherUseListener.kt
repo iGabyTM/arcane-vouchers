@@ -85,6 +85,7 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             // If the receiver name is null it means that this voucher was crated before v2.0.0
             if (receiverUuid != null && receiverUuid != this.player.uniqueId) {
                 bindToReceiver.message.send(audience, args.add("{player}", Bukkit.getOfflinePlayer(receiverUuid).name ?: ""))
+                bindToReceiver.sound.play(audience)
                 return
             }
         }
@@ -98,6 +99,7 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             // The limit was reached and the player can't bypass it
             if (usages >= limit.limit && !limitManager.bypassLimit(player, voucher)) {
                 limit.message.send(audience, args)
+                limit.sound.play(audience)
                 return
             }
         }
@@ -110,6 +112,7 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             if (timeLeft > 0L && !voucherManager.cooldownManager.bypassCooldown(player, voucherId)) {
                 // TODO: 1/4/2022 format time left
                 settings.cooldown.message.send(audience, args.add("{left}","${timeLeft / 1000}s"))
+                settings.cooldown.sound.play(audience)
                 return
             }
         }
@@ -120,12 +123,14 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
         // Player's world is blacklisted
         if (worlds.isBlacklisted(world, placeholders, values)) {
             worlds.blacklistedMessage.send(audience, args.add("{world}", world.name))
+            worlds.blacklistedSound.play(audience)
             return
         }
 
         // Player's world is not whitelisted
         if (!worlds.isWhitelisted(world, placeholders, values)) {
             worlds.notWhitelistedMessage.send(audience, args.add("{world}", world.name))
+            worlds.notWhitelistedSound.play(audience)
             return
         }
 
@@ -136,12 +141,14 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             // The player is inside a blacklisted region
             if (regions.isBlacklisted(worldGuardRegions, placeholders, values)) {
                 regions.blacklistedMessage.send(audience, args)
+                regions.blacklistedSound.play(audience)
                 return
             }
 
             // The player is not inside a whitelisted region
             if (!regions.isWhitelisted(worldGuardRegions, placeholders, values)) {
                 regions.notWhitelistedMessage.send(audience, args)
+                regions.notWhitelistedSound.play(audience)
                 return
             }
         }
@@ -151,12 +158,14 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
         // The player is blacklisted by permission
         if (permissions.isBlacklisted(this.player, placeholders, values)) {
             permissions.blacklistedMessage.send(audience, args)
+            permissions.blacklistedSound.play(audience)
             return
         }
 
         // The player is not whitelisted
         if (!permissions.isWhitelisted(this.player, placeholders, values)) {
             permissions.notWhitelistedMessage.send(audience, args)
+            permissions.notWhitelistedSound.play(audience)
             return
         }
 

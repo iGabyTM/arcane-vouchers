@@ -40,7 +40,10 @@ class Voucher private constructor(
             voucherManager.cooldownManager.addCooldown(player.uniqueId, this.id, this.settings.cooldown.cooldown)
         }
 
-        this.settings.messages.redeemMessage.send(player.audience(), args.add("{amount}", amount.toString()))
+        with (player.audience()) {
+            settings.messages.redeemMessage.send(this, args.add("{amount}", amount.toString()))
+            settings.sounds.redeemSound.play(this)
+        }
     }
 
     private fun executeActions(player: Player, amount: Int,
