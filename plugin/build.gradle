@@ -1,6 +1,4 @@
 repositories {
-    mavenLocal()
-
     maven {
         url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
@@ -12,6 +10,7 @@ repositories {
     }
 
     maven {
+        name 'actions-core, actions-spigot, triumph-gui'
         url 'https://repo.mattstudios.me/artifactory/public/'
     }
 
