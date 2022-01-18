@@ -1,7 +1,9 @@
-package me.gabytm.minecraft.arcanevouchers.updater.utils;
+package me.gabytm.minecraft.arcanevouchers.comet.utils;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -14,7 +16,8 @@ public final class Strings {
 
     private Strings() { }
 
-    public static String upgradeColorsFormat(String string) {
+    @Contract("_ -> !null")
+    public static String upgradeColorsFormat(@NotNull String string) {
         string = argsRegex.matcher(string).replaceAll("%$1%");
 
         if (legacyColorsRegex.matcher(string).find()) {
@@ -24,7 +27,8 @@ public final class Strings {
         return string;
     }
 
-    public static List<String> upgradeColorsFormat(final List<String> list) {
+    @Contract("_ -> !null")
+    public static List<String> upgradeColorsFormat(@NotNull final List<String> list) {
         return list.stream().map(Strings::upgradeColorsFormat).collect(Collectors.toList());
     }
 

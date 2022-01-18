@@ -1,7 +1,7 @@
-package me.gabytm.minecraft.arcanevouchers.updater.updaters;
+package me.gabytm.minecraft.arcanevouchers.comet.modules.implementations.updater.updaters;
 
-import me.gabytm.minecraft.arcanevouchers.updater.utils.Files;
-import me.gabytm.minecraft.arcanevouchers.updater.utils.Strings;
+import me.gabytm.minecraft.arcanevouchers.comet.utils.Files;
+import me.gabytm.minecraft.arcanevouchers.comet.utils.Strings;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.slf4j.Logger;
