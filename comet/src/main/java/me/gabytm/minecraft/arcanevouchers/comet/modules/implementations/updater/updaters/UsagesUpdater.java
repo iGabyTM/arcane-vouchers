@@ -1,6 +1,6 @@
-package me.gabytm.minecraft.arcanevouchers.updater.updaters;
+package me.gabytm.minecraft.arcanevouchers.comet.modules.implementations.updater.updaters;
 
-import me.gabytm.minecraft.arcanevouchers.updater.utils.Files;
+import me.gabytm.minecraft.arcanevouchers.comet.utils.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.configurate.CommentedConfigurationNode;

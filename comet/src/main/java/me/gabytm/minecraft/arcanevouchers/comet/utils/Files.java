@@ -1,5 +1,6 @@
-package me.gabytm.minecraft.arcanevouchers.updater.utils;
+package me.gabytm.minecraft.arcanevouchers.comet.utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ public final class Files {
 
     private Files() { }
 
-    public static void copy(final String file) {
+    public static void copy(@NotNull final String file) {
         try {
             java.nio.file.Files.copy(
                     Paths.get(String.format("./%s", file)),
@@ -24,7 +25,7 @@ public final class Files {
         }
     }
 
-    public static boolean checkFile(final File file) {
+    public static boolean checkFile(@NotNull final File file) {
         if (file.exists() && file.isFile()) {
             return true;
         }
