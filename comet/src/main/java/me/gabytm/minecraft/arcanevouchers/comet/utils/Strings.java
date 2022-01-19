@@ -18,6 +18,7 @@ public final class Strings {
 
     @Contract("_ -> !null")
     public static String upgradeColorsFormat(@NotNull String string) {
+        string = string.replace("\u00A7", "&"); // Replace § with &
         string = argsRegex.matcher(string).replaceAll("%$1%");
 
         if (legacyColorsRegex.matcher(string).find()) {
