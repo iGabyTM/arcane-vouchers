@@ -78,7 +78,7 @@ public class ConverterModule extends CometModule {
 
         if (targetFile.exists()) {
             try {
-                Files.write(targetFile.toPath(), new byte[0], StandardOpenOption.WRITE);
+                Files.write(targetFile.toPath(), new byte[0], StandardOpenOption.TRUNCATE_EXISTING);
             } catch (IOException e) {
                 LOGGER.error("Could not empty " + targetFile, e);
                 System.exit(0);
