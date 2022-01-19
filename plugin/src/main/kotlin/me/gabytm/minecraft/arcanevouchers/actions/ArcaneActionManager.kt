@@ -9,6 +9,7 @@ import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.ItemAc
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.BossBarAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.ChatAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.MessageAction
+import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.EffectAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.other.SoundAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.vault.AddMoneyAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.vault.PermissionAction
@@ -55,6 +56,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         //-----
 
         // Other
+        register("effect") { EffectAction(it, handler) }
         register("sound") { SoundAction(it, handler) }
         //-----
 

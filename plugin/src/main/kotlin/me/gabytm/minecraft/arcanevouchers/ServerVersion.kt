@@ -20,6 +20,11 @@ object ServerVersion {
     val HAS_OFF_HAND = VERSION >= V_1_9
 
     /**
+     * Whether in the current version, [org.bukkit.potion.PotionEffect] has a [org.bukkit.Color] argument (1.9 - 1.12.2)
+     */
+    val POTION_EFFECT_HAS_COLOR = VERSION in 1_9_0..1_12_2
+
+    /**
      * Whether setting an [org.bukkit.inventory.ItemStack] amount to 0 would remove it (>= 1.11.2)
      */
     val ITEMS_WITH_ZERO_AMOUNT_ARE_REMOVED = VERSION >= 1_11_2
