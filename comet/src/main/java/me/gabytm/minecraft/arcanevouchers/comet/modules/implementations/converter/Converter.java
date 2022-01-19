@@ -123,10 +123,6 @@ public abstract class Converter {
         moveString(source, sourcePath, target, targetPath, Function.identity());
     }
 
-    private boolean check() {
-        return Files.checkFile(new File(this.filePath));
-    }
-
     public abstract boolean convert(final CommentedConfigurationNode source, final CommentedConfigurationNode target) throws SerializationException;
 
 }
