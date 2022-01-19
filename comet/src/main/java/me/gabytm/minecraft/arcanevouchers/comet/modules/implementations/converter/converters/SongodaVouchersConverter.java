@@ -2,6 +2,7 @@ package me.gabytm.minecraft.arcanevouchers.comet.modules.implementations.convert
 
 import me.gabytm.minecraft.arcanevouchers.comet.modules.implementations.converter.Converter;
 import me.gabytm.minecraft.arcanevouchers.comet.utils.Strings;
+import net.kyori.adventure.title.Title;
 import org.bukkit.inventory.ItemFlag;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -127,10 +128,66 @@ public class SongodaVouchersConverter extends Converter {
             }
         });
 
+        source.node("actionbar").act(actionbar -> {
+            if (actionbar.virtual() || actionbar.empty()) {
+                return;
+            }
+
+            final String message = actionbar.getString();
+
+            if (message != null) {
+                actions.add("{type=ACTION} [message] " + updateString(message, true));
+            }
+        });
+
+        source.node("titles").act(titles -> {
+            if (titles.virtual() || titles.empty()) {
+                return;
+            }
+
+            actions.add(String.format(
+                    "{type=TITLE fadeIn=%d stay=%d fadeOut=%d} [message] %s[n]%s",
+                    titles.node("fade-in").getInt(10),
+                    titles.node("stay").getInt(70),
+                    titles.node("fade-out").getInt(20),
+                    updateString(titles.node("title").getString(""), true),
+                    updateString(titles.node("subtitle").getString(""), true)
+            ));
+        });
+
+        source.node("sounds").act(sounds -> {
+            if (sounds.virtual() || sounds.empty()) {
+                return;
+            }
+
+            actions.add("[sound] " + sounds.node("sound").getString(""));
+        });
+
         if (!actions.isEmpty()) {
             target.node("actions").setList(String.class, actions);
             target.node("bulkActions").setList(String.class, actions);
         }
+    }
+
+    private void convertSettings(CommentedConfigurationNode source, CommentedConfigurationNode targe) throws SerializationException {
+        source.node("confirm").act(confirm -> {
+            if (confirm.getBoolean()) {
+                targe.node("confirmation", "enabled").set(true);
+            }
+        });
+
+        source.node("coolDown").act(cooldown -> {
+            if (cooldown.virtual() || cooldown.empty()) {
+                return;
+            }
+
+            final int cooldownValue = cooldown.getInt();
+
+            if (cooldownValue > 0) {
+                targe.node("cooldown", "enabled").set(true);
+                targe.node("cooldown", "cooldown").set(cooldownValue);
+            }
+        });
     }
 
     @Override
@@ -146,6 +203,7 @@ public class SongodaVouchersConverter extends Converter {
 
             convertItem(voucherSection, targetVoucherSection.node("item"));
             convertActions(voucherSection, targetVoucherSection);
+            convertSettings(voucherSection, targetVoucherSection.node("settings"));
         }
 
         return true;
