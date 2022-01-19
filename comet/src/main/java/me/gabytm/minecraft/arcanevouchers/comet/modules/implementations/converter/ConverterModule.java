@@ -3,6 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.comet.modules.implementations.convert
 import me.gabytm.minecraft.arcanevouchers.comet.modules.CometModule;
 import me.gabytm.minecraft.arcanevouchers.comet.modules.ModuleInfo;
 import me.gabytm.minecraft.arcanevouchers.comet.modules.implementations.converter.converters.BadBonesVouchersConverter;
+import me.gabytm.minecraft.arcanevouchers.comet.modules.implementations.converter.converters.SongodaVouchersConverter;
 import org.apache.commons.cli.CommandLine;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -54,6 +55,11 @@ public class ConverterModule extends CometModule {
         switch (pluginName.toLowerCase()) {
             case "badbones": {
                 converter = new BadBonesVouchersConverter();
+                break;
+            }
+
+            case "songoda": {
+                converter = new SongodaVouchersConverter();
                 break;
             }
 
