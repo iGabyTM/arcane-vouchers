@@ -51,11 +51,9 @@ public class Main {
             }
 
             new Comet(commandLine);
+        } catch (MissingOptionException e) {
+            new HelpFormatter().printHelp("see below", options);
         } catch (ParseException e) {
-            if (e instanceof MissingOptionException) {
-                return;
-            }
-
             LoggerFactory.getLogger("main").error(e.getMessage(), e);
         }
     }
