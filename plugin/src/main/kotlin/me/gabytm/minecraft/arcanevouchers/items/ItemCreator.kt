@@ -8,14 +8,13 @@ import dev.triumphteam.gui.builder.item.ItemBuilder
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
-import me.gabytm.minecraft.arcanevouchers.functions.exception
 import me.gabytm.minecraft.arcanevouchers.functions.isPlayerHead
 import me.gabytm.minecraft.arcanevouchers.functions.mini
+import me.gabytm.minecraft.arcanevouchers.functions.toColor
 import me.gabytm.minecraft.arcanevouchers.functions.warning
 import me.gabytm.minecraft.arcanevouchers.items.skulls.SkullTextureProvider
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.configuration.ConfigurationSection
@@ -50,29 +49,6 @@ class ItemCreator(plugin: ArcaneVouchers) {
         }
         val level = get(1).toIntOrNull() ?: return null
         return enchantment to level
-    }
-
-    /**
-     * Attempt to parse a [Color] from a string with format `red,green,blue`
-     * @return [Color] or null
-     */
-    private fun String.toColor(): Color? {
-        val parts = split(Constant.Separator.COMMA, 3)
-
-        if (parts.size != 3) {
-            return null
-        }
-
-        val red = parts[0].toIntOrNull(16) ?: return null
-        val green = parts[1].toIntOrNull(16) ?: return null
-        val blue = parts[2].toIntOrNull(16) ?: return null
-
-        return try {
-            Color.fromRGB(red, green, blue)
-        } catch (e: IllegalArgumentException) {
-            exception("Could not parse color from '$this'", e)
-            null
-        }
     }
 
     /**
