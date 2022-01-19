@@ -10,9 +10,15 @@ public class Main {
         final Options options = new Options();
 
         options.addOption(
+                Option.builder("h")
+                        .longOpt("help")
+                        .desc("Display the help menu")
+                        .build()
+        );
+
+        options.addOption(
                 Option.builder("a")
                         .longOpt("action")
-                        .required()
                         .hasArg()
                         .type(String.class)
                         .argName("action")
@@ -39,10 +45,14 @@ public class Main {
             final CommandLineParser parser = new DefaultParser();
             final CommandLine commandLine = parser.parse(options, args);
 
+            if (commandLine.hasOption('h') || commandLine.getOptions().length == 0) {
+                new HelpFormatter().printHelp("see below", options);
+                return;
+            }
+
             new Comet(commandLine);
         } catch (ParseException e) {
             if (e instanceof MissingOptionException) {
-                new HelpFormatter().printHelp("see below", options);
                 return;
             }
 
