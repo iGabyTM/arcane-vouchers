@@ -2,8 +2,6 @@ package me.gabytm.minecraft.arcanevouchers.comet.modules.implementations.convert
 
 import me.gabytm.minecraft.arcanevouchers.comet.modules.implementations.converter.Converter;
 import me.gabytm.minecraft.arcanevouchers.comet.utils.Strings;
-import net.kyori.adventure.title.Title;
-import org.bukkit.inventory.ItemFlag;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +48,7 @@ public class SongodaVouchersConverter extends Converter {
         moveBoolean(source, "unbreakable", target, "unbreakable", true);
 
         if (source.node("hide-attributes").getBoolean()) {
-            target.node("flags").setList(String.class, Collections.singletonList(ItemFlag.HIDE_ATTRIBUTES.name()));
+            target.node("flags").setList(String.class, Collections.singletonList("HIDE_ATTRIBUTES"));
         }
     }
 

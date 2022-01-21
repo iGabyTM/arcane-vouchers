@@ -25,7 +25,9 @@ subprojects {
     }
 
     dependencies {
-        compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-        compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+        if (project.name != 'comet') {
+            compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+            compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+        }
     }
 }
