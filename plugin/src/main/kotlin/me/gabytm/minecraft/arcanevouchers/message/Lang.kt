@@ -24,6 +24,7 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
     //-----
 
     // Messages for the give command
+    GIVE__ALL("give.all", Placeholder.AMOUNT, Placeholder.VOUCHER),
     GIVE__SENDER("give.sender", Placeholder.AMOUNT, Placeholder.RECEIVER, Placeholder.VOUCHER),
     GIVE__USAGE("give.usage"),
     //-----

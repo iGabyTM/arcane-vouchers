@@ -5,7 +5,7 @@
 #
 # Use {prefix} on any message to replace it with this value
 #
-prefix: '<dark_purple>A</dark_purple><light_purple>V</light_purple> <dark_gray>┃</dark_gray>'
+prefix: '<dark_purple>A<light_purple>V <dark_gray>┃'
 
 general:
   #
@@ -13,50 +13,55 @@ general:
   #
   invalid:
     number:
-      integer: '{prefix} <red><u>{input}</u> is not an integer.</red>'
-      long: '{prefix} <red><u>{input}</u> is not a long.</red>'
-  noPermission: '{prefix} <red>You can not use this command.</red>'
+      integer: '{prefix} <red><u>{input}</u> is not an integer.'
+      long: '{prefix} <red><u>{input}</u> is not a long.'
+  noPermission: '{prefix} <red>You can not use this command.'
   #
   # {input} - player's input
   #
   unknown:
-    player: '{prefix} <red>Unknown player <u>{input}</u>.</red>'
-    voucher: '{prefix} <red>Unknown voucher <u>{input}</u>.</red>'
+    player: '{prefix} <red>Unknown player <u>{input}</u>.'
+    voucher: '{prefix} <red>Unknown voucher <u>{input}</u>.'
+
+give:
+  all: '{prefix} <white>You gave everyone <light_purple>{amount}<white>x <dark_gray>''<r>{voucher}<dark_gray>''<white>.'
+  sender: '{prefix} <white>You gave <light_purple>{receiver} {amount}<white>x <dark_gray>''<r>{voucher}<dark_gray>''<white>.'
+  usage: '{prefix} <dark_purple>/av give <light_purple>[player/*] [voucher] [amount] <white>(arguments) <dark_gray>- <gray>Give a voucher'
 
 help: |-
-  <dark_purple>ArcaneVouchers</dark_purple> <gray>v</gray><white>{version}</white> <gray>Commands list</gray>
+  <dark_purple>ArcaneVouchers <gray>v<white>{version} <gray>Commands list
     
-    <dark_purple>/av give</dark_purple> <light_purple>[player/*] [voucher] [amount]</light_purple> <white>(arguments)</white> <dark_gray>-</dark_gray> <gray>Give a voucher</gray>
-    <dark_purple>/av help</dark_purple> <dark_gray>-</dark_gray> <gray>Display the commands list</gray>
-    <dark_purple>/av list</dark_purple> <dark_gray>-</dark_gray> <gray>Receive a list of all loaded vouchers</gray>
-    <dark_purple>/av reload</dark_purple> <dark_gray>-</dark_gray> <gray>Reload the plugin</gray>
-    <dark_purple>/av usages</dark_purple> <light_purple>[voucher] [action]</light_purple> <white>(arguments)</white> <dark_gray>-</dark_gray> <gray>Give a voucher</gray>
+    <dark_purple>/av give <light_purple>[player/*] [voucher] [amount] <white>(arguments) <dark_gray>- <gray>Give a voucher
+    <dark_purple>/av help <dark_gray>- <gray>Display the commands list
+    <dark_purple>/av list <dark_gray>- <gray>Receive a list of all loaded vouchers
+    <dark_purple>/av reload <dark_gray>- <gray>Reload the plugin
+    <dark_purple>/av usages <light_purple>[voucher] [action] <white>(arguments) <dark_gray>- <gray>Give a voucher
 
 list:
-  noVouchers: '{prefix} &c0 &7vouchers loaded.'
+  noVouchers: '{prefix} <red>0 <gray>vouchers loaded.'
   #
   # {amount} - how many vouchers are loaded
   #
-  prefix: '{prefix} <dark_purple>{amount}</dark_purple> <gray>voucher(s) loaded:</gray> '
-  separator: '<gray>,<gray> '
+  prefix: '{prefix} <dark_purple>{amount} <gray>voucher(s) loaded:</gray> '
+  separator: '<gray>,</gray> '
   #
   # {voucher} - the id of the voucher
   #
   voucher: '<light_purple>{voucher}</light_purple>'
   suffix: '<gray>.</gray>'
 
-reload: '{prefix} <green>The plugin has been reloaded.</green>'
+reload: '{prefix} <green>The plugin has been reloaded.'
 
 usages:
   #
   # {voucher} - the id of the voucher
   #
-  typeNone: '{prefix} <red>Limit type of voucher <u>{voucher}</u> is NONE.</red>'
+  typeNone: '{prefix} <red>Limit type of voucher <u>{voucher}</u> is NONE.'
   usage: |-
-    {prefix} <white>Usage:</white>
-    <dark_purple>/av usages</dark_purple> <light_purple>[voucher] check</light_purple> <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>-</dark_gray> <gray>Check the usages of a voucher</gray>
-    <dark_purple>/av usages</dark_purple> <light_purple>[voucher] modify [value]</light_purple> <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>-</dark_gray> <gray>Modify the usages of a voucher</gray>
-    <dark_purple>/av usages</dark_purple> <light_purple>[voucher] set [value]</light_purple> <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>-</dark_gray> <gray>Set the usages of a voucher</gray>
+    {prefix} <white>Usage:
+    <dark_purple>/av usages <light_purple>[voucher] check <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>- <gray>Check the usages of a voucher
+    <dark_purple>/av usages <light_purple>[voucher] modify [value] <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>- <gray>Modify the usages of a voucher
+    <dark_purple>/av usages <light_purple>[voucher] set [value] <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>- <gray>Set the usages of a voucher
   check:
     global:
       #
@@ -64,7 +69,7 @@ usages:
       # {usages}  - the usages
       # {voucher} - the id of the voucher
       #
-      message: '{prefix} <white>Voucher <light_purple>{voucher}</light_purple> was used <light_purple>{usages}</light_purple> times <gray>(limit: {limit})</gray>.</white>'
+      message: '{prefix} <white>Voucher <light_purple>{voucher} was used <light_purple>{usages} times <gray>(limit: {limit})<white>.'
     personal:
       #
       # {limit}   - the limit of the voucher
@@ -72,9 +77,9 @@ usages:
       # {usages}  - the usages
       # {voucher} - the id of the voucher
       #
-      message: '{prefix} <white><light_purple>{player}</light_purple> has used voucher <light_purple>{voucher} {usages}</light_purple> times <gray>(limit: {limit})</gray>.</white>'
-      requirePlayer: '{prefix} <red>A player name is required because the limit type is PERSONAL.</red>'
+      message: '{prefix} <light_purple>{player} <white>has used voucher <light_purple>{voucher} {usages} times <gray>(limit: {limit})<white>.'
+      requirePlayer: '{prefix} <red>A player name is required because the limit type is PERSONAL.'
   modify:
-    usage: '<dark_purple>/av usages</dark_purple> <light_purple>[voucher] modify [value]</light_purple> <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>-</dark_gray> <gray>Modify the usages of a voucher</gray>'
+    usage: '{prefix} <dark_purple>/av usages <light_purple>[voucher] modify [value] <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>- <gray>Modify the usages of a voucher'
   set:
-    usage: '<dark_purple>/av usages</dark_purple> <light_purple>[voucher] set [value]</light_purple> <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>-</dark_gray> <gray>Set the usages of a voucher</gray>'
+    usage: '{prefix} <dark_purple>/av usages <light_purple>[voucher] set [value] <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>- <gray>Set the usages of a voucher'

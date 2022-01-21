@@ -92,6 +92,7 @@ class GiveCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
         val arguments = processArguments(args)
 
         if (giveToEveryone) {
+            Lang.GIVE__ALL.send(sender, amount, voucher.id)
             Bukkit.getOnlinePlayers().map { this.plugin.voucherManager.giveVoucher(it, voucher, amount, arguments) }
             return
         }
@@ -99,7 +100,7 @@ class GiveCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
         // Just to avoid 'receiver!!', at this point receiver shouldn't be null anyway
         if (receiver != null) {
             this.plugin.voucherManager.giveVoucher(receiver, voucher, amount, arguments)
-            Lang.GIVE__SENDER.send(sender, listOf(amount, receiver.name, voucher.id))
+            Lang.GIVE__SENDER.send(sender, amount, receiver.name, voucher.id)
         }
     }
 
