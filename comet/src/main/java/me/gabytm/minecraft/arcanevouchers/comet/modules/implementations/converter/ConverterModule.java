@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 @ModuleInfo(id = "converter")
@@ -25,10 +25,12 @@ public class ConverterModule extends CometModule {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConverterModule.class);
 
+    @SuppressWarnings("SpellCheckingInspection")
     public static List<String> converters() {
-        return Collections.singletonList("badbones");
+        return Arrays.asList("badbones", "songoda");
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void create(@NotNull final File file) {
         if (file.exists()) {
             return;
