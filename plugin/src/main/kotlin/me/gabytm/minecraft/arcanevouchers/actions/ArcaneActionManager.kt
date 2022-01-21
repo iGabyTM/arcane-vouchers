@@ -46,7 +46,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
         // Economy
         register("addexp") { AddExpAction(it, handler) }
-        register("item") { ItemAction(it, handler) }
+        register("item") { ItemAction(it, handler, plugin.itemCreator) }
         //-----
 
         // Message
