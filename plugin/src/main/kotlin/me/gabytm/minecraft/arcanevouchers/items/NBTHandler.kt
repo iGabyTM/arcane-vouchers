@@ -1,10 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.items
 
-import com.google.gson.JsonObject
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
-import me.gabytm.minecraft.arcanevouchers.functions.exception
-import java.io.IOException
 import java.nio.file.Files
 
 /**
@@ -12,16 +9,12 @@ import java.nio.file.Files
  */
 class NBTHandler(plugin: ArcaneVouchers) {
 
-    private val jsonFilePath = plugin.dataFolder.toPath().resolve("vouchers-nbt.json")
-    private lateinit var json: JsonObject
+    private val nbtFilePath = plugin.dataFolder.toPath().resolve("vouchers-nbt.txt")
+    private val nbt = mutableMapOf<String, String>()
 
     init {
-        if (!Files.exists(jsonFilePath)) {
-            try {
-                Files.createFile(this.jsonFilePath)
-            } catch (e: IOException) {
-                exception("Could not create $jsonFilePath", e)
-            }
+        if (!Files.exists(this.nbtFilePath)) {
+            plugin.saveResource("vouchers-nbt.txt", false)
         }
 
         this.load()
@@ -31,8 +24,13 @@ class NBTHandler(plugin: ArcaneVouchers) {
      * Load the NBT string from file
      */
     fun load() {
-        Files.newBufferedReader(this.jsonFilePath).use {
-            this.json = Constant.GSON.fromJson(it, JsonObject::class.java)
+        this.nbt.clear()
+
+        Files.newBufferedReader(this.nbtFilePath).use { reader ->
+            reader.lines()
+                .map { it.split(Constant.Separator.SPACE, 2) }
+                .filter { it.size == 2 }
+                .forEach { this.nbt[it[0]] = it[1] }
         }
     }
 
@@ -42,7 +40,7 @@ class NBTHandler(plugin: ArcaneVouchers) {
      * @return NBT string if found otherwise `null`
      */
     fun getNbt(id: String): String? {
-        return this.json.get(id)?.toString()
+        return this.nbt[id]
     }
 
 }

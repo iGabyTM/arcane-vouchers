@@ -14,7 +14,6 @@ import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
-import java.nio.file.Files
 import java.util.regex.Pattern
 
 class ArcaneVouchers : JavaPlugin() {
@@ -56,10 +55,6 @@ class ArcaneVouchers : JavaPlugin() {
 
         saveDefaultConfig()
         this.settings = Settings(this.config)
-
-        if (!Files.exists(dataFolder.toPath().resolve("vouchers-nbt.json"))) {
-            saveResource("vouchers-nbt.json", false)
-        }
 
         this.audiences = BukkitAudiences.create(this)
         this.compatHandler = CompatHandler(this)
