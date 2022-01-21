@@ -86,6 +86,11 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         return Material.values().filter(filter).map { it.name }
     }
 
+    /**
+     * Equivalent of [Material.isItem] for legacy versions
+     * @return whether the material is an item or not
+     * @author MD_5 [original](https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/browse/src/main/java/org/bukkit/Material.java?until=7eb6b52fb21699805eab4b074599030861227e64#1397-1455)
+     */
     private fun isItem(material: Material): Boolean {
         return when (material.name) {
             "ACACIA_DOOR", "BED_BLOCK", "BEETROOT_BLOCK",
