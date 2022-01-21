@@ -18,6 +18,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Suppress("DEPRECATION")
 class UtilsHandler(plugin: ArcaneVouchers) {
 
     init {
@@ -55,7 +56,7 @@ class UtilsHandler(plugin: ArcaneVouchers) {
 
         yaml["itemFlags"] = ItemFlag.values().map { it.name }
 
-        yaml["materials"] = Material.values().map { it.name }.filter { !it.startsWith("LEGACY_") }
+        yaml["materials"] = getMaterials()
 
         yaml["patternTypes"] = PatternType.values().map { it.name }
 
@@ -67,6 +68,17 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         } catch (e: IOException) {
             exception("Could not save ${file.path}", e)
         }
+    }
+
+    // TODO: 21-Jan-22 add method for legacy versions to check if the material is an item 
+    private fun getMaterials(): List<String> {
+        val filter: (Material) -> Boolean = if (ServerVersion.IS_LEGACY) {
+            { it != Material.AIR }
+        } else {
+            { it != Material.AIR && it.isItem && !it.isLegacy }
+        }
+
+        return Material.values().filter(filter).map { it.name }
     }
 
     private fun getSounds(): List<String> {
