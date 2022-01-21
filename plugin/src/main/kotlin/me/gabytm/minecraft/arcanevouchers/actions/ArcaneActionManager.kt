@@ -72,11 +72,11 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
         info("Loaded actions: ${actions.rowKeySet().sorted().joinToString(", ")}")
 
-        // '%player_name' is the only placeholder replaced in case PlaceholderAPI is not installed
-        placeholderManager.register(PlayerNamePlaceholderProvider())
-
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             placeholderManager.register(PlaceholderAPIProvider())
+        } else {
+            // '%player_name' is the only placeholder replaced in case PlaceholderAPI is not installed
+            placeholderManager.register(PlayerNamePlaceholderProvider())
         }
     }
 
