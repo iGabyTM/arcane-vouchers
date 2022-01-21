@@ -27,7 +27,17 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         val file = File(plugin.dataFolder, ".UTILS.yml")
 
         if (file.exists()) {
-            file.delete()
+            try {
+                Files.write(file.toPath(), ByteArray(0), StandardOpenOption.WRITE)
+            } catch (e: IOException) {
+                exception("Could not delete the content of $file", e)
+            }
+        } else {
+            try {
+                file.createNewFile()
+            } catch (e: IOException) {
+                exception("Could not create $file", e)
+            }
         }
 
         val time = SimpleDateFormat("dd MMM yyyy, HH:mm z").format(Date())
