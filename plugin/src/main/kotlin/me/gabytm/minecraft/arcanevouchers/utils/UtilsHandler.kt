@@ -12,6 +12,7 @@ import org.bukkit.block.banner.PatternType
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
+import org.bukkit.potion.PotionEffectType
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -43,6 +44,8 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         yaml["bossBar.progress.max"] = BossBar.MAX_PROGRESS
 
         yaml["dyeColors"] = DyeColor.values().map { it.name }
+
+        yaml["effect.types"] = PotionEffectType.values().map { it.name }
 
         yaml["enchantments"] = if (ServerVersion.HAS_KEYS) {
             Enchantment.values().map { it.key.toString() }
