@@ -1,4 +1,4 @@
-package me.gabytm.minecraft.arcanevouchers.utils
+package me.gabytm.minecraft.arcanevouchers
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import org.bstats.bukkit.Metrics

@@ -9,7 +9,6 @@ import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
 import me.gabytm.minecraft.arcanevouchers.listeners.DisableActionsListener
 import me.gabytm.minecraft.arcanevouchers.listeners.VoucherUseListener
 import me.gabytm.minecraft.arcanevouchers.message.Lang
-import me.gabytm.minecraft.arcanevouchers.utils.BStats
 import me.gabytm.minecraft.arcanevouchers.utils.UtilsHandler
 import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
