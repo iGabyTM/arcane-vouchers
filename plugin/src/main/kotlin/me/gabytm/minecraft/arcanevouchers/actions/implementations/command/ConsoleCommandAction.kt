@@ -10,6 +10,8 @@ import org.bukkit.entity.Player
 
 class ConsoleCommandAction(meta: ActionMeta<Player>, handler: PermissionHandler) : ArcaneAction(meta, handler) {
 
+    override fun getName(): String = "Console"
+
     override fun run(player: Player, context: Context<Player>) {
         execute(player) {
             sync {

@@ -27,6 +27,14 @@ class MessageAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arca
         return meta.getProperty(key, default) { it.toLongOrNull()?.let(Ticks::duration) }
     }
 
+    override fun getName(): String {
+        return if (messageType == MessageType.CHAT) {
+            "Message"
+        } else {
+            "Message ($messageType)"
+        }
+    }
+
     override fun run(player: Player, context: Context<Player>) {
         execute(player) {
             if (messageType == MessageType.TITLE) {

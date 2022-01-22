@@ -8,6 +8,8 @@ import org.bukkit.entity.Player
 
 class PlayerCommandAction(meta: ActionMeta<Player>, handler: PermissionHandler) : ArcaneAction(meta, handler) {
 
+    override fun getName(): String = "Player"
+
     override fun run(player: Player, context: Context<Player>) {
         execute(player) {
             player.chat('/' + meta.getParsedData(player, context))

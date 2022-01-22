@@ -8,6 +8,8 @@ import org.bukkit.entity.Player
 
 abstract class ArcaneAction(meta: ActionMeta<Player>, private val handler: PermissionHandler) : Action<Player>(meta) {
 
+    private val defaultName = javaClass.simpleName.replace("Action", "")
+
     private val permissionMode: PermissionMode
     private val permission: String
 
@@ -23,6 +25,12 @@ abstract class ArcaneAction(meta: ActionMeta<Player>, private val handler: Permi
             this.permission = permission
         }
     }
+
+    /**
+     * Get the name of the action, currently used for bStats
+     * @return the name of the action
+     */
+    open fun getName(): String = defaultName
 
     protected fun execute(player: Player, action: () -> Unit) {
         permissionMode.execute(handler, player, permission, action)
