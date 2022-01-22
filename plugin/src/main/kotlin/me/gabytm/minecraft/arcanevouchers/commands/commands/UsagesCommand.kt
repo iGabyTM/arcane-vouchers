@@ -144,7 +144,7 @@ class UsagesCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
             // The limit.type is GLOBAL
             if (voucher.settings.limit.type == LimitType.GLOBAL) {
                 val newLimit = manager.modifyGlobalUsages(voucher.id, value, false)
-                Lang.USAGES__MODIFY__GLOBAL__CONFIRMATION.send(sender, newLimit, value, voucher.id)
+                Lang.USAGES__MODIFY__GLOBAL__CONFIRMATION.send(sender, newLimit, (if (value > 0) "+$value" else value), voucher.id)
                 return
             }
 
@@ -165,7 +165,7 @@ class UsagesCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
             val newLimit = this.manager.modifyPersonalUsages(player.uniqueId, voucher.id, value, false)
             Lang.USAGES__MODIFY__PERSONAL__CONFIRMATION.send(
                 sender,
-                newLimit, player.name(args[1]), value, voucher.id
+                newLimit, player.name(args[1]), (if (value > 0) "+$value" else value), voucher.id
             )
         }
 

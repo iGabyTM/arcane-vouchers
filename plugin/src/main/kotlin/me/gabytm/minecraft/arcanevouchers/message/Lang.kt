@@ -55,11 +55,11 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
     USAGES__MODIFY__USAGE("usages.modify.usage"),
     USAGES__MODIFY__GLOBAL__CONFIRMATION(
         "usages.modify.global.confirmation",
-        Placeholder.NEW_LIMIT, Placeholder.VALUE, Placeholder.VOUCHER
+        Placeholder.NEW_VALUE, Placeholder.VALUE, Placeholder.VOUCHER
     ),
     USAGES__MODIFY__PERSONAL__CONFIRMATION(
         "usages.modify.player.confirmation",
-        Placeholder.NEW_LIMIT, Placeholder.PLAYER, Placeholder.VALUE, Placeholder.VOUCHER
+        Placeholder.NEW_VALUE, Placeholder.PLAYER, Placeholder.VALUE, Placeholder.VOUCHER
     ),
     USAGES__MODIFY__PERSONAL__REQUIRE_PLAYER("usages.modify.personal.requirePlayer"),
 
@@ -159,7 +159,6 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
 
         const val LIMIT: String = "{limit}"
 
-        const val NEW_LIMIT: String = "{new_limit}"
         const val NEW_VALUE: String = "{new_value}"
 
         const val PLAYER: String = "{player}"

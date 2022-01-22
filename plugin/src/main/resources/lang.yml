@@ -81,5 +81,35 @@ usages:
       requirePlayer: '{prefix} <red>A player name is required because the limit type is PERSONAL.'
   modify:
     usage: '{prefix} <dark_purple>/av usages <light_purple>[voucher] modify [value] <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>- <gray>Modify the usages of a voucher'
+    global:
+      #
+      # {new_value} - the new usages value
+      # {value}     - the value
+      # {voucher}   - the id of the voucher
+      #
+      confirmation: '{prefix} <white>The total usages for <light_purple>{voucher} <white>is now <light_purple>{new_value} <gray>({value})<white>.'
+    personal:
+      #
+      # {new_value} - the new usages value
+      # {player}    - the name of the player
+      # {value}     - the value
+      # {voucher}   - the id of the voucher
+      #
+      confirmation: '{prefix} <light_purple>{player}<white>''s usages for <light_purple>{voucher} <white>is now <light_purple>{new_value} <gray>({value})<white>.'
+      requirePlayer: '{prefix} <red>A player name is required because the limit type is PERSONAL.'
   set:
     usage: '{prefix} <dark_purple>/av usages <light_purple>[voucher] set [value] <hover:show_text:"If limit type is PERSONAL"><white>(player)</white></hover> <dark_gray>- <gray>Set the usages of a voucher'
+    global:
+      #
+      # {new_value} - the new usages value
+      # {voucher}   - the id of the voucher
+      #
+      confirmation: '{prefix} <white>The total usages for <light_purple>{voucher} <white>is now <light_purple>{new_value}<white>.'
+    personal:
+      #
+      # {new_value} - the new usages value
+      # {player}    - the name of the player
+      # {voucher}   - the id of the voucher
+      #
+      confirmation: '{prefix} <light_purple>{player}<white>''s usages for <light_purple>{voucher} <white>is now <light_purple>{new_value}<white>.'
+      requirePlayer: '{prefix} <red>A player name is required because the limit type is PERSONAL.'
