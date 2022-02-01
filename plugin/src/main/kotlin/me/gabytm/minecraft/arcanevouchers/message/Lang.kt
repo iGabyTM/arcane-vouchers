@@ -13,6 +13,18 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
 
     PREFIX("prefix"),
 
+    // Messages used for formatting the cooldown message
+    COOLDOWN__DAY("cooldown.day", Placeholder.VALUE),
+    COOLDOWN__DAYS("cooldown.days", Placeholder.VALUE),
+    COOLDOWN__HOUR("cooldown.hour", Placeholder.VALUE),
+    COOLDOWN__HOURS("cooldown.hours", Placeholder.VALUE),
+    COOLDOWN__MINUTE("cooldown.minute", Placeholder.VALUE),
+    COOLDOWN__MINUTES("cooldown.minutes", Placeholder.VALUE),
+    COOLDOWN__SECOND("cooldown.second", Placeholder.VALUE),
+    COOLDOWN__SECONDS("cooldown.seconds", Placeholder.VALUE),
+    COOLDOWN__OTHER("cooldown.other"),
+    //-----
+
     // Messages used pretty much for all commands and not only
     GENERAL__INVALID__NUMBER__INTEGER("general.invalid.number.integer", Placeholder.INPUT),
     GENERAL__INVALID__NUMBER__LONG("general.invalid.number.long", Placeholder.INPUT),
@@ -81,11 +93,13 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
 
     init {
         for (placeholder in stringPlaceholders) {
-            placeholders.add(Pattern.compile(Pattern.quote(placeholder), Pattern.CASE_INSENSITIVE))
+            placeholders.add(Pattern.quote(placeholder).toPattern(Pattern.CASE_INSENSITIVE))
         }
     }
 
     fun isEmpty(): Boolean = this.component == null || this.component == Component.empty()
+
+    fun get(): Component? = component
 
     fun format(values: List<Any> = emptyList()): Component? {
         if (component == null) {

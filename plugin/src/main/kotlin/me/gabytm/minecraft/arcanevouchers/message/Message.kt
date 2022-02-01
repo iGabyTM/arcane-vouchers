@@ -1,17 +1,55 @@
 package me.gabytm.minecraft.arcanevouchers.message
 
 import me.gabytm.minecraft.arcanevouchers.Constant
+import me.gabytm.minecraft.arcanevouchers.functions.mini
 import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.text.Component
+import java.util.regex.Pattern
 
 abstract class Message(protected val string: String) {
 
-    abstract fun send(player: Audience, args: Map<String, String> = emptyMap())
+    private fun getPlaceholder(stringPlaceholder: String): Pattern {
+        val placeholder = PLACEHOLDERS[stringPlaceholder]
+
+        if (placeholder != null) {
+            return placeholder
+        }
+
+        val newPlaceholder = Pattern.quote(stringPlaceholder).toPattern(Pattern.CASE_INSENSITIVE)
+        PLACEHOLDERS[stringPlaceholder] = newPlaceholder
+        return newPlaceholder
+    }
+
+    protected fun format(
+        message: Component,
+        strings: Map<String, String>,
+        components: Map<String, Component>
+    ): Component {
+        if (strings.isEmpty() && components.isEmpty()) {
+            return message
+        }
+
+        val placeholdersAndValues = components.toMutableMap()
+        strings.forEach { (placeholder, value) -> placeholdersAndValues[placeholder] = value.mini() }
+
+        var replaced = message
+
+        for ((placeholder, value) in placeholdersAndValues) {
+            replaced = replaced.replaceText { it.match(getPlaceholder(placeholder)).replacement(value) }
+        }
+
+        return replaced
+    }
+
+    abstract fun send(player: Audience, strings: Map<String, String> = emptyMap(), components: Map<String, Component> = emptyMap())
 
     companion object {
 
+        private val PLACEHOLDERS = mutableMapOf<String, Pattern>()
+
         val NONE = object : Message("") {
             // no-op
-            override fun send(player: Audience, args: Map<String, String>) { }
+            override fun send(player: Audience, strings: Map<String, String>, components: Map<String, Component>) {}
         }
 
         fun create(string: String): Message {
