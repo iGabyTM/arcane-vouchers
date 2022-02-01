@@ -106,12 +106,12 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
 
         // The voucher has a cooldown set
         if (settings.cooldown.enabled) {
-            val timeLeft = voucherManager.cooldownManager.getTimeLeft(player.uniqueId, voucher)
+            val cooldownManager = voucherManager.cooldownManager
+            val timeLeft = cooldownManager.getTimeLeft(player.uniqueId, voucher)
 
             // The player is on cooldown, and they can't bypass it
-            if (timeLeft > 0L && !voucherManager.cooldownManager.bypassCooldown(player, voucherId)) {
-                // TODO: 1/4/2022 format time left
-                settings.cooldown.message.send(audience, args.add("{left}","${timeLeft / 1000}s"))
+            if (timeLeft > 0L && !cooldownManager.bypassCooldown(player, voucherId)) {
+                settings.cooldown.message.send(audience, args, mapOf("{left}" to cooldownManager.formatTimeLeft(timeLeft)))
                 settings.cooldown.sound.play(audience)
                 return
             }

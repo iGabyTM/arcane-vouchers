@@ -7,6 +7,20 @@
 #
 prefix: '<dark_purple>A<light_purple>V <dark_gray>┃'
 
+cooldown:
+  #
+  # {value} - the days/hours/minutes/seconds
+  #
+  day: '{value} day '
+  days: '{value} days '
+  hour: '{value} hour '
+  hours: '{value} hours '
+  minute: '{value} minute '
+  minutes: '{value} minutes '
+  second: '{value} second'
+  seconds: '{value} seconds'
+  other: 'a moment'
+
 general:
   #
   # {input} - player's input
