@@ -9,6 +9,7 @@ import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
 import me.gabytm.minecraft.arcanevouchers.listeners.DisableActionsListener
 import me.gabytm.minecraft.arcanevouchers.listeners.VoucherUseListener
 import me.gabytm.minecraft.arcanevouchers.message.Lang
+import me.gabytm.minecraft.arcanevouchers.files.FileHandler
 import me.gabytm.minecraft.arcanevouchers.utils.UtilsHandler
 import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
@@ -53,13 +54,13 @@ class ArcaneVouchers : JavaPlugin() {
             return
         }
 
-        saveDefaultConfig()
+        FileHandler(this)
         this.settings = Settings(this.config)
 
         this.audiences = BukkitAudiences.create(this)
         this.compatHandler = CompatHandler(this)
 
-        this.vouchersConfig = Config(this, "vouchers.yml")
+        this.vouchersConfig = Config(this, "vouchers.yml", false)
         this.langFile = Config(this, "lang.yml")
 
         this.actionManager = ArcaneActionManager(this)
