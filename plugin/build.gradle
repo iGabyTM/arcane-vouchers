@@ -10,8 +10,8 @@ repositories {
     }
 
     maven {
-        name 'actions-core, actions-spigot, triumph-gui'
-        url 'https://repo.mattstudios.me/artifactory/public/'
+        name 'actions-core, actions-spigot'
+        url 'https://repo.triumphteam.dev/snapshots'
     }
 
     maven {
@@ -38,7 +38,7 @@ dependencies {
     implementation 'net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT'
 
     // GUis and commands
-    implementation 'dev.triumphteam:triumph-gui:3.1.0-SNAPSHOT'
+    implementation 'dev.triumphteam:triumph-gui:3.1.1'
     implementation 'me.mattstudios.utils:matt-framework:1.4.6'
 
     // Heads
