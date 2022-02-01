@@ -25,6 +25,7 @@ class CommandManager(plugin: ArcaneVouchers) {
     private fun registerMessages(handler: MessageHandler) {
         mutableMapOf(
             // Default messages
+            "cmd.no.exists" to Lang.GENERAL__UNKNOWN__COMMAND,
             "cmd.no.permission" to Lang.GENERAL__NO_PERMISSION,
             // Plugin messages
             "command.give.usage" to Lang.GIVE__USAGE,

@@ -34,6 +34,7 @@ general:
   # {input} - player's input
   #
   unknown:
+    command: '{player} <red>The command you are trying to use doesn''t exist, run <u>/av help</u> to see the list of commands.'
     player: '{prefix} <red>Unknown player <u>{input}</u>.'
     voucher: '{prefix} <red>Unknown voucher <u>{input}</u>.'
 

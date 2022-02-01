@@ -31,6 +31,7 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
 
     GENERAL__NO_PERMISSION("general.noPermission"),
 
+    GENERAL__UNKNOWN__COMMAND("general.unknown.command"),
     GENERAL__UNKNOWN__PLAYER("general.unknown.player", Placeholder.INPUT),
     GENERAL__UNKNOWN__VOUCHER("general.unknown.voucher", Placeholder.INPUT),
     //-----
