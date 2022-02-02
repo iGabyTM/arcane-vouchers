@@ -24,7 +24,8 @@ vouchers:
   #
   headExample:
     item:
-      material: PLAYER_HEAD
+      material: SKULL_ITEM
+      damage: 3
       texture: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGNlYjE3MDhkNTQwNGVmMzI2MTAzZTdiNjA1NTljOTE3OGYzZGNlNzI5MDA3YWM5YTBiNDk4YmRlYmU0NjEwNyJ9fX0=
       name: '<red>Head <yellow>Exa<blue>mple'
     actions:
