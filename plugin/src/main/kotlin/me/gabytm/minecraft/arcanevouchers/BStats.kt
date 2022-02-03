@@ -14,6 +14,7 @@ class BStats(plugin: ArcaneVouchers) {
             plugin.voucherManager.getVouchers()
                 .flatMap { it.actions }
                 .map { it.getName() }
+                .distinct()
                 .groupingBy { it }
                 .eachCount()
         })
