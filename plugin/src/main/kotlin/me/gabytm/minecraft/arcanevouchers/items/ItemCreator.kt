@@ -1,6 +1,5 @@
 package me.gabytm.minecraft.arcanevouchers.items
 
-import com.google.common.base.Enums
 import de.tr7zw.nbtapi.NBTContainer
 import de.tr7zw.nbtapi.NBTItem
 import de.tr7zw.nbtapi.NbtApiException
@@ -58,7 +57,7 @@ class ItemCreator(plugin: ArcaneVouchers) {
      */
     private fun BaseItemBuilder<*>.setGeneralMeta(isVoucher: Boolean, config: ConfigurationSection): ItemStack {
         val flags = config.getStringList("flags")
-            .mapNotNull { Enums.getIfPresent(ItemFlag::class.java, it.uppercase()).orNull() }
+            .mapNotNull { it.toEnumValue<ItemFlag>() }
             .toTypedArray()
 
         // Enchantments are saved in a list as 'Enchantment;level'
@@ -112,7 +111,7 @@ class ItemCreator(plugin: ArcaneVouchers) {
      *                        invalid
      * @return an [ItemStack] created according to the specified values
      */
-    // TODO: 14-Aug-21 add support for banners 
+    // TODO: 14-Aug-21 add support for banners
     fun create(isVoucher: Boolean, config: ConfigurationSection?, defaultMaterial: Material? = null): ItemStack {
         // Return a default item if the config section is null
         if (config == null) {
@@ -166,6 +165,7 @@ class ItemCreator(plugin: ArcaneVouchers) {
         val material: Material
         var damage: Short = 0
 
+        // The material doesn't contain ':damage'
         if (parts.size == 1) {
             material = Material.getMaterial(materialString) ?: kotlin.run {
                 warning("Unknown material $materialString")
@@ -213,7 +213,7 @@ class ItemCreator(plugin: ArcaneVouchers) {
 
                 "flags" -> {
                     val flags = value.split(Constant.Separator.COMMA)
-                        .mapNotNull { Enums.getIfPresent(ItemFlag::class.java, it.uppercase()).orNull() }
+                        .mapNotNull { it.toEnumValue<ItemFlag>() }
                         .toTypedArray()
                     builder.flags(*flags)
                 }
@@ -223,12 +223,13 @@ class ItemCreator(plugin: ArcaneVouchers) {
                 "model" -> value.toIntOrNull()?.let { builder.model(it) }
 
                 "nbt" -> {
-                    val json = string.substring(string.indexOf("nbt:") + 4)
+                    // Take everything that's after 'nbt:'
+                    val sNbt = string.substring(string.indexOf("$key:") + 4)
 
                     try {
-                        return NBTItem(builder.build()).apply { mergeCompound(NBTContainer(json)) }.item
+                        return NBTItem(builder.build()).apply { mergeCompound(NBTContainer(sNbt)) }.item
                     } catch (e: NbtApiException) {
-                        exception("Could not parse nbt '$json'", e)
+                        exception("Could not parse SNBT '$sNbt'", e)
                     }
                 }
 

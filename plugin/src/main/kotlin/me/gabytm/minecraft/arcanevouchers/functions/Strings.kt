@@ -1,5 +1,6 @@
 package me.gabytm.minecraft.arcanevouchers.functions
 
+import com.google.common.base.Enums
 import com.google.common.primitives.Ints
 import me.gabytm.minecraft.arcanevouchers.Constant
 import net.kyori.adventure.text.Component
@@ -102,4 +103,8 @@ fun String.toColor(): Color? {
         exception("Could not parse color from '$this'", e)
         null
     }
+}
+
+inline fun <reified E: Enum<E>> String.toEnumValue(default: E? = null): E? {
+    return Enums.getIfPresent(E::class.java, this.uppercase()).orNull() ?: default
 }
