@@ -17,7 +17,7 @@ enum class MessageType {
     },
 
     NONE {
-        override fun create(string: String): Message = Message.NONE
+        override fun create(string: String): Message = Message.NO_OP
     };
 
     abstract fun create(string: String): Message

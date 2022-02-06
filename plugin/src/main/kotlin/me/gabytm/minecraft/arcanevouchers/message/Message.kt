@@ -47,7 +47,7 @@ abstract class Message(protected val string: String) {
 
         private val PLACEHOLDERS = mutableMapOf<String, Pattern>()
 
-        val NONE = object : Message("") {
+        val NO_OP = object : Message("") {
             // no-op
             override fun send(player: Audience, strings: Map<String, String>, components: Map<String, Component>) {}
         }

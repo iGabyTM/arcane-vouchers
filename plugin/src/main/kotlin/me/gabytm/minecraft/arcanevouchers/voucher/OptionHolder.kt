@@ -13,7 +13,7 @@ class OptionHolder(
     private val regexOptions: Set<Pattern> = emptySet()
 ) {
 
-    fun isEmpty(): Boolean = this.stringOptions.isEmpty() && this.regexOptions.isEmpty()
+    val isEmpty: Boolean = this.stringOptions.isEmpty() && this.regexOptions.isEmpty()
 
     /**
      * Check if any value of a [Set] matches any of the options
@@ -68,6 +68,9 @@ class OptionHolder(
 
         private const val REGEX_PREFIX = "regex:"
         private val REGEX_PREFIX_PATTERN = Regex(REGEX_PREFIX, RegexOption.IGNORE_CASE)
+
+        /* no-op */
+        val NO_OP = OptionHolder()
 
         fun from(list: List<String>): OptionHolder {
             val stringOptions = mutableSetOf<String>()

@@ -34,8 +34,8 @@ class VoucherSettings(
     )
 
     data class Messages(
-        val receiveMessage: Message = Message.NONE,
-        val redeemMessage: Message = Message.NONE
+        val receiveMessage: Message = Message.NO_OP,
+        val redeemMessage: Message = Message.NO_OP
     )
 
     data class Sounds(
@@ -47,23 +47,23 @@ class VoucherSettings(
         val enabled: Boolean = false,
         val type: LimitType = LimitType.NONE,
         val limit: Long = 0L,
-        val message: Message = Message.NONE,
+        val message: Message = Message.NO_OP,
         val sound: SoundWrapper = SoundWrapper.NO_OP
     )
 
     data class Cooldown(
         val enabled: Boolean = false,
         val cooldown: Long = 0L,
-        val message: Message = Message.NONE,
+        val message: Message = Message.NO_OP,
         val sound: SoundWrapper = SoundWrapper.NO_OP
     )
 
     class Permissions(
         private val whitelistPermissions: List<String> = emptyList(),
-        val notWhitelistedMessage: Message = Message.NONE,
+        val notWhitelistedMessage: Message = Message.NO_OP,
         val notWhitelistedSound: SoundWrapper = SoundWrapper.NO_OP,
         private val blacklistPermissions: List<String> = emptyList(),
-        val blacklistedMessage: Message = Message.NONE,
+        val blacklistedMessage: Message = Message.NO_OP,
         val blacklistedSound: SoundWrapper = SoundWrapper.NO_OP,
     ) {
 
@@ -86,16 +86,16 @@ class VoucherSettings(
     }
 
     class Worlds(
-        private val whitelistedWorlds: OptionHolder = OptionHolder(),
-        val notWhitelistedMessage: Message = Message.NONE,
+        private val whitelistedWorlds: OptionHolder = OptionHolder.NO_OP,
+        val notWhitelistedMessage: Message = Message.NO_OP,
         val notWhitelistedSound: SoundWrapper = SoundWrapper.NO_OP,
-        private val blacklistWorlds: OptionHolder = OptionHolder(),
-        val blacklistedMessage: Message = Message.NONE,
+        private val blacklistWorlds: OptionHolder = OptionHolder.NO_OP,
+        val blacklistedMessage: Message = Message.NO_OP,
         val blacklistedSound: SoundWrapper = SoundWrapper.NO_OP
     ) {
 
         fun isWhitelisted(world: World, placeholders: Array<String>, values: Array<String>): Boolean {
-            if (this.whitelistedWorlds.isEmpty()) {
+            if (this.whitelistedWorlds.isEmpty) {
                 return true
             }
 
@@ -103,7 +103,7 @@ class VoucherSettings(
         }
 
         fun isBlacklisted(world: World, placeholders: Array<String>, values: Array<String>): Boolean {
-            if (this.blacklistWorlds.isEmpty()) {
+            if (this.blacklistWorlds.isEmpty) {
                 return false
             }
 
@@ -113,16 +113,16 @@ class VoucherSettings(
     }
 
     class Regions(
-        private val whitelist: OptionHolder = OptionHolder(),
-        val notWhitelistedMessage: Message = Message.NONE,
+        private val whitelist: OptionHolder = OptionHolder.NO_OP,
+        val notWhitelistedMessage: Message = Message.NO_OP,
         val notWhitelistedSound: SoundWrapper = SoundWrapper.NO_OP,
-        private val blacklist: OptionHolder = OptionHolder(),
-        val blacklistedMessage: Message = Message.NONE,
+        private val blacklist: OptionHolder = OptionHolder.NO_OP,
+        val blacklistedMessage: Message = Message.NO_OP,
         val blacklistedSound: SoundWrapper = SoundWrapper.NO_OP
     ) {
 
         fun isWhitelisted(regions: Set<String>, placeholders: Array<String>, values: Array<String>): Boolean {
-            if (this.whitelist.isEmpty()) {
+            if (this.whitelist.isEmpty) {
                 return true
             }
 
@@ -130,7 +130,7 @@ class VoucherSettings(
         }
 
         fun isBlacklisted(regions: Set<String>, placeholders: Array<String>, values: Array<String>): Boolean {
-            if (this.blacklist.isEmpty()) {
+            if (this.blacklist.isEmpty) {
                 return false
             }
 
@@ -141,7 +141,7 @@ class VoucherSettings(
 
     data class BindToReceiver(
         val enabled: Boolean = false,
-        val message: Message = Message.NONE,
+        val message: Message = Message.NO_OP,
         val sound: SoundWrapper = SoundWrapper.NO_OP
     )
 
