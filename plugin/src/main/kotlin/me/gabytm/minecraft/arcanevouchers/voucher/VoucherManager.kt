@@ -67,11 +67,11 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         val keys = argsMap.keys.toTypedArray()
         val values = argsMap.values.toTypedArray()
 
-        if (meta.hasDisplayName()) {
+        if (argsMap.isNotEmpty() && meta.hasDisplayName()) {
             meta.setDisplayName(StringUtils.replaceEach(meta.displayName, keys, values))
         }
 
-        if (meta.hasLore()) {
+        if (argsMap.isNotEmpty() && meta.hasLore()) {
             meta.lore = meta.lore?.map { StringUtils.replaceEach(it, keys, values) }
         }
 
