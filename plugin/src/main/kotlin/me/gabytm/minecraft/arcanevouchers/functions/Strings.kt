@@ -46,6 +46,10 @@ fun String.replace(placeholders: Array<String>, values: Array<String>): String {
 fun String.mini(): Component = Constant.MINI.parse(this)
 
 fun Array<String>.toArgsMap(): MutableMap<String, String> {
+    if (isEmpty()) {
+        return mutableMapOf()
+    }
+
     val map = mutableMapOf("%args%" to joinToString(" "))
 
     withIndex().forEach { (index, it) -> map["%args[${index + 1}]%"] = it }
