@@ -9,6 +9,7 @@ import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.arcanevouchers.functions.add
 import me.gabytm.minecraft.arcanevouchers.functions.audience
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
+import me.gabytm.minecraft.arcanevouchers.voucher.settings.VoucherSettings
 import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player

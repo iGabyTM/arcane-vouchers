@@ -1,4 +1,4 @@
-package me.gabytm.minecraft.arcanevouchers.voucher
+package me.gabytm.minecraft.arcanevouchers.voucher.settings
 
 import me.gabytm.minecraft.arcanevouchers.functions.replace
 import me.gabytm.minecraft.arcanevouchers.functions.warning
@@ -90,7 +90,7 @@ class OptionHolder(
                 }
             }
 
-            return OptionHolder(stringOptions, regexOptions)
+            return if (stringOptions.isEmpty() && regexOptions.isEmpty()) NO_OP else OptionHolder(stringOptions, regexOptions)
         }
 
     }

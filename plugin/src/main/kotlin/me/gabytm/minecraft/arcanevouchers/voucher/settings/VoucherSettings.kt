@@ -1,14 +1,9 @@
-package me.gabytm.minecraft.arcanevouchers.voucher
+package me.gabytm.minecraft.arcanevouchers.voucher.settings
 
-import me.gabytm.minecraft.arcanevouchers.functions.exception
 import me.gabytm.minecraft.arcanevouchers.functions.parseTime
 import me.gabytm.minecraft.arcanevouchers.functions.replace
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
 import me.gabytm.minecraft.arcanevouchers.message.Message
-import net.kyori.adventure.audience.Audience
-import net.kyori.adventure.key.InvalidKeyException
-import net.kyori.adventure.key.Key
-import net.kyori.adventure.sound.Sound
 import org.bukkit.World
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
@@ -144,42 +139,6 @@ class VoucherSettings(
         val message: Message = Message.NO_OP,
         val sound: SoundWrapper = SoundWrapper.NO_OP
     )
-
-    data class SoundWrapper(
-        private val sound: Sound? = null
-    ) {
-
-        fun play(audience: Audience) {
-            audience.playSound(sound ?: return)
-        }
-
-        companion object {
-
-            val NO_OP = SoundWrapper(null)
-
-            fun from(config: ConfigurationSection?): SoundWrapper {
-                if (config == null) {
-                    return NO_OP
-                }
-
-                val soundString = config.getString("sound") ?: return NO_OP
-
-                return try {
-                    val key = Key.key(soundString)
-                    val source = config.getString("source")?.let { Sound.Source.NAMES.value(it) } ?: Sound.Source.MASTER
-                    val volume = config.getDouble("volume", 1.0).toFloat()
-                    val pitch = config.getDouble("pitch", 1.0).toFloat()
-
-                    return SoundWrapper(Sound.sound(key, source, volume, pitch))
-                } catch (e: InvalidKeyException) {
-                    exception("'$soundString' is an invalid Sound namespaced key", e)
-                    NO_OP
-                }
-            }
-
-        }
-
-    }
 
     companion object {
 
