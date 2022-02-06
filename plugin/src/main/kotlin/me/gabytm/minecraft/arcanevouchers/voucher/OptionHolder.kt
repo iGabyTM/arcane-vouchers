@@ -66,15 +66,19 @@ class OptionHolder(
 
     companion object {
 
+        private const val REGEX_PREFIX = "regex:"
+        private val REGEX_PREFIX_PATTERN = Regex(REGEX_PREFIX, RegexOption.IGNORE_CASE)
+
         fun from(list: List<String>): OptionHolder {
             val stringOptions = mutableSetOf<String>()
             val regexOptions = mutableSetOf<Pattern>()
 
             for (it in list) {
-                if (it.startsWith("regex:")) {
-                    val regex = it.split("regex:")[0]
+                if (it.startsWith(REGEX_PREFIX, true)) {
+                    val regex = it.split(REGEX_PREFIX_PATTERN)[0]
+
                     try {
-                        regexOptions.add(Pattern.compile(regex))
+                        regexOptions.add(Pattern.quote(regex).toPattern())
                     } catch (e: PatternSyntaxException) {
                         warning("Could not parse regex '$regex': ${e.message}")
                     }
