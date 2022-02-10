@@ -4,6 +4,7 @@ import com.google.common.base.Enums
 import com.google.common.primitives.Ints
 import me.gabytm.minecraft.arcanevouchers.Constant
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextDecoration
 import net.md_5.bungee.api.ChatColor
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Color
@@ -43,7 +44,13 @@ fun String.replace(placeholders: Array<String>, values: Array<String>): String {
     return StringUtils.replaceEach(this, placeholders, values)
 }
 
-fun String.mini(): Component = Constant.MINI.parse(this)
+fun String.mini(removeItalic: Boolean = false): Component {
+    return if (removeItalic) {
+        Constant.MINI.parse(this).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+    } else {
+        Constant.MINI.parse(this)
+    }
+}
 
 fun Array<String>.toArgsMap(): MutableMap<String, String> {
     if (isEmpty()) {

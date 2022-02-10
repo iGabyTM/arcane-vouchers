@@ -68,8 +68,8 @@ class ItemCreator(plugin: ArcaneVouchers) {
         val customModelData = config.getInt("customModelData")
 
         val item = this
-            .name(config.getString("name")?.mini() ?: Component.empty())
-            .lore(config.getStringList("lore").map { it.mini() })
+            .name(config.getString("name")?.mini(true) ?: Component.empty())
+            .lore(config.getStringList("lore").map { it.mini(true) })
             .flags(*flags)
             .unbreakable(config.getBoolean("unbreakable"))
             .apply {
