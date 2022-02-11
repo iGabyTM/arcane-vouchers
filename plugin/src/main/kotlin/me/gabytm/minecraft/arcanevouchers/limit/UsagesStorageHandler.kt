@@ -133,7 +133,7 @@ class UsagesStorageHandler(plugin: ArcaneVouchers) : Storage<UsagesStorageHandle
             """
                 REPLACE INTO `personal_usages` (id, uuid, voucher, usages) 
                 VALUES (
-                    (SELECT id FROM `personal_limits` WHERE uuid = ? AND voucher = ?),
+                    (SELECT id FROM `personal_usages` WHERE uuid = ? AND voucher = ?),
                     ?,
                     ?,
                     ?
