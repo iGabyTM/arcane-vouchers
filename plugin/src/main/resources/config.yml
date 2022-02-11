@@ -6,6 +6,7 @@
 #
 
 settings:
+  DEBUG: false
   disable:
     #
     # If 'true', people won't be able to craft items using vouchers
