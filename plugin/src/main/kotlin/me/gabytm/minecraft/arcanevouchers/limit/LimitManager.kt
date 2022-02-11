@@ -43,7 +43,7 @@ class LimitManager(plugin: ArcaneVouchers) {
                 Permission.LIMIT_BYPASS_ALL_PERSONAL,
                 Permission.LIMIT_BYPASS_PERSONAL.format(voucher.id)
             )
-            LimitType.NONE -> true
+            LimitType.NONE -> false
         }
     }
 
