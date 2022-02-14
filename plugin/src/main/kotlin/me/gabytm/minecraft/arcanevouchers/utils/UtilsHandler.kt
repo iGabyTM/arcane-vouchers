@@ -27,6 +27,7 @@ class UtilsHandler(plugin: ArcaneVouchers) {
     init {
         val file = File(plugin.dataFolder, ".UTILS.yml")
 
+        // If the file exists, delete its content
         if (file.exists()) {
             try {
                 Files.write(file.toPath(), ByteArray(0), StandardOpenOption.WRITE)
@@ -34,6 +35,7 @@ class UtilsHandler(plugin: ArcaneVouchers) {
                 exception("Could not delete the content of $file", e)
             }
         } else {
+            // Otherwise, create it
             try {
                 file.createNewFile()
             } catch (e: IOException) {
@@ -43,7 +45,8 @@ class UtilsHandler(plugin: ArcaneVouchers) {
 
         val time = SimpleDateFormat("dd MMM yyyy, HH:mm z").format(Date())
         val yaml = YamlConfiguration.loadConfiguration(file)
-        yaml.options().header("\nHelpful lists of data generated for Minecraft ${Bukkit.getBukkitVersion()} at $time\n ")
+        yaml.options()
+            .header("\nHelpful lists of data generated for Minecraft ${Bukkit.getBukkitVersion()} at $time\n ")
 
         yaml["bossBar.colors"] = BossBar.Color.NAMES.keys().toList()
         yaml["bossBar.flags"] = BossBar.Flag.NAMES.keys().toList()
@@ -75,7 +78,7 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         try {
             yaml.save(file)
         } catch (e: IOException) {
-            exception("Could not save ${file.path}", e)
+            exception("Could not save $file", e)
         }
     }
 
