@@ -1,13 +1,26 @@
 package me.gabytm.minecraft.arcanevouchers
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import me.gabytm.minecraft.arcanevouchers.functions.exception
+import me.gabytm.minecraft.arcanevouchers.functions.info
 import net.kyori.adventure.text.minimessage.MiniMessage
+import org.bukkit.Color
+import java.lang.reflect.Modifier
 
 object Constant {
 
-    val GSON: Gson = GsonBuilder().create()
     val MINI = MiniMessage.get()
+
+    lateinit var NAMED_COLORS: Map<String, Color> private set
+
+    init {
+        try {
+            NAMED_COLORS = Color::class.java.declaredFields
+                .filter { Modifier.isStatic(it.modifiers) && it.type == Color::class.java }
+                .associate { it.name to (it.get(null) as Color) }
+        } catch (e: SecurityException) {
+            exception("Could not get colors", e)
+        }
+    }
 
     object NBT {
 

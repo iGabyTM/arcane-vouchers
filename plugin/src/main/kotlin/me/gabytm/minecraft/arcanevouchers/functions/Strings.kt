@@ -11,28 +11,9 @@ import org.bukkit.Color
 import sh.okx.timeapi.TimeAPI
 import java.util.concurrent.TimeUnit
 
-// TODO: 21-Jan-22 auto generate this using reflections
-private val NAMED_COLORS = mapOf<String, Color>(
-    "WHITE" to Color.WHITE,
-    "SILVER" to Color.SILVER,
-    "GRAY" to Color.GRAY,
-    "BLACK" to Color.BLACK,
-    "RED" to Color.RED,
-    "MAROON" to Color.MAROON,
-    "YELLOW" to Color.YELLOW,
-    "OLIVE" to Color.OLIVE,
-    "LIME" to Color.LIME,
-    "GREEN" to Color.GREEN,
-    "AQUA" to Color.AQUA,
-    "TEAL" to Color.TEAL,
-    "BLUE" to Color.BLUE,
-    "NAVY" to Color.NAVY,
-    "FUCHSIA" to Color.FUCHSIA,
-    "PURPLE" to Color.PURPLE,
-    "ORANGE" to Color.ORANGE
-)
+private val EMPTY_COMPONENT_WITHOUT_ITALIC = Component.text().decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE).build()
 
-fun String.color(hex: Boolean = false): String {
+fun String.color(): String {
     return ChatColor.translateAlternateColorCodes('&', this)
 }
 
@@ -46,7 +27,7 @@ fun String.replace(placeholders: Array<String>, values: Array<String>): String {
 
 fun String.mini(removeItalic: Boolean = false): Component {
     return if (removeItalic) {
-        Constant.MINI.parse(this).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+        EMPTY_COMPONENT_WITHOUT_ITALIC.append(Constant.MINI.parse(this))
     } else {
         Constant.MINI.parse(this)
     }
@@ -92,7 +73,7 @@ fun String.toColor(): Color? {
         }
     }
 
-    val namedColor = NAMED_COLORS[uppercase()]
+    val namedColor = Constant.NAMED_COLORS[uppercase()]
 
     if (namedColor != null) {
         return namedColor

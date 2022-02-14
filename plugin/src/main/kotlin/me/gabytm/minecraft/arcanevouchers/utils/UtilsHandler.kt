@@ -1,6 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.utils
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
+import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
 import me.gabytm.minecraft.arcanevouchers.functions.exception
 import net.kyori.adventure.bossbar.BossBar
@@ -49,6 +50,8 @@ class UtilsHandler(plugin: ArcaneVouchers) {
         yaml["bossBar.overlays"] = BossBar.Overlay.NAMES.keys().toList()
         yaml["bossBar.progress.min"] = BossBar.MIN_PROGRESS
         yaml["bossBar.progress.max"] = BossBar.MAX_PROGRESS
+
+        yaml["colors"] = Constant.NAMED_COLORS.keys.toList()
 
         yaml["dyeColors"] = DyeColor.values().map { it.name }
 
