@@ -8,7 +8,9 @@ import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.arcanevouchers.functions.add
 import me.gabytm.minecraft.arcanevouchers.functions.audience
+import me.gabytm.minecraft.arcanevouchers.functions.debug
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
+import me.gabytm.minecraft.arcanevouchers.limit.LimitType
 import me.gabytm.minecraft.arcanevouchers.voucher.settings.VoucherSettings
 import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
@@ -22,6 +24,25 @@ class Voucher private constructor(
     val actions: List<ArcaneAction>,
     val bulkActions: List<ArcaneAction>
 ) {
+
+    private fun handleBulkOpenLimit(player: Player, voucher: ItemStack,
+                                    args: MutableMap<String, String>, plugin: ArcaneVouchers,
+                                    increaseLimit: Boolean
+    ) {
+        val vouchers = voucher.amount
+        val bulkLimit = this.settings.bulkOpen.limit
+
+        debug(player, "[redeem] bulkLimit = $bulkLimit, vouchers = $vouchers")
+
+        // If bulkOpen limit is higher than the amount of vouchers, so the player can redeem them all
+        val amount = if (bulkLimit >= vouchers) {
+            vouchers
+        } else {
+            // Otherwise, they can redeem only 'bulkLimit' vouchers
+            bulkLimit
+        }
+        redeem(player, voucher, args, plugin, increaseLimit, true, amount)
+    }
 
     private fun redeem(player: Player, voucher: ItemStack, args: MutableMap<String, String>,
                        plugin: ArcaneVouchers, increaseLimit: Boolean,
@@ -88,54 +109,64 @@ class Voucher private constructor(
     fun redeem(player: Player, voucher: ItemStack, args: MutableMap<String, String>, plugin: ArcaneVouchers, isBulk: Boolean) {
         val limitManager = plugin.voucherManager.limitManager
         val vouchers = voucher.amount
+        val hasLimit = this.settings.limit.type != LimitType.NONE
+
+        if (hasLimit) {
+            debug(player, "[redeem] voucher $id has ${this.settings.limit.type} limit of ${this.settings.limit.limit}")
+        }
 
         if (isBulk) {
             // The player bypasses the limit
             if (limitManager.bypassLimit(player, this)) {
-                redeem(player, voucher, args, plugin, increaseLimit = false, isBulk = true, vouchers)
+                debug(player, "[redeem] (bulk) bypass the limit for $id")
+                handleBulkOpenLimit(player, voucher, args, plugin, false)
                 return
             }
 
-            // Get how many times the player has used this voucher
-            val usages = limitManager.getUsages(player.uniqueId, this)
-            // Calculate the usages left
-            val usagesLeft = (this.settings.limit.limit - usages).toInt()
+            // If the voucher has a limit of usages, we need to check how many vouchers they can redeem
+            if (hasLimit) {
+                val usages = limitManager.getUsages(player.uniqueId, this)
+                // Calculate the usages left
+                val usagesLeft = (this.settings.limit.limit - usages).toInt()
 
-            // The player has more usages left than the amount of vouchers used now
-            if (usagesLeft >= vouchers) {
-                val bulkLimit = settings.bulkOpen.limit
+                debug(player, "[redeem] (bulk) usages = $usages, usagesLeft = $usagesLeft")
 
-                // The bulkOpen limit is higher than the amount of vouchers used now
-                if (bulkLimit >= vouchers) {
-                    redeem(player, voucher, args, plugin, increaseLimit = true, isBulk = true, vouchers)
-                    return
+                // The player has enough usagesLeft to redeem all vouchers
+                if (usagesLeft >= vouchers) {
+                    handleBulkOpenLimit(player, voucher, args, plugin, true)
                 }
-
-                // Redeem only 'bulkLimit' vouchers
-                redeem(player, voucher, args, plugin, true, isBulk = true, bulkLimit)
                 return
             }
 
-            // Redeem only 'usagesLeft' vouchers
-            redeem(player, voucher, args, plugin, true, isBulk = true, usagesLeft)
+            // Otherwise, go straight to redeem
+            handleBulkOpenLimit(player, voucher, args, plugin, true)
             return
         }
 
         // The player bypass the limit
         if (limitManager.bypassLimit(player, this)) {
-            redeem(player, voucher, args, plugin, false, isBulk = false, 1)
+            redeem(player, voucher, args, plugin, increaseLimit = false, isBulk = false, 1)
             return
         }
 
-        // Get how many times the player has used this voucher
-        val usages = limitManager.getUsages(player.uniqueId, this)
-        // Calculate the usages left
-        val usagesLeft = (this.settings.limit.limit - usages).toInt()
+        // If the voucher has a limit of usages, we need to check how many vouchers they can redeem
+        if (hasLimit) {
+            // Get how many times the player has used this voucher
+            val usages = limitManager.getUsages(player.uniqueId, this)
+            // Calculate the usages left
+            val usagesLeft = (this.settings.limit.limit - usages).toInt()
 
-        // The player can redeem more than 1 voucher
-        if (usagesLeft >= 1) {
-            redeem(player, voucher, args, plugin, true, isBulk = false, 1)
+            debug(player, "[redeem] usages = $usages, usagesLeft = $usagesLeft")
+
+            // The player can redeem more than 1 voucher
+            if (usagesLeft >= 1) {
+                redeem(player, voucher, args, plugin, increaseLimit = true, isBulk = false, 1)
+            }
+            return
         }
+
+        // Otherwise, go straight to redeem
+        redeem(player, voucher, args, plugin, increaseLimit = true, isBulk = false, 1)
     }
 
     companion object {
