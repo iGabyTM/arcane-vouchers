@@ -48,7 +48,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         this.giveVoucher(player, voucher, amount, args)
     }
 
-    fun giveVoucher(player: Player, voucher: Voucher, amount: Int, args: Array<String>) {
+    fun createVoucherItem(player: Player, voucher: Voucher, amount: Int, args: Array<String>): ItemStack {
         val argsMap = args.toArgsMap()
         val nbt = NBTItem(voucher.item.clone())
 
@@ -61,7 +61,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         // -----
 
         val item = nbt.item
-        val meta = item.itemMeta ?: Bukkit.getItemFactory().getItemMeta(item.type) ?: return
+        val meta = item.itemMeta ?: Bukkit.getItemFactory().getItemMeta(item.type) ?: return item
 
         // Replace the arguments on item name and lore
         val keys = argsMap.keys.toTypedArray()
@@ -77,7 +77,13 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
 
         item.itemMeta = meta
         item.amount = amount
-        // -----
+
+        return item
+    }
+
+    fun giveVoucher(player: Player, voucher: Voucher, amount: Int, args: Array<String>) {
+        val argsMap = args.toArgsMap()
+        val item = createVoucherItem(player, voucher, amount, args)
 
         // Add the voucher to player's inventory and drop the leftovers on the ground
         player.giveItems(item)
