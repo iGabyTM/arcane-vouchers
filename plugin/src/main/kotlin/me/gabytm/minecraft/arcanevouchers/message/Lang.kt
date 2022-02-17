@@ -156,7 +156,7 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
     companion object {
 
         private val PREFIX_PATTERN: Pattern = Pattern.compile("\\{prefix}", Pattern.CASE_INSENSITIVE)
-        val VALUES: EnumSet<Lang> = EnumSet.allOf(Lang::class.java)
+        private val VALUES: EnumSet<Lang> = EnumSet.allOf(Lang::class.java)
 
         fun load(lang: YamlConfiguration) {
             for (it in VALUES) {
@@ -166,7 +166,7 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
 
     }
 
-    public object Placeholder {
+    object Placeholder {
 
         const val AMOUNT: String = "{amount}"
 
