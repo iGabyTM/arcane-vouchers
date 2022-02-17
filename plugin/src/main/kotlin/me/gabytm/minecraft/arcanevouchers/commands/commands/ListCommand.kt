@@ -9,6 +9,7 @@ import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
 import me.gabytm.minecraft.arcanevouchers.commands.ArcaneCommand
 import me.gabytm.minecraft.arcanevouchers.functions.audience
+import me.gabytm.minecraft.arcanevouchers.functions.processArguments
 import me.gabytm.minecraft.arcanevouchers.functions.removeItalic
 import me.gabytm.minecraft.arcanevouchers.message.Lang
 import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
@@ -30,8 +31,8 @@ class ListCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
     @Permission(Constant.Permission.ADMIN)
     @SubCommand("list")
     fun onCommand(sender: CommandSender, args: Array<String>) {
-        if (sender is Player) {
-            listGui.open(sender, args.copyOfRange(1, args.size))
+        if (plugin.settings.useGuiForList && sender is Player) {
+            listGui.open(sender, args.copyOfRange(1, args.size).joinToString().processArguments())
             return
         }
 
