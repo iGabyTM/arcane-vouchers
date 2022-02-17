@@ -23,6 +23,10 @@ settings:
   # s - seconds
   #
   cooldownSaveThreshold: 1m
+  #
+  # Whether vouchers should be displayed on a GUI when using /av list in-game
+  #
+  useGuiForList: true
 
 confirmationGui:
   size: 3 # The number of rows, min 1 and max 6

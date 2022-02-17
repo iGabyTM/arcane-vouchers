@@ -11,6 +11,8 @@ class Settings(config: FileConfiguration) {
     var disableCrafting: Boolean = false; private set
     var cooldownSaveThreshold: Long = 30L; private set
 
+    var useGuiForList: Boolean = true; private set
+
     init {
         load(config)
     }
@@ -19,6 +21,7 @@ class Settings(config: FileConfiguration) {
         this.debug = config.getBoolean("settings.DEBUG")
         this.disableCrafting = config.getBoolean("settings.disable.crafting")
         this.cooldownSaveThreshold = (config.getString("settings.cooldownSaveThreshold") ?: "").parseTime(TimeUnit.MILLISECONDS)
+        this.useGuiForList = config.getBoolean("settings.useGuiForList")
     }
 
 }
