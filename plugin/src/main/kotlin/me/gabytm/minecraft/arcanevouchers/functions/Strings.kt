@@ -10,8 +10,11 @@ import org.apache.commons.lang.StringUtils
 import org.bukkit.Color
 import sh.okx.timeapi.TimeAPI
 import java.util.concurrent.TimeUnit
+import java.util.regex.Pattern
 
 private val EMPTY_COMPONENT_WITHOUT_ITALIC = Component.text().decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE).build()
+private val ARGUMENTS_REGEX = Pattern.compile("([^\"]\\S*|\".+?\")\\s*")
+private const val QUOTATION_MARK = '"'
 
 fun String.color(): String {
     return ChatColor.translateAlternateColorCodes('&', this)
@@ -99,4 +102,27 @@ fun String.toColor(): Color? {
 
 inline fun <reified E: Enum<E>> String.toEnumValue(default: E? = null): E? {
     return Enums.getIfPresent(E::class.java, this.uppercase()).orNull() ?: default
+}
+
+fun String.processArguments(): Array<String> {
+    // If the string doesn't contain a quote then the regex won't match
+    if (!contains(QUOTATION_MARK)) {
+        return split(Constant.Separator.SPACE).toTypedArray()
+    }
+
+    val arguments = mutableListOf<String>()
+    val matcher = ARGUMENTS_REGEX.matcher(this)
+
+    while (matcher.find()) {
+        val trimmed = matcher.group().trimEnd()
+
+        // The regex also give the " " that are around the string, so we need to remove them
+        if (trimmed.startsWith(QUOTATION_MARK) && trimmed.startsWith(QUOTATION_MARK)) {
+            arguments.add(trimmed.substring(1, trimmed.length - 1))
+        } else {
+            arguments.add(trimmed)
+        }
+    }
+
+    return arguments.toTypedArray()
 }

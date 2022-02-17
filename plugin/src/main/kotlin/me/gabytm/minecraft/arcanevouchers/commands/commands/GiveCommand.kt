@@ -3,6 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.commands.commands
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.commands.ArcaneCommand
+import me.gabytm.minecraft.arcanevouchers.functions.processArguments
 import me.gabytm.minecraft.arcanevouchers.message.Lang
 import me.mattstudios.mf.annotations.CompleteFor
 import me.mattstudios.mf.annotations.Permission
@@ -11,11 +12,8 @@ import me.mattstudios.mf.annotations.WrongUsage
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import java.util.regex.Pattern
 
 class GiveCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
-
-    private val argumentsRegex = Pattern.compile("([^\"]\\S*|\".+?\")\\s*")
 
     /**
      * Process the extra command arguments by removing the first 3 ('give', 'voucher', 'amount'), then join by space to
@@ -35,7 +33,7 @@ class GiveCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
         val copy = commandArgs.copyOfRange(ARGS_START_INDEX, commandArgs.size)
         val string = copy.joinToString(" ")
 
-        // If the string doesn't contain a quote then the regex won't match, so we just return the original arguments
+        /*// If the string doesn't contain a quote then the regex won't match, so we just return the original arguments
         if (!string.contains("\"")) {
             return copy
         }
@@ -54,7 +52,8 @@ class GiveCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
             }
         }
 
-        return arguments.toTypedArray()
+        return arguments.toTypedArray()*/
+        return string.processArguments()
     }
 
     @WrongUsage("command.give.usage")
