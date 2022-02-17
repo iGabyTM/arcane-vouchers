@@ -6,6 +6,7 @@ import me.gabytm.minecraft.arcanevouchers.Constant.NBT
 import me.gabytm.minecraft.arcanevouchers.cooldown.CooldownManager
 import me.gabytm.minecraft.arcanevouchers.functions.*
 import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
+import me.gabytm.minecraft.arcanevouchers.message.Lang
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -50,6 +51,8 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
 
     fun createVoucherItem(player: Player, voucher: Voucher, amount: Int, args: Array<String>): ItemStack {
         val argsMap = args.toArgsMap()
+        argsMap[Lang.Placeholder.RECEIVER] = player.name
+
         val nbt = NBTItem(voucher.item.clone())
 
         // Set the arguments and player's name inside the item
@@ -90,7 +93,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
 
         with (player.audience()) {
             // Send the message to the player and also add the {amount} placeholder
-            voucher.settings.messages.receiveMessage.send(this, argsMap.add("{amount}", amount.toString()))
+            voucher.settings.messages.receiveMessage.send(this, argsMap.add(Lang.Placeholder.AMOUNT, amount.toString()))
             voucher.settings.sounds.receiveSound.play(this)
         }
     }

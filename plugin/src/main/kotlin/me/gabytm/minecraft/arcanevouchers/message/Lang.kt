@@ -166,7 +166,7 @@ enum class Lang(private val path: String, vararg stringPlaceholders: String) {
 
     }
 
-    private object Placeholder {
+    public object Placeholder {
 
         const val AMOUNT: String = "{amount}"
 
