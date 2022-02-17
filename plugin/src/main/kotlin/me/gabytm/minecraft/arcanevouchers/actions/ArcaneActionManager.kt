@@ -6,6 +6,7 @@ import me.gabytm.minecraft.arcanevouchers.actions.implementations.command.Player
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.crates.GiveCrateReloadedKeyAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.AddExpAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.ItemAction
+import me.gabytm.minecraft.arcanevouchers.actions.implementations.economy.VoucherAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.BossBarAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.ChatAction
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.message.MessageAction
@@ -48,6 +49,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         // Economy
         register("addexp") { AddExpAction(it, handler) }
         register("item") { ItemAction(it, handler, plugin.itemCreator) }
+        register("voucher") { VoucherAction(it, handler, plugin.voucherManager) }
         //-----
 
         // Message
