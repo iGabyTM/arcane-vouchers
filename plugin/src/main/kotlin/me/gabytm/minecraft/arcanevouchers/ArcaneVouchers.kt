@@ -2,7 +2,7 @@ package me.gabytm.minecraft.arcanevouchers
 
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.arcanevouchers.commands.CommandManager
-import me.gabytm.minecraft.arcanevouchers.compat.CompatHandler
+import me.gabytm.minecraft.arcanevouchers.compatibility.CompatibilityHandler
 import me.gabytm.minecraft.arcanevouchers.config.Config
 import me.gabytm.minecraft.arcanevouchers.functions.color
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
@@ -22,7 +22,7 @@ class ArcaneVouchers : JavaPlugin() {
     lateinit var settings: Settings private set
 
     lateinit var audiences: BukkitAudiences private set
-    lateinit var compatHandler: CompatHandler private set
+    lateinit var compatibilityHandler: CompatibilityHandler private set
 
     lateinit var vouchersConfig: Config private set
     private lateinit var langFile: Config
@@ -58,7 +58,7 @@ class ArcaneVouchers : JavaPlugin() {
         this.settings = Settings(this.config)
 
         this.audiences = BukkitAudiences.create(this)
-        this.compatHandler = CompatHandler(this)
+        this.compatibilityHandler = CompatibilityHandler(this)
 
         this.vouchersConfig = Config(this, "vouchers.yml", false)
         this.langFile = Config(this, "lang.yml")

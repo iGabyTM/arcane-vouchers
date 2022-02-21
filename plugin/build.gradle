@@ -45,9 +45,7 @@ dependencies {
     compileOnly('com.arcaniax:HeadDatabase-API:1.3.1') { transitive false }
 
     // WorldGuard compatibility
-    implementation project(':worldguard_compat')
-    implementation project(':worldguard_compat_v6')
-    implementation project(':worldguard_compat_v7')
+    ['base', 'v6', 'v7'].forEach {implementation project(':plugin:compatibility:worldguard:' + it)  }
 
     // bStats
     implementation 'org.bstats:bstats-bukkit:2.2.1'

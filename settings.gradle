@@ -1,4 +1,4 @@
 rootProject.name = 'arcane-vouchers'
 include(':plugin')
-include(':worldguard_compat', ':worldguard_compat_v6', ':worldguard_compat_v7')
+['base', 'v6', 'v7'].forEach { include(':plugin:compatibility:worldguard:' + it) }
 include(':comet')
