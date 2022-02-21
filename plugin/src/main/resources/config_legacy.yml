@@ -43,11 +43,11 @@ confirmationGui:
       confirmation:
         material: EMERALD_BLOCK
         name: '<green><b>YES'
-        slot: 12
+        slots: 12
       cancel:
         material: REDSTONE_BLOCK
         name: '<red><b>NO'
-        slot: 14
+        slots: 14
     #
     # Items listed here are only used for design
     #
