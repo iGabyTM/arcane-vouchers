@@ -24,7 +24,7 @@ settings:
   #
   cooldownSaveThreshold: 1m
   #
-  # Whether vouchers should be displayed on a GUI when using /av list in-game
+  # Whether vouchers should be displayed in a GUI when using /av list in-game
   #
   useGuiForList: true
 
