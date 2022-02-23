@@ -98,7 +98,7 @@ class ListCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
                     .lore {
                         it.add(empty())
                         it.add(text("Left Click to get 1x ${voucher.id}").removeItalic())
-                        it.add(text("Left Click to get 64x ${voucher.id}").removeItalic())
+                        it.add(text("Right Click to get 64x ${voucher.id}").removeItalic())
                         it.add(empty())
                     }
                     .asGuiItem {
