@@ -54,7 +54,7 @@ dependencies {
     ['base', 'v6', 'v7'].forEach {implementation project(':plugin:compatibility:worldguard:' + it)  }
 
     // bStats
-    implementation 'org.bstats:bstats-bukkit:2.2.1'
+    implementation 'org.bstats:bstats-bukkit:3.0.0'
 
     // TimeAPI - https://github.com/PiggyPiglet/TimeAPI
     implementation 'me.piggypiglet:TimeAPI:+'
