@@ -30,9 +30,9 @@ fun String.replace(placeholders: Array<String>, values: Array<String>): String {
 
 fun String.mini(removeItalic: Boolean = false): Component {
     return if (removeItalic) {
-        EMPTY_COMPONENT_WITHOUT_ITALIC.append(Constant.MINI.parse(this))
+        EMPTY_COMPONENT_WITHOUT_ITALIC.append(Constant.MINI.deserialize(this))
     } else {
-        Constant.MINI.parse(this)
+        Constant.MINI.deserialize(this)
     }
 }
 

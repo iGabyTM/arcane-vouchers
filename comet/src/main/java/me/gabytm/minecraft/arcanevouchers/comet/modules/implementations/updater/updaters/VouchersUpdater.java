@@ -206,7 +206,7 @@ public class VouchersUpdater {
 
                 case "json": {
                     // First serialize the GSON and then deserialize to string using Mini
-                    final String mini = MiniMessage.get().serialize(GsonComponentSerializer.gson().deserialize(data));
+                    final String mini = MiniMessage.miniMessage().serialize(GsonComponentSerializer.gson().deserialize(data));
                     updatedActions.add("[message] " + mini);
                     break;
                 }

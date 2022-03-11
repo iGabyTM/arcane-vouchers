@@ -8,7 +8,7 @@ import java.lang.reflect.Modifier
 
 object Constant {
 
-    val MINI = MiniMessage.get()
+    val MINI = MiniMessage.miniMessage()
 
     lateinit var NAMED_COLORS: Map<String, Color> private set
 

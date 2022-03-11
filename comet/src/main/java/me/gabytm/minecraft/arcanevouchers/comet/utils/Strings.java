@@ -22,7 +22,7 @@ public final class Strings {
         string = argsRegex.matcher(string).replaceAll("%$1%");
 
         if (legacyColorsRegex.matcher(string).find()) {
-            return MiniMessage.get().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(string));
+            return MiniMessage.miniMessage().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(string));
         }
 
         return string;
