@@ -44,7 +44,7 @@ dependencies {
     implementation 'net.kyori:adventure-text-minimessage:4.10.1'
 
     // GUis and commands
-    implementation 'dev.triumphteam:triumph-gui:3.1.1'
+    implementation 'dev.triumphteam:triumph-gui:3.1.2'
     implementation 'me.mattstudios.utils:matt-framework:1.4.6'
 
     // Heads
