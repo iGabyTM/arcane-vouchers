@@ -58,7 +58,8 @@ class UtilsHandler(plugin: ArcaneVouchers) {
 
         yaml["dyeColors"] = DyeColor.values().map { it.name }
 
-        yaml["effect.types"] = PotionEffectType.values().map { it.name }
+        // For some reason, on versions <= 1.12.2, the first value of the array is null (???)
+        yaml["effect.types"] = PotionEffectType.values().filterNotNull().map { it.name }
 
         yaml["enchantments"] = if (ServerVersion.HAS_KEYS) {
             Enchantment.values().map { it.key.toString() }
@@ -123,13 +124,26 @@ class UtilsHandler(plugin: ArcaneVouchers) {
     private fun getSounds(): List<String> {
         return if (ServerVersion.HAS_KEYS) {
             org.bukkit.Sound.values().map { it.key.toString() }
-        } else {
+        } else if (ServerVersion.HAS_OFF_HAND) {
+            // On 1.9 - 1.12.2, each Sound has a minecraftKey field
             try {
                 val craftSound = ServerVersion.getCraftClass("CraftSound")
-                val field = craftSound.getDeclaredField("minecraftKey")
-                field.isAccessible = true
+                val minecraftKeyField = craftSound.getDeclaredField("minecraftKey")
+                minecraftKeyField.isAccessible = true
 
-                craftSound.enumConstants.map { field.get(it) as String }
+                craftSound.enumConstants.map { minecraftKeyField.get(it) as String }
+            } catch (e: ReflectiveOperationException) {
+                exception("Could not retrieve sounds", e)
+                emptyList()
+            }
+        } else {
+            // On 1.8, the keys are stored on a string array
+            try {
+                val craftSound = ServerVersion.getCraftClass("CraftSound")
+                val soundsField = craftSound.getDeclaredField("sounds")
+                soundsField.isAccessible = true
+
+                (soundsField.get(null) as Array<String>).map { it }
             } catch (e: ReflectiveOperationException) {
                 exception("Could not retrieve sounds", e)
                 emptyList()
