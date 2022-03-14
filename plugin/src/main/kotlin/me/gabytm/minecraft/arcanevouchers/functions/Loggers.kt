@@ -1,6 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.functions
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
+import me.gabytm.minecraft.arcanevouchers.ServerVersion
 import me.gabytm.minecraft.arcanevouchers.Settings
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -19,7 +20,7 @@ fun debug(player: Player? = null, message: String) {
     }
 }
 
-fun exception(message: String, exception: Throwable) = logger.log(Level.SEVERE, message, exception)
+fun exception(message: String, exception: Throwable) = logger.log(Level.SEVERE, "$message (${ServerVersion.CURRENT})", exception)
 
 fun info(message: String) = logger.info(message)
 

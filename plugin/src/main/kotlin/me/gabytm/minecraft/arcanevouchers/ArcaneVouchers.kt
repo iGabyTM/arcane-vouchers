@@ -32,13 +32,10 @@ class ArcaneVouchers : JavaPlugin() {
     lateinit var voucherManager: VoucherManager private set
 
     private fun sendLogo() {
-        val matcher = Pattern.compile("\\d+\\.\\d+(?:\\.\\d+)?").matcher(Bukkit.getBukkitVersion())
-        val serverVersion = if (matcher.find()) matcher.group() else "unknown"
-
         with (description) {
             sequenceOf(
                 "&5 _____   _____   ",
-                "&5|  _  | |  |  |  &fArcaneVouchers &dv$version &fby &d${authors.joinToString()} &7($serverVersion)",
+                "&5|  _  | |  |  |  &fArcaneVouchers &dv$version &fby &d${authors.joinToString()} &7(${ServerVersion.CURRENT})",
                 "&5|     | |  |  |  &7$description",
                 "&5|__|__|  \\___/  "
             ).forEach { line -> Bukkit.getConsoleSender().sendMessage(line.color()) }

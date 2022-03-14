@@ -15,6 +15,8 @@ object ServerVersion {
     private const val V_1_9 = 1_9_0
     private const val V_1_13 = 1_13_0
 
+    val CURRENT = getCurrentVersionAsString()
+
     val IS_VERY_OLD = VERSION.toString().startsWith("17")
     val IS_ANCIENT = VERSION <= V_1_8
     val HAS_OFF_HAND = VERSION >= V_1_9
@@ -55,6 +57,11 @@ object ServerVersion {
                 append(matcher.group("patch")?.replace(".", "") ?: "0")
             }
         }.toIntOrNull() ?: throw IllegalArgumentException("Could not retrieve server version!")
+    }
+
+    private fun getCurrentVersionAsString(): String {
+        val matcher = Pattern.compile("\\d+\\.\\d+(?:\\.\\d+)?").matcher(Bukkit.getBukkitVersion())
+        return if (matcher.find()) matcher.group() else "unknown"
     }
 
     /**
