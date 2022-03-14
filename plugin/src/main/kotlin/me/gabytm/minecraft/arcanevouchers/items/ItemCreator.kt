@@ -33,12 +33,12 @@ class ItemCreator(plugin: ArcaneVouchers) {
         val enchantment = if (ServerVersion.HAS_KEYS) {
             val parts = first().split(Constant.Separator.COLON, 2)
 
-            // The server has NamespacedKeys but this isn't one
-            if (parts.size != 2) {
-                Enchantment.getByName(parts[0])
+            if (parts.size == 2) {
+                Enchantment.getByKey(NamespacedKey(parts[0], parts[1]))
+            } else {
+                // The server has NamespacedKeys but this isn't one
+                Enchantment.getByName(first())
             }
-
-            Enchantment.getByKey(NamespacedKey(parts[0], parts[1]))
         } else {
             Enchantment.getByName(first())
         } ?: kotlin.run {
