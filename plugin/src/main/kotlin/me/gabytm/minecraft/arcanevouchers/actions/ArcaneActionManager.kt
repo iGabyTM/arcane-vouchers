@@ -21,6 +21,9 @@ import me.gabytm.minecraft.arcanevouchers.functions.info
 import me.gabytm.util.actions.actions.Action
 import me.gabytm.util.actions.spigot.actions.SpigotActionManager
 import me.gabytm.util.actions.spigot.placeholders.PlaceholderAPIProvider
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.JoinConfiguration
+import net.kyori.adventure.text.format.NamedTextColor
 import net.milkbowl.vault.economy.Economy
 import net.milkbowl.vault.permission.Permission
 import org.bukkit.Bukkit
@@ -33,44 +36,52 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
     private lateinit var economy: Economy
     private lateinit var permission: Permission
 
+    private val usages = mutableListOf<Component>()
+    val actionsMessage: Component
+
     init {
         registerDefaults(Player::class.java)
         componentParser.registerDefaults(Player::class.java)
 
         // Commands
-        register("console") { ConsoleCommandAction(it, handler) }
-        register("player") { PlayerCommandAction(it, handler) }
+        usages.add(Component.text("+ Commands:", NamedTextColor.LIGHT_PURPLE))
+        register("console", ConsoleCommandAction::class.java) { ConsoleCommandAction(it, handler) }
+        register("player", PlayerCommandAction::class.java) { PlayerCommandAction(it, handler) }
         //-----
 
         // Crates
-        register("CrateReloaded", GiveCrateReloadedKeyAction.ID) { GiveCrateReloadedKeyAction(it, handler) }
+        register("CrateReloaded", GiveCrateReloadedKeyAction.ID, GiveCrateReloadedKeyAction::class.java) { GiveCrateReloadedKeyAction(it, handler) }
         //-----
 
         // Economy
-        register("addexp") { AddExpAction(it, handler) }
-        register("item") { ItemAction(it, handler, plugin.itemCreator) }
-        register("voucher") { VoucherAction(it, handler, plugin.voucherManager) }
+        usages.add(Component.text("+ Economy:", NamedTextColor.LIGHT_PURPLE))
+        register("addexp", AddExpAction::class.java) { AddExpAction(it, handler) }
+        register("item", ItemAction::class.java) { ItemAction(it, handler, plugin.itemCreator) }
+        register("voucher", VoucherAction::class.java) { VoucherAction(it, handler, plugin.voucherManager) }
         //-----
 
         // Message
-        register("bossbar") { BossBarAction(it, handler) }
-        register("chat") { ChatAction(it, handler) }
-        register("message") { MessageAction(it, handler) }
+        usages.add(Component.text("+ Message:", NamedTextColor.LIGHT_PURPLE))
+        register("bossbar", BossBarAction::class.java) { BossBarAction(it, handler) }
+        register("chat", ChatAction::class.java) { ChatAction(it, handler) }
+        register("message", MessageAction::class.java) { MessageAction(it, handler) }
         //-----
 
         // Other
-        register("data") { DataAction(it, handler) }
-        register("effect") { EffectAction(it, handler) }
-        register("sound") { SoundAction(it, handler) }
+        usages.add(Component.text("+ Other:", NamedTextColor.LIGHT_PURPLE))
+        register("data", DataAction::class.java) { DataAction(it, handler) }
+        register("effect", EffectAction::class.java) { EffectAction(it, handler) }
+        register("sound", SoundAction::class.java) { SoundAction(it, handler) }
         //-----
 
         // Vault
+        usages.add(Component.text("+ Vault:", NamedTextColor.DARK_PURPLE))
         if (setupEconomy()) {
-            register("addmoney") { AddMoneyAction(it, handler, economy) }
+            register("addmoney", AddMoneyAction::class.java) { AddMoneyAction(it, handler, economy) }
         }
 
         if (setupPermission()) {
-            register("permission") { PermissionAction(it, handler, permission) }
+            register("permission", PermissionAction::class.java) { PermissionAction(it, handler, permission) }
         }
         //-----
 
@@ -82,16 +93,32 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
             // '%player_name' is the only placeholder replaced in case PlaceholderAPI is not installed
             placeholderManager.register(PlayerNamePlaceholderProvider())
         }
+
+        // Join all usages in one component
+        actionsMessage = Component.join(JoinConfiguration.newlines(), usages)
+        usages.clear()
     }
 
-    private fun register(id: String, supplier: Action.Supplier<Player>) {
+    private fun register(id: String, clazz: Class<*>, supplier: Action.Supplier<Player>) {
         register(Player::class.java, id, supplier)
+
+        try {
+            val method = clazz.getDeclaredMethod("usage")
+            method.isAccessible = true
+
+            usages.add(method.invoke(null) as Component)
+        } catch (e: ReflectiveOperationException) {
+            if (e !is NoSuchMethodException) {
+                e.printStackTrace()
+            }
+        }
     }
 
-    private fun register(plugin: String, id: String, supplier: Action.Supplier<Player>) {
+    @Suppress("SameParameterValue")
+    private fun register(plugin: String, id: String, clazz: Class<*>, supplier: Action.Supplier<Player>) {
         if (Bukkit.getPluginManager().isPluginEnabled(plugin)) {
             info("Registering [$id] because $plugin is on the server")
-            register(id, supplier)
+            register(id, clazz, supplier)
         }
     }
 

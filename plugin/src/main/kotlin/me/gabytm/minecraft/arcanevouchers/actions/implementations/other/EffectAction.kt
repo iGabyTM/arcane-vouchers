@@ -3,12 +3,14 @@ package me.gabytm.minecraft.arcanevouchers.actions.implementations.other
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
+import me.gabytm.minecraft.arcanevouchers.actions.UsageBuilder
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.functions.exception
 import me.gabytm.minecraft.arcanevouchers.functions.toColor
 import me.gabytm.minecraft.arcanevouchers.functions.warning
 import me.gabytm.util.actions.actions.ActionMeta
 import me.gabytm.util.actions.actions.Context
+import net.kyori.adventure.text.Component
 import org.bukkit.Color
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
@@ -109,6 +111,43 @@ class EffectAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arcan
         } else {
             null
         }
+
+        private val usage = UsageBuilder("effect")
+            .hover(Component.text("Give a potion effect to the player"))
+            // Properties
+            .optional(
+                false,
+                "ambient",
+                UsageBuilder.BOOLEAN,
+                "makes potion effect produce more, translucent, particles",
+                true
+            )
+            .optional(false, "particles", UsageBuilder.BOOLEAN, "whether the effect has particles", true)
+            .optional(
+                false,
+                "color",
+                UsageBuilder.STRING,
+                "the color of the particles",
+                "none",
+                CONSTRUCTOR_WITH_COLOR != null
+            )
+            .optional(
+                false,
+                "icon",
+                UsageBuilder.BOOLEAN,
+                "whether the icon of the effect will be displayed",
+                true,
+                ServerVersion.HAS_KEYS
+            )
+            // Arguments
+            .required(true, "effect", UsageBuilder.STRING, "name of a PotionEffectType")
+            .required(true, "duration", UsageBuilder.TICKS, "the duration of the effect")
+            .optional(true, "amplifier", UsageBuilder.INTEGER, "the amplifier of the effect", 1)
+            .build()
+
+        @Suppress("unused")
+        @JvmStatic
+        private fun usage(): Component = usage
 
     }
 

@@ -14,6 +14,7 @@ class CommandManager(plugin: ArcaneVouchers) {
         registerMessages(manager.messageHandler)
 
         manager.register(
+            ActionsCommand(plugin),
             GiveCommand(plugin),
             HelpCommand(plugin),
             ListCommand(plugin),

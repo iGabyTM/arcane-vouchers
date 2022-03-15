@@ -19,6 +19,10 @@ object ServerVersion {
 
     val IS_VERY_OLD = VERSION.toString().startsWith("17")
     val IS_ANCIENT = VERSION <= V_1_8
+
+    /**
+     * Whether the current version has [org.bukkit.inventory.EquipmentSlot.OFF_HAND] (>= 1.9)
+     */
     val HAS_OFF_HAND = VERSION >= V_1_9
 
     /**
@@ -31,12 +35,20 @@ object ServerVersion {
      */
     val ITEMS_WITH_ZERO_AMOUNT_ARE_REMOVED = VERSION >= 1_11_2
 
+    /**
+     * Whether the current version is before 1.13
+     */
     val IS_LEGACY = VERSION < V_1_13
 
     /**
      * Whether the current version has the [org.bukkit.NamespacedKey] class
      */
     val HAS_KEYS = VERSION >= V_1_13
+
+    /**
+     * Whether in the current version, [org.bukkit.inventory.meta.ItemMeta.getCustomModelData] exists (>= 1.14.4)
+     */
+    val HAS_CUSTOM_MODEL_DATA = VERSION >= 1_14_14
 
     /**
      * Whether in the current version [java.util.UUID] can be stored on NBT
