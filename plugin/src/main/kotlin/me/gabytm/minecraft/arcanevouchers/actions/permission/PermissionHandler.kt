@@ -6,10 +6,8 @@ import org.bukkit.entity.Player
 
 class PermissionHandler {
 
-    var hasPermissionSupport: Boolean = false
-        private set
-    lateinit var permission: Permission
-        private set
+    var hasPermissionSupport: Boolean = false; private set
+    lateinit var permission: Permission private set
 
     init {
         setup()
@@ -26,10 +24,20 @@ class PermissionHandler {
         this.hasPermissionSupport = true
     }
 
+    /**
+     * Add a permission node to a [Player] using vault
+     * @param player player
+     * @param permission permission node to add
+     */
     fun add(player: Player, permission: String) {
         this.permission.playerAdd(null, player, permission)
     }
 
+    /**
+     * Remove a permission node from a [Player] using vault
+     * @param player player
+     * @param permission permission node to remove
+     */
     fun remove(player: Player, permission: String) {
         this.permission.playerRemove(null, player, permission)
     }

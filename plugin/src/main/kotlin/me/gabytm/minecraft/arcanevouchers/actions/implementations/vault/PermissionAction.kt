@@ -16,15 +16,18 @@ class PermissionAction(
 
     override fun run(player: Player, context: Context<Player>) {
         execute(player) {
+            // Format: <ADD/REMOVE> <permission.node> (world)
             val parts = meta.getParsedData(player, context).split(Constant.Separator.SPACE, 3)
 
             if (parts.size < 2) {
                 return@execute
             }
 
+            // Check if the permission should be added or removed
             val add = parts[0].equals("ADD", true)
             val permission = parts[1]
 
+            // The name of a world was specified
             if (parts.size == 3) {
                 val world = parts[2]
 
@@ -37,6 +40,7 @@ class PermissionAction(
                 return@execute
             }
 
+            // Add or remove the permission globally
             if (add) {
                 vault.playerAdd(null, player, permission)
             } else {

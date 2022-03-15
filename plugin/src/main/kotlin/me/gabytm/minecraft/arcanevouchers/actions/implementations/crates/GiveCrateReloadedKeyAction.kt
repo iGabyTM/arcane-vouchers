@@ -13,7 +13,9 @@ class GiveCrateReloadedKeyAction(meta: ActionMeta<Player>, handler: PermissionHa
 
     override fun run(player: Player, context: Context<Player>) {
         execute(player) {
+            // Format: <crate> (amount: 1)
             val parts = meta.getParsedData(player, context).split(Constant.Separator.SPACE, 2)
+
             val amount = if (parts.size == 1) 1 else parts[1].toIntOrNull() ?: kotlin.run {
                 warning("Could not parse integer from '${parts[1]}', ($ID, ${meta.rawData})")
                 return@execute

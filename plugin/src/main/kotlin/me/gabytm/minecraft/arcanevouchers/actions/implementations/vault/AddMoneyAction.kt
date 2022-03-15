@@ -1,6 +1,5 @@
 package me.gabytm.minecraft.arcanevouchers.actions.implementations.vault
 
-import com.google.common.primitives.Doubles
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.functions.warning
@@ -18,7 +17,7 @@ class AddMoneyAction(
     override fun run(player: Player, context: Context<Player>) {
         execute(player) {
             val parsedData = meta.getParsedData(player, context)
-            val amount = Doubles.tryParse(parsedData) ?: kotlin.run {
+            val amount = parsedData.toDoubleOrNull() ?: kotlin.run {
                 warning("Could not parse double from '$parsedData' (addmoney, '${meta.rawData}')")
                 return@execute
             }

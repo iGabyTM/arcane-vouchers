@@ -11,9 +11,11 @@ class AddExpAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arcan
 
     override fun run(player: Player, context: Context<Player>) {
         execute(player) {
+            // Format: <amount>(L)
             val parsed = meta.getParsedData(player, context)
 
             if (parsed.endsWith('L')) {
+                // Remove the L at the end
                 val levels = parsed.substring(0, parsed.length - 2).toIntOrNull() ?: kotlin.run {
                     warning("Could not parse integer from '$parsed' (addexp, ${meta.rawData})")
                     return@execute

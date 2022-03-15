@@ -18,6 +18,7 @@ class VoucherAction(
 
     override fun run(player: Player, context: Context<Player>) {
         execute(player) {
+            // Format: <voucher> (amount: 1) (args...)
             val parts = meta.getParsedData(player, context).split(Constant.Separator.SPACE, 3)
 
             val voucher = voucherManager.getVoucher(parts[0]) ?: kotlin.run {

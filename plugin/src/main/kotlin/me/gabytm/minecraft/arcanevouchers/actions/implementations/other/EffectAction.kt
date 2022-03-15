@@ -38,6 +38,7 @@ class EffectAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arcan
     override fun run(player: Player, context: Context<Player>) {
         execute(player) {
             val parsed = meta.getParsedData(player, context)
+            // Format: <effect> <duration> (amplifier: 0) (other properties)
             val parts = parsed.split(Constant.Separator.SPACE)
 
             if (parts.size < 2) {

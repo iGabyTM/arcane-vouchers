@@ -4,6 +4,7 @@ import me.gabytm.minecraft.arcanevouchers.Constant
 import org.bukkit.entity.Player
 import java.util.*
 
+@Suppress("unused")
 enum class PermissionMode {
 
     /**
@@ -82,13 +83,21 @@ enum class PermissionMode {
 
         private val VALUES = EnumSet.allOf(PermissionMode::class.java)
 
-        fun getPermissionAndMode(permission: String): Pair<String, PermissionMode> {
-            val parts = permission.split(Constant.Separator.SEMICOLON)
+        /**
+         * Process an input string to a [Pair] of `<permission.node, PermissionMode>`
+         * @param input input to process
+         * @return [Pair]
+         */
+        fun getPermissionAndMode(input: String): Pair<String, PermissionMode> {
+            // The input will be structured as 'MODE:permission.node'
+            val parts = input.split(Constant.Separator.COLON)
 
+            // If the input doesn't contain a semicolon, the default mode is REQUIRED
             if (parts.size == 1) {
-                return parts[0] to REQUIRE
+                return input to REQUIRE
             }
 
+            // Find the mode by its name or fallback to REQUIRE
             val mode = VALUES.firstOrNull { parts[0].equals(it.name, true) } ?: REQUIRE
             return parts[1] to mode
         }
