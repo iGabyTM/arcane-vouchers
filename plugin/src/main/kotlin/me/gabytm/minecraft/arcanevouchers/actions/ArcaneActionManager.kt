@@ -17,6 +17,7 @@ import me.gabytm.minecraft.arcanevouchers.actions.implementations.vault.AddMoney
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.vault.PermissionAction
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.actions.placeholders.PlayerNamePlaceholderProvider
+import me.gabytm.minecraft.arcanevouchers.functions.exception
 import me.gabytm.minecraft.arcanevouchers.functions.info
 import me.gabytm.util.actions.actions.Action
 import me.gabytm.util.actions.spigot.actions.SpigotActionManager
@@ -100,16 +101,19 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
     }
 
     private fun register(id: String, clazz: Class<*>, supplier: Action.Supplier<Player>) {
-        register(Player::class.java, id, supplier)
-
         try {
+            val idField = clazz.getDeclaredField("ID")
+            idField.isAccessible = true
+
+            register(Player::class.java, idField.get(null) as String, supplier)
+
             val method = clazz.getDeclaredMethod("usage")
             method.isAccessible = true
 
             usages.add(method.invoke(null) as Component)
         } catch (e: ReflectiveOperationException) {
             if (e !is NoSuchMethodException) {
-                e.printStackTrace()
+                exception("Could not register action ${clazz.simpleName}", e)
             }
         }
     }
