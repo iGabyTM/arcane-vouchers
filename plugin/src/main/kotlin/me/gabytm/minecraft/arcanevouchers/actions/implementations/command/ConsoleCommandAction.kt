@@ -2,6 +2,7 @@ package me.gabytm.minecraft.arcanevouchers.actions.implementations.command
 
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.UsageBuilder
+import me.gabytm.minecraft.arcanevouchers.actions.UsageBuilder.Companion.element
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.functions.sync
 import me.gabytm.util.actions.actions.ActionMeta
@@ -23,15 +24,16 @@ class ConsoleCommandAction(meta: ActionMeta<Player>, handler: PermissionHandler)
         }
     }
 
+    @Suppress("unused")
     companion object {
+
+        private const val ID: String = "console"
 
         private val USAGE = UsageBuilder("console")
             .hover(text("Execute command from console"))
-            // Arguments
-            .required(true, "command", UsageBuilder.STRING, "command to execute")
+            .argument(element("command").type(UsageBuilder.STRING).description("command to execute").required())
             .build()
 
-        @Suppress("unused")
         @JvmStatic
         private fun usage(): Component = USAGE
 

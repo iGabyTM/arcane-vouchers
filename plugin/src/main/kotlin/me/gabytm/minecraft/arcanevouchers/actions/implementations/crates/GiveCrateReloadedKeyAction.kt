@@ -29,8 +29,11 @@ class GiveCrateReloadedKeyAction(meta: ActionMeta<Player>, handler: PermissionHa
         }
     }
 
+    @Suppress("unused")
     companion object {
+
         const val ID: String = "givecratereloadedkey"
+
     }
 
 }

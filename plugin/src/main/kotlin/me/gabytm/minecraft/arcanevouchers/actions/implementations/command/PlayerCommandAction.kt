@@ -19,7 +19,10 @@ class PlayerCommandAction(meta: ActionMeta<Player>, handler: PermissionHandler) 
         }
     }
 
+    @Suppress("unused")
     companion object {
+
+        private const val ID: String = "player"
 
         private val USAGE = UsageBuilder("player")
             .hover(text("Execute a command as the player that is using the voucher"))
@@ -32,7 +35,6 @@ class PlayerCommandAction(meta: ActionMeta<Player>, handler: PermissionHandler) 
             )
             .build()
 
-        @Suppress("unused")
         @JvmStatic
         private fun usage(): Component = USAGE
 
