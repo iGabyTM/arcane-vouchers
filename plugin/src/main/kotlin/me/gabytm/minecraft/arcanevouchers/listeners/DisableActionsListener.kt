@@ -4,6 +4,7 @@ import de.tr7zw.nbtapi.NBTItem
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.functions.item
+import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
@@ -18,7 +19,7 @@ class DisableActionsListener(private val plugin: ArcaneVouchers) : Listener {
         }
 
         for (item in inventory.matrix) {
-            if (item == null) {
+            if (item == null || item.type == Material.AIR) {
                 continue
             }
 
