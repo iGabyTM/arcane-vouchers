@@ -143,7 +143,7 @@ class UtilsHandler(plugin: ArcaneVouchers) {
                 val soundsField = craftSound.getDeclaredField("sounds")
                 soundsField.isAccessible = true
 
-                (soundsField.get(null) as Array<String>).map { it }
+                (soundsField.get(null) as Array<String>).toList()
             } catch (e: ReflectiveOperationException) {
                 exception("Could not retrieve sounds", e)
                 emptyList()
