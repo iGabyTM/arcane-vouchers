@@ -26,12 +26,11 @@ class PlayerCommandAction(meta: ActionMeta<Player>, handler: PermissionHandler) 
 
         private val USAGE = UsageBuilder("player")
             .hover(text("Execute a command as the player that is using the voucher"))
-            // Arguments
-            .required(
-                true,
-                "command",
-                UsageBuilder.STRING,
-                "the command to execute (the slash is not required, unless the command has two or more)"
+            .argument(
+                UsageBuilder.element("command")
+                    .type(UsageBuilder.STRING)
+                    .description("the command to execute (the slash is not required, unless the command has two or more)")
+                    .required()
             )
             .build()
 

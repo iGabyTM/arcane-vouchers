@@ -1,8 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.actions
 
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.Component.join
-import net.kyori.adventure.text.Component.text
+import net.kyori.adventure.text.Component.*
 import net.kyori.adventure.text.JoinConfiguration.newlines
 import net.kyori.adventure.text.event.HoverEventSource
 import net.kyori.adventure.text.format.NamedTextColor.*
@@ -17,19 +16,6 @@ internal class UsageBuilder(
     private val optionalArguments = mutableListOf<Component>()
     private val requiredArguments = mutableListOf<Component>()
 
-    private fun createDescription(name: String, type: Component, description: String, default: Any? = null): Component {
-        val builder = text()
-            .append(text("$name: ", type.color()))
-            .append(type)
-            .append(text(", $description"))
-
-        if (default != null) {
-            builder.append(text(" (default: $default)", GRAY))
-        }
-
-        return builder.build()
-    }
-
     fun hover(hover: HoverEventSource<*>): UsageBuilder {
         this.hover = hover
         return this
@@ -40,13 +26,11 @@ internal class UsageBuilder(
             return this
         }
 
-        val component = property.create()
-
         if (property.required) {
-            requiredProperties.add(component)
+            requiredProperties
         } else {
-            optionalProperties.add(component)
-        }
+            optionalProperties
+        }.add(property.create())
 
         return this
     }
@@ -56,71 +40,34 @@ internal class UsageBuilder(
             return this
         }
 
-        val component = argument.create()
-
         if (argument.required) {
-            requiredArguments.add(component)
+            requiredArguments
         } else {
-            optionalArguments.add(component)
-        }
-
-        return this
-    }
-
-    fun optional(
-        isArgument: Boolean,
-        name: String,
-        type: Component,
-        description: String,
-        default: Any? = null,
-        condition: Boolean = true
-    ): UsageBuilder {
-        if (!condition) {
-            return this
-        }
-
-        if (isArgument) {
-            optionalArguments.add(createDescription(name, type, description, default))
-        } else {
-            optionalProperties.add(createDescription(name, type, description, default))
-        }
-
-        return this
-    }
-
-    fun required(
-        isArgument: Boolean,
-        name: String,
-        type: Component,
-        description: String,
-        default: Any? = null,
-        condition: Boolean = true
-    ): UsageBuilder {
-        if (!condition) {
-            return this
-        }
-
-        if (isArgument) {
-            optionalArguments.add(createDescription(name, type, description, default))
-        } else {
-            optionalProperties.add(createDescription(name, type, description, default))
-        }
+            optionalArguments
+        }.add(argument.create())
 
         return this
     }
 
     fun build(): Component {
         val builder = text()
+        val hasRequiredProperties = requiredProperties.isNotEmpty()
+        val hasOptionalProperties = optionalProperties.isNotEmpty()
 
-        if (requiredProperties.isNotEmpty() || optionalProperties.isNotEmpty()) {
+        if (hasRequiredProperties || hasOptionalProperties) {
             builder.append(text("- ")).append(text("{", GRAY))
 
-            if (requiredProperties.isNotEmpty()) {
-                builder.append(text("<required", RED).hoverEvent(join(newlines(), requiredProperties)))
+            if (hasRequiredProperties) {
+                builder.append(text("Req", RED).hoverEvent(join(newlines(), requiredProperties)))
             }
 
-            if (optionalProperties.isNotEmpty()) {
-                builder.append(text("(optional)", GREEN).hoverEvent(join(newlines(), optionalProperties)))
+            // Add space between properties
+            if (hasRequiredProperties && hasOptionalProperties) {
+                builder.append(space())
+            }
+
+            if (hasOptionalProperties) {
+                builder.append(text("Opt", GREEN).hoverEvent(join(newlines(), optionalProperties)))
             }
 
             builder.append(text("} ", GRAY)).append(text("[$actionName]").hoverEvent(hover))
@@ -129,11 +76,11 @@ internal class UsageBuilder(
         }
 
         if (requiredArguments.isNotEmpty()) {
-            builder.append(text(" <required>", RED).hoverEvent(join(newlines(), requiredArguments)))
+            builder.append(text(" Req", RED).hoverEvent(join(newlines(), requiredArguments)))
         }
 
         if (optionalArguments.isNotEmpty()) {
-            builder.append(text(" (optional)", GREEN).hoverEvent(join(newlines(), optionalArguments)))
+            builder.append(text(" Opt", GREEN).hoverEvent(join(newlines(), optionalArguments)))
         }
 
         return builder.build()
@@ -179,6 +126,7 @@ internal class UsageBuilder(
             return this
         }
 
+        @Suppress("DuplicatedCode")
         fun create(): Component {
             // name: Type, description (default: value)
             // unbreakable: Boolean, whether the item is unbreakable (default: false)

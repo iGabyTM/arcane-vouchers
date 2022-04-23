@@ -24,7 +24,10 @@ class ItemAction(meta: ActionMeta<Player>, handler: PermissionHandler, private v
         }
     }
 
+    @Suppress("unused")
     companion object {
+
+        private const val ID = "item"
 
         private val usage = UsageBuilder("item")
             .hover(
@@ -33,39 +36,51 @@ class ItemAction(meta: ActionMeta<Player>, handler: PermissionHandler, private v
                     .append(
                         text("A format similar to EssentialsX's is used", NamedTextColor.GRAY, TextDecoration.ITALIC))
             )
-            // Arguments
-            .required(
-                true,
-                "material(:damage)",
-                UsageBuilder.STRING,
-                "name of a Material. To specify its damage, add :damage after (INK_SACK:4 for lapiz lazuli on < 1.13)"
+            .argument(
+                UsageBuilder.element("material(:damage)")
+                    .type(UsageBuilder.STRING)
+                    .description("name of a Material. To specify its damage, add :damage after (INK_SACK:4 for lapiz lazuli on < 1.13)")
+                    .required()
             )
-            .required(true, "amount", UsageBuilder.INTEGER, "the amount of the item")
-            .optional(true, "name", UsageBuilder.STRING, "the name of the item, use _ for space")
-            .optional(true, "lore", UsageBuilder.STRING, "the lore of the item, use _ for space and | for a new line")
-            .optional(true, "flags", UsageBuilder.LIST, "a comma separated list of ItemFlag names")
-            .optional(
-                true,
-                "unbreakable",
-                UsageBuilder.BOOLEAN,
-                "make the item unbreakable, this argument doesn't require a value"
+            .argument(
+                UsageBuilder.element("amount")
+                    .type(UsageBuilder.INTEGER)
+                    .description("the amount of the item")
+                    .required()
             )
-            .optional(
-                true,
-                "model",
-                UsageBuilder.INTEGER,
-                "the custom model data of this item",
-                condition = ServerVersion.HAS_CUSTOM_MODEL_DATA
+            .argument(
+                UsageBuilder.element("name")
+                    .type(UsageBuilder.STRING)
+                    .description("the name of the item, use _ for space")
             )
-            .optional(
-                true,
-                "nbt",
-                UsageBuilder.STRING,
-                "a JSON string representing item's NBT, some escaping should be done, mostly for quotes. This argument must be the last one since it takes everything that's after nbt: as value"
+            .argument(
+                UsageBuilder.element("lore")
+                    .type(UsageBuilder.STRING)
+                    .description("the lore of the item, use _ for space and | for a new line")
+            )
+            .argument(
+                UsageBuilder.element("flags")
+                    .type(UsageBuilder.LIST)
+                    .description("a comma separated list of ItemFlag names")
+            )
+            .argument(
+                UsageBuilder.element("unbreakable")
+                    .type(UsageBuilder.BOOLEAN)
+                    .description("make the item unbreakable, this argument doesn't require a value")
+            )
+            .argument(
+                UsageBuilder.element("model")
+                    .type(UsageBuilder.INTEGER)
+                    .description("the custom model data of this item"),
+                ServerVersion.HAS_CUSTOM_MODEL_DATA
+            )
+            .argument(
+                UsageBuilder.element("nbt")
+                    .type(UsageBuilder.STRING)
+                    .description("a JSON string representing item's NBT, some escaping should be done, mostly for quotes. This argument must be the last one since it takes everything that's after nbt: as value")
             )
             .build()
 
-        @Suppress("unused")
         @JvmStatic
         private fun usage(): Component = usage
 

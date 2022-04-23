@@ -41,7 +41,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
     val actionsMessage: Component
 
     init {
-        registerDefaults(Player::class.java)
+        //registerDefaults(Player::class.java)
         componentParser.registerDefaults(Player::class.java)
 
         // Commands
@@ -51,6 +51,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         //-----
 
         // Crates
+        usages.add(Component.text("+ Crates:", NamedTextColor.LIGHT_PURPLE))
         register("CrateReloaded", GiveCrateReloadedKeyAction.ID, GiveCrateReloadedKeyAction::class.java) { GiveCrateReloadedKeyAction(it, handler) }
         //-----
 
@@ -76,13 +77,16 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         //-----
 
         // Vault
-        usages.add(Component.text("+ Vault:", NamedTextColor.DARK_PURPLE))
-        if (setupEconomy()) {
-            register("addmoney", AddMoneyAction::class.java) { AddMoneyAction(it, handler, economy) }
-        }
+        if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+            usages.add(Component.text("+ Vault:", NamedTextColor.DARK_PURPLE))
 
-        if (setupPermission()) {
-            register("permission", PermissionAction::class.java) { PermissionAction(it, handler, permission) }
+            if (setupEconomy()) {
+                register("addmoney", AddMoneyAction::class.java) { AddMoneyAction(it, handler, economy) }
+            }
+
+            if (setupPermission()) {
+                register("permission", PermissionAction::class.java) { PermissionAction(it, handler, permission) }
+            }
         }
         //-----
 

@@ -89,6 +89,7 @@ class EffectAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arcan
         }
     }
 
+    @Suppress("unused")
     companion object {
 
         /**
@@ -112,40 +113,54 @@ class EffectAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arcan
             null
         }
 
+        private const val ID = "effect"
+
         private val usage = UsageBuilder("effect")
             .hover(Component.text("Give a potion effect to the player"))
-            // Properties
-            .optional(
-                false,
-                "ambient",
-                UsageBuilder.BOOLEAN,
-                "makes potion effect produce more, translucent, particles",
-                true
+            .property(
+                UsageBuilder.element("ambient")
+                    .type(UsageBuilder.BOOLEAN)
+                    .description("makes potion effect produce more, translucent, particles")
+                    .default(true)
             )
-            .optional(false, "particles", UsageBuilder.BOOLEAN, "whether the effect has particles", true)
-            .optional(
-                false,
-                "color",
-                UsageBuilder.STRING,
-                "the color of the particles",
-                "none",
+            .property(
+                UsageBuilder.element("particles")
+                    .type(UsageBuilder.BOOLEAN)
+                    .description("whether the effect has particles")
+                    .default(true)
+            )
+            .property(
+                UsageBuilder.element("color")
+                    .type(UsageBuilder.STRING)
+                    .description("the color of the particles")
+                    .default("none"),
                 CONSTRUCTOR_WITH_COLOR != null
             )
-            .optional(
-                false,
-                "icon",
-                UsageBuilder.BOOLEAN,
-                "whether the icon of the effect will be displayed",
-                true,
+            .property(
+                UsageBuilder.element("icon")
+                    .type(UsageBuilder.BOOLEAN)
+                    .description("whether the icon of the effect will be displayed")
+                    .default(true),
                 ServerVersion.HAS_KEYS
             )
-            // Arguments
-            .required(true, "effect", UsageBuilder.STRING, "name of a PotionEffectType")
-            .required(true, "duration", UsageBuilder.TICKS, "the duration of the effect")
-            .optional(true, "amplifier", UsageBuilder.INTEGER, "the amplifier of the effect", 1)
+            .argument(
+                UsageBuilder.element("effect")
+                    .type(UsageBuilder.STRING)
+                    .description("name of a PotionEffectType")
+            )
+            .argument(
+                UsageBuilder.element("duration")
+                    .type(UsageBuilder.TICKS)
+                    .description("the duration of the effect")
+            )
+            .argument(
+                UsageBuilder.element("amplifier")
+                    .type(UsageBuilder.TICKS)
+                    .description("the amplifier of the effect")
+                    .default(1)
+            )
             .build()
 
-        @Suppress("unused")
         @JvmStatic
         private fun usage(): Component = usage
 
