@@ -2,11 +2,13 @@ package me.gabytm.minecraft.arcanevouchers.actions.implementations.message
 
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
+import me.gabytm.minecraft.arcanevouchers.actions.UsageBuilder
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.functions.mini
 import me.gabytm.util.actions.actions.ActionMeta
 import me.gabytm.util.actions.actions.Context
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.title.Title
 import net.kyori.adventure.util.Ticks
 import org.bukkit.entity.Player
@@ -56,6 +58,17 @@ class MessageAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arca
                 else -> return@execute // to get rid of IDE warnings
             }
         }
+    }
+
+    @Suppress("unused")
+    companion object {
+
+        private const val ID: String = "message"
+
+        private val USAGE: Component = UsageBuilder(ID)
+            .hover(Component.text("Work in progress...", NamedTextColor.GRAY))
+            .build()
+
     }
 
     private enum class MessageType {

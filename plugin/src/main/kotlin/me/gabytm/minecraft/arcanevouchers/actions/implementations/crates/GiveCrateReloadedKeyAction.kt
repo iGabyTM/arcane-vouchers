@@ -3,10 +3,12 @@ package me.gabytm.minecraft.arcanevouchers.actions.implementations.crates
 import com.hazebyte.crate.api.CrateAPI
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
+import me.gabytm.minecraft.arcanevouchers.actions.UsageBuilder
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.functions.warning
 import me.gabytm.util.actions.actions.ActionMeta
 import me.gabytm.util.actions.actions.Context
+import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 
 class GiveCrateReloadedKeyAction(meta: ActionMeta<Player>, handler: PermissionHandler) : ArcaneAction(meta, handler) {
@@ -29,10 +31,26 @@ class GiveCrateReloadedKeyAction(meta: ActionMeta<Player>, handler: PermissionHa
         }
     }
 
-    @Suppress("unused")
+    @Suppress("unused", "SpellCheckingInspection")
     companion object {
 
-        const val ID: String = "givecratereloadedkey"
+        private const val ID: String = "givecratereloadedkey"
+
+        private val USAGE: Component = UsageBuilder(ID)
+            .hover(Component.text("Give CrateReloaded crates to the player"))
+            // Required arguments
+            .argument("crate") {
+                type(UsageBuilder.STRING)
+                    .description("the name of a CrateReloaded crate")
+                    .required()
+            }
+            // Optional arguments
+            .argument("amount") {
+                type(UsageBuilder.INTEGER)
+                    .description("the amount of crates to give")
+                    .default(1)
+            }
+            .build()
 
     }
 

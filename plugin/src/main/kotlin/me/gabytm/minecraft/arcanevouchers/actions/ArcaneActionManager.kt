@@ -25,6 +25,7 @@ import me.gabytm.util.actions.spigot.placeholders.PlaceholderAPIProvider
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
 import net.milkbowl.vault.economy.Economy
 import net.milkbowl.vault.permission.Permission
 import org.bukkit.Bukkit
@@ -43,15 +44,12 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
     init {
         componentParser.registerDefaults(Player::class.java)
 
+        // Default actions
+
         // Commands
         usages.add(Component.text("+ Commands:", NamedTextColor.LIGHT_PURPLE))
         register<ConsoleCommandAction> { ConsoleCommandAction(it, handler) }
         register<PlayerCommandAction> { PlayerCommandAction(it, handler) }
-        //-----
-
-        // Crates
-        usages.add(Component.text("+ Crates:", NamedTextColor.LIGHT_PURPLE))
-        registerIfEnabled<GiveCrateReloadedKeyAction>("CrateReloaded") { GiveCrateReloadedKeyAction(it, handler) }
         //-----
 
         // Economy
@@ -75,6 +73,13 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         register<SoundAction> { SoundAction(it, handler) }
         //-----
 
+        // Actions with external dependencies
+
+        // Crates
+        usages.add(Component.text("+ Crates:", NamedTextColor.DARK_PURPLE))
+        registerIfEnabled<GiveCrateReloadedKeyAction>("CrateReloaded") { GiveCrateReloadedKeyAction(it, handler) }
+        //-----
+
         // Vault
         isEnabled("Vault") {
             usages.add(Component.text("+ Vault:", NamedTextColor.DARK_PURPLE))
@@ -89,7 +94,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         }
         //-----
 
-        info("Loaded actions: ${actions.rowKeySet().sorted().joinToString(", ")}")
+        info("Loaded ${actions.size()} actions: ${actions.rowKeySet().sorted().joinToString(", ")}")
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             placeholderManager.register(PlaceholderAPIProvider())
@@ -100,10 +105,12 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
         // Join all usages in one component
         actionsMessage = Component.join(JoinConfiguration.newlines(), usages)
+            .append(Component.newline())
+            .append(Component.text("     ${actions.size()} actions available", NamedTextColor.GRAY, TextDecoration.ITALIC))
         usages.clear()
     }
 
-    private inline fun <reified A: ArcaneAction> register(supplier: Action.Supplier<Player>) {
+    private inline fun <reified A : ArcaneAction> register(supplier: Action.Supplier<Player>) {
         val clazz = A::class.java
 
         try {
@@ -113,14 +120,12 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
             val usage = clazz.getDeclaredField("USAGE").apply { isAccessible = true }.get(null)
             usages.add(usage as Component)
         } catch (e: ReflectiveOperationException) {
-            if (e !is NoSuchMethodException) {
-                exception("Could not register action ${clazz.simpleName}", e)
-            }
+            exception("An exception occurred while registering ${clazz.simpleName}", e)
         }
     }
 
     @Suppress("SameParameterValue")
-    private inline fun <reified A: ArcaneAction> registerIfEnabled(plugin: String, supplier: Action.Supplier<Player>) {
+    private inline fun <reified A : ArcaneAction> registerIfEnabled(plugin: String, supplier: Action.Supplier<Player>) {
         isEnabled(plugin) { register<A>(supplier) }
     }
 

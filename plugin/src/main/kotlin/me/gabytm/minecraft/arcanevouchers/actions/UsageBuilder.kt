@@ -122,6 +122,7 @@ internal class UsageBuilder(
     companion object {
 
         val BOOLEAN = text("Boolean", DARK_GREEN)
+        val DOUBLE = text("Double", BLUE)
         val FLOAT = text("Float", BLUE)
         val INTEGER = text("Integer", GOLD)
         val LIST = text("List", AQUA)
