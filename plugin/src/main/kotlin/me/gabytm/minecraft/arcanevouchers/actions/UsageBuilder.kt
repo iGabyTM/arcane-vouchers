@@ -35,6 +35,22 @@ internal class UsageBuilder(
         return this
     }
 
+    fun property(id: String, condition: Boolean, block: UsageElement.() -> UsageElement): UsageBuilder {
+        if (!condition) {
+            return this
+        }
+
+        val property = element(id).block()
+        val collection = if (property.required) requiredProperties else optionalProperties
+
+        collection.add(property.create())
+        return this
+    }
+
+    fun property(id: String, block: UsageElement.() -> UsageElement): UsageBuilder {
+        return property(id, true, block)
+    }
+
     fun argument(argument: UsageElement, condition: Boolean = true): UsageBuilder {
         if (!condition) {
             return this
@@ -47,6 +63,22 @@ internal class UsageBuilder(
         }.add(argument.create())
 
         return this
+    }
+
+    fun argument(id: String, condition: Boolean, block: UsageElement.() -> UsageElement): UsageBuilder {
+        if (!condition) {
+            return this
+        }
+
+        val argument = element(id).block()
+        val collection = if (argument.required) requiredArguments else optionalArguments
+
+        collection.add(argument.create())
+        return this
+    }
+
+    fun argument(id: String, block: UsageElement.() -> UsageElement): UsageBuilder {
+        return argument(id, true, block)
     }
 
     fun build(): Component {
@@ -86,11 +118,14 @@ internal class UsageBuilder(
         return builder.build()
     }
 
+    @Suppress("SpellCheckingInspection")
     companion object {
 
         val BOOLEAN = text("Boolean", DARK_GREEN)
+        val FLOAT = text("Float", BLUE)
         val INTEGER = text("Integer", GOLD)
         val LIST = text("List", AQUA)
+        val NAMESPACED_KEY = text("NamespacedKey", LIGHT_PURPLE)
         val STRING = text("String", GREEN)
         val TICKS = text("Ticks", YELLOW)
 
@@ -126,7 +161,6 @@ internal class UsageBuilder(
             return this
         }
 
-        @Suppress("DuplicatedCode")
         fun create(): Component {
             // name: Type, description (default: value)
             // unbreakable: Boolean, whether the item is unbreakable (default: false)

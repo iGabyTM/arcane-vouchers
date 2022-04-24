@@ -41,51 +41,50 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
     val actionsMessage: Component
 
     init {
-        //registerDefaults(Player::class.java)
         componentParser.registerDefaults(Player::class.java)
 
         // Commands
         usages.add(Component.text("+ Commands:", NamedTextColor.LIGHT_PURPLE))
-        register("console", ConsoleCommandAction::class.java) { ConsoleCommandAction(it, handler) }
-        register("player", PlayerCommandAction::class.java) { PlayerCommandAction(it, handler) }
+        register<ConsoleCommandAction> { ConsoleCommandAction(it, handler) }
+        register<PlayerCommandAction> { PlayerCommandAction(it, handler) }
         //-----
 
         // Crates
         usages.add(Component.text("+ Crates:", NamedTextColor.LIGHT_PURPLE))
-        register("CrateReloaded", GiveCrateReloadedKeyAction.ID, GiveCrateReloadedKeyAction::class.java) { GiveCrateReloadedKeyAction(it, handler) }
+        registerIfEnabled<GiveCrateReloadedKeyAction>("CrateReloaded") { GiveCrateReloadedKeyAction(it, handler) }
         //-----
 
         // Economy
         usages.add(Component.text("+ Economy:", NamedTextColor.LIGHT_PURPLE))
-        register("addexp", AddExpAction::class.java) { AddExpAction(it, handler) }
-        register("item", ItemAction::class.java) { ItemAction(it, handler, plugin.itemCreator) }
-        register("voucher", VoucherAction::class.java) { VoucherAction(it, handler, plugin.voucherManager) }
+        register<AddExpAction> { AddExpAction(it, handler) }
+        register<ItemAction> { ItemAction(it, handler, plugin.itemCreator) }
+        register<VoucherAction> { VoucherAction(it, handler, plugin.voucherManager) }
         //-----
 
         // Message
         usages.add(Component.text("+ Message:", NamedTextColor.LIGHT_PURPLE))
-        register("bossbar", BossBarAction::class.java) { BossBarAction(it, handler) }
-        register("chat", ChatAction::class.java) { ChatAction(it, handler) }
-        register("message", MessageAction::class.java) { MessageAction(it, handler) }
+        register<BossBarAction> { BossBarAction(it, handler) }
+        register<ChatAction> { ChatAction(it, handler) }
+        register<MessageAction> { MessageAction(it, handler) }
         //-----
 
         // Other
         usages.add(Component.text("+ Other:", NamedTextColor.LIGHT_PURPLE))
-        register("data", DataAction::class.java) { DataAction(it, handler) }
-        register("effect", EffectAction::class.java) { EffectAction(it, handler) }
-        register("sound", SoundAction::class.java) { SoundAction(it, handler) }
+        register<DataAction> { DataAction(it, handler) }
+        register<EffectAction> { EffectAction(it, handler) }
+        register<SoundAction> { SoundAction(it, handler) }
         //-----
 
         // Vault
-        if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+        isEnabled("Vault") {
             usages.add(Component.text("+ Vault:", NamedTextColor.DARK_PURPLE))
 
             if (setupEconomy()) {
-                register("addmoney", AddMoneyAction::class.java) { AddMoneyAction(it, handler, economy) }
+                register<AddMoneyAction> { AddMoneyAction(it, handler, economy) }
             }
 
             if (setupPermission()) {
-                register("permission", PermissionAction::class.java) { PermissionAction(it, handler, permission) }
+                register<PermissionAction> { PermissionAction(it, handler, permission) }
             }
         }
         //-----
@@ -104,17 +103,15 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
         usages.clear()
     }
 
-    private fun register(id: String, clazz: Class<*>, supplier: Action.Supplier<Player>) {
+    private inline fun <reified A: ArcaneAction> register(supplier: Action.Supplier<Player>) {
+        val clazz = A::class.java
+
         try {
-            val idField = clazz.getDeclaredField("ID")
-            idField.isAccessible = true
+            val identifier = clazz.getDeclaredField("ID").apply { isAccessible = true }.get(null)
+            register(Player::class.java, identifier as String, supplier)
 
-            register(Player::class.java, idField.get(null) as String, supplier)
-
-            val method = clazz.getDeclaredMethod("usage")
-            method.isAccessible = true
-
-            usages.add(method.invoke(null) as Component)
+            val usage = clazz.getDeclaredField("USAGE").apply { isAccessible = true }.get(null)
+            usages.add(usage as Component)
         } catch (e: ReflectiveOperationException) {
             if (e !is NoSuchMethodException) {
                 exception("Could not register action ${clazz.simpleName}", e)
@@ -123,28 +120,23 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
     }
 
     @Suppress("SameParameterValue")
-    private fun register(plugin: String, id: String, clazz: Class<*>, supplier: Action.Supplier<Player>) {
+    private inline fun <reified A: ArcaneAction> registerIfEnabled(plugin: String, supplier: Action.Supplier<Player>) {
+        isEnabled(plugin) { register<A>(supplier) }
+    }
+
+    private fun isEnabled(plugin: String, action: () -> Unit) {
         if (Bukkit.getPluginManager().isPluginEnabled(plugin)) {
-            info("Registering [$id] because $plugin is on the server")
-            register(id, clazz, supplier)
+            action()
         }
     }
 
     private fun setupEconomy(): Boolean {
-        if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-            return false
-        }
-
         val rsp = Bukkit.getServicesManager().getRegistration(Economy::class.java) ?: return false
         this.economy = rsp.provider
         return true
     }
 
     private fun setupPermission(): Boolean {
-        if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-            return false
-        }
-
         val rsp = Bukkit.getServicesManager().getRegistration(Permission::class.java) ?: return false
         this.permission = rsp.provider
         return true
