@@ -1,5 +1,6 @@
 package me.gabytm.minecraft.arcanevouchers.voucher.settings
 
+import me.gabytm.minecraft.arcanevouchers.functions.exception
 import me.gabytm.minecraft.arcanevouchers.functions.replace
 import me.gabytm.minecraft.arcanevouchers.functions.warning
 import java.util.regex.Pattern
@@ -67,7 +68,7 @@ class OptionHolder(
     companion object {
 
         private const val REGEX_PREFIX = "regex:"
-        private val REGEX_PREFIX_PATTERN = Regex(REGEX_PREFIX, RegexOption.IGNORE_CASE)
+        private const val REGEX_PREFIX_LENGTH = REGEX_PREFIX.length
 
         /* no-op */
         val NO_OP = OptionHolder()
@@ -78,12 +79,19 @@ class OptionHolder(
 
             for (it in list) {
                 if (it.startsWith(REGEX_PREFIX, true)) {
-                    val regex = it.split(REGEX_PREFIX_PATTERN)[0]
+                    // Remove the 'regex:' prefix
+                    val pattern = it.substring(REGEX_PREFIX_LENGTH)
+
+                    // The pattern is missing
+                    if (pattern.isEmpty()) {
+                        warning("Missing regex pattern ('$it')")
+                        continue
+                    }
 
                     try {
-                        regexOptions.add(Pattern.quote(regex).toPattern())
+                        regexOptions.add(pattern.toPattern())
                     } catch (e: PatternSyntaxException) {
-                        warning("Could not parse regex '$regex': ${e.message}")
+                        exception("Could not parse regex from pattern '$pattern'", e)
                     }
                 } else {
                     stringOptions.add(it)
