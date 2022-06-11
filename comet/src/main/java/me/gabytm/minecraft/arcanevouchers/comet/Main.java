@@ -22,7 +22,7 @@ public class Main {
                         .hasArg()
                         .type(String.class)
                         .argName("action")
-                        .desc("Available actions: convert, updater")
+                        .desc("Available actions: convert, update")
                         .build()
         );
 
