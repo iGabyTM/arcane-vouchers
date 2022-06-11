@@ -135,6 +135,7 @@ class ItemCreator(plugin: ArcaneVouchers) {
 
         // If the material specified is null return a fallback item
         if (material == null) {
+            warning("Unknown material $materialString")
             return ItemBuilder.from(Material.PAPER)
                 .name(Component.text("Unknown material $materialString", NamedTextColor.RED))
                 .build()
