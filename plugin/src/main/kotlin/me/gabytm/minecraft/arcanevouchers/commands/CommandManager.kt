@@ -15,6 +15,7 @@ class CommandManager(plugin: ArcaneVouchers) {
 
         manager.register(
             ActionsCommand(plugin),
+            DebugCommand(plugin),
             GiveCommand(plugin),
             HelpCommand(plugin),
             ListCommand(plugin),

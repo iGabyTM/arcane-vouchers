@@ -22,7 +22,7 @@ import java.util.*
 
 class ItemCreator(plugin: ArcaneVouchers) {
 
-    private val nbtHandler = NBTHandler(plugin)
+    val nbtHandler = NBTHandler(plugin)
 
     /**
      * Turn a list with 2 elements into a Pair<[Enchantment], [Int]>

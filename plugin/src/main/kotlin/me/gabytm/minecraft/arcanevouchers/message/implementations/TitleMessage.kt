@@ -1,11 +1,23 @@
 package me.gabytm.minecraft.arcanevouchers.message.implementations
 
+import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.JsonNull
+import com.google.gson.JsonObject
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import me.gabytm.minecraft.arcanevouchers.Constant
+import me.gabytm.minecraft.arcanevouchers.commands.commands.DebugCommand
+import me.gabytm.minecraft.arcanevouchers.functions.info
 import me.gabytm.minecraft.arcanevouchers.functions.mini
 import me.gabytm.minecraft.arcanevouchers.message.Message
+import me.gabytm.minecraft.arcanevouchers.message.MessageType
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.title.Title
+import java.lang.reflect.Type
 
 class TitleMessage(string: String) : Message(string) {
 
@@ -26,6 +38,26 @@ class TitleMessage(string: String) : Message(string) {
                 format(subtitle, strings, components)
             )
         )
+    }
+
+    internal class Serializer private constructor() : JsonSerializer<TitleMessage> {
+
+        override fun serialize(src: TitleMessage?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
+            if (src == null) {
+                return JsonNull.INSTANCE
+            }
+
+            val obj = JsonObject()
+            obj.addProperty("type", MessageType.TITLE.name)
+            obj.add("title", DebugCommand.GSON.toJsonTree(src.title, TextComponent::class.java))
+            obj.add("subtitle", DebugCommand.GSON.toJsonTree(src.subtitle, TextComponent::class.java))
+            return obj
+        }
+
+        companion object {
+            val INSTANCE = Serializer()
+        }
+
     }
 
 }
