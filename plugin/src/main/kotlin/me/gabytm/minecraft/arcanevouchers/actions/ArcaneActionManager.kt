@@ -17,6 +17,7 @@ import me.gabytm.minecraft.arcanevouchers.actions.implementations.vault.AddMoney
 import me.gabytm.minecraft.arcanevouchers.actions.implementations.vault.PermissionAction
 import me.gabytm.minecraft.arcanevouchers.actions.permission.PermissionHandler
 import me.gabytm.minecraft.arcanevouchers.actions.placeholders.PlayerNamePlaceholderProvider
+import me.gabytm.minecraft.arcanevouchers.actions.tags.ChanceTag
 import me.gabytm.minecraft.arcanevouchers.functions.exception
 import me.gabytm.minecraft.arcanevouchers.functions.info
 import me.gabytm.util.actions.actions.Action
@@ -30,6 +31,7 @@ import net.milkbowl.vault.economy.Economy
 import net.milkbowl.vault.permission.Permission
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import me.gabytm.util.actions.components.Component as ActionComponent
 
 class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) {
 
@@ -43,6 +45,7 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
 
     init {
         componentParser.registerDefaults(Player::class.java)
+        registerTag<ChanceTag, String>(::ChanceTag)
 
         // Default actions
 
@@ -127,6 +130,17 @@ class ArcaneActionManager(plugin: ArcaneVouchers) : SpigotActionManager(plugin) 
     @Suppress("SameParameterValue")
     private inline fun <reified A : ArcaneAction> registerIfEnabled(plugin: String, supplier: Action.Supplier<Player>) {
         isEnabled(plugin) { register<A>(supplier) }
+    }
+
+    private inline fun <reified T : ActionComponent<Player, R>, R> registerTag(supplier: ActionComponent.Supplier<Player, R>) {
+        val clazz = T::class.java
+
+        try {
+            val identifier = clazz.getDeclaredField("ID").apply { isAccessible = true }.get(null)
+            componentParser.register(Player::class.java, identifier as String, supplier)
+        } catch (e: ReflectiveOperationException) {
+            exception("An exception occurred while registering ${clazz.simpleName}", e)
+        }
     }
 
     private fun isEnabled(plugin: String, action: () -> Unit) {
