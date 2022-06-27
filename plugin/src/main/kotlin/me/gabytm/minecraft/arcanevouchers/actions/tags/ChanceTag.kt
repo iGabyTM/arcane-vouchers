@@ -15,31 +15,34 @@ class ChanceTag(stringValue: String, placeholderManager: PlaceholderManager) : C
     private val default: String
 
     init {
-        val test = stringValue
-            .split(",")
-            .map { it.split("=") }
-            .map { it[0] to it[1] }
+        // Example: {50=COAL,25=DIAMOND,25=EMERALD,default=STONE}
+        val pairs = stringValue
+            .split(",") // Split by comma
+            .map { it.split("=") } // Split each pair by equal
+            .map { it[0] to it[1] } // Create a pair from each part resulted from the previous map { }
             .toMutableSet()
 
-        val defaultValue = test.firstOrNull { it.first == "default" }
+        val defaultValue = pairs.firstOrNull { it.first == "default" }
 
-        if (defaultValue != null) {
-            test.remove(defaultValue)
-            default = defaultValue.second
-            elements = test.toSet()
+        default = if (defaultValue != null) {
+            pairs.remove(defaultValue)
+            defaultValue.second
         } else {
-            elements = test.toSet()
-            default = ""
+            ""
         }
+
+        elements = pairs.toSet()
     }
 
     override fun parse(player: Player, context: Context<Player>): String {
-        val set2 = elements.map {
-            val chance = placeholderManager.replace(player, it.first, context).toDoubleOrNull() ?: throw IllegalArgumentException("(chance tag) '${it.first}' is not a number")
+        // Map all elements into Pair<Chance, Element>
+        val set = elements.map {
+            val chance = placeholderManager.replace(player, it.first, context).toDoubleOrNull()
+                ?: throw IllegalArgumentException("(chance tag) '${it.first}' is not a number")
             chance to placeholderManager.replace(player, it.second, context)
         }
-        val chance = RANDOM.nextDouble(101.0)
-        val valid = set2.filter { chance <= it.first }
+        val chance = RANDOM.nextDouble(101.0) // Generate random chance between 0 and 100
+        val valid = set.filter { chance <= it.first } // Filter the elements
 
         return if (valid.isEmpty()) {
             default
