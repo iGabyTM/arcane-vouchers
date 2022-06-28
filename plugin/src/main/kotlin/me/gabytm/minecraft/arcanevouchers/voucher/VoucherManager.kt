@@ -31,6 +31,11 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         }
 
         for (it in vouchersSection.getValues(false).keys) {
+            if (it.contains(' ')) {
+                warning("Invalid voucher name '$it', remove any spaces and invalid characters")
+                continue
+            }
+
             val section = vouchersSection.getConfigurationSection(it) ?: continue
             this.loadedVouchers[it] = Voucher.from(section, plugin.actionManager, plugin.itemCreator)
         }
