@@ -3,12 +3,12 @@ package me.gabytm.minecraft.arcanevouchers.voucher
 import de.tr7zw.nbtapi.NBTItem
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant.NBT
-import me.gabytm.minecraft.arcanevouchers.ServerVersion
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.arcanevouchers.functions.add
 import me.gabytm.minecraft.arcanevouchers.functions.audience
 import me.gabytm.minecraft.arcanevouchers.functions.debug
+import me.gabytm.minecraft.arcanevouchers.functions.item
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
 import me.gabytm.minecraft.arcanevouchers.voucher.settings.VoucherSettings
@@ -91,19 +91,15 @@ class Voucher private constructor(
     private fun removeVouchers(player: Player, voucher: ItemStack, amount: Int) {
         // Remove the item completely if it has the same amount as the amount of redeemed vouchers
         if (voucher.amount == amount) {
-            // On 1.11.2+ we can just set the item amount to 0, and it will be removed
-            if (ServerVersion.ITEMS_WITH_ZERO_AMOUNT_ARE_REMOVED) {
-                voucher.amount = 0
-            } else {
-                // But on pre 1.11.2 that doesn't work
-                player.setItemInHand(null)
-            }
-
+            player.item(ItemStack(Material.AIR))
             return
         }
 
         // Otherwise, subtract one
         voucher.amount = voucher.amount - amount
+        // FIXME for some reason, when confirmation is enabled, on certain game versions the item is not updated by the
+        //       code that's above this line, a workaround I found is to set player's item in hand
+        player.item(voucher)
     }
 
     fun redeem(player: Player, voucher: ItemStack, args: MutableMap<String, String>, plugin: ArcaneVouchers, isBulk: Boolean) {

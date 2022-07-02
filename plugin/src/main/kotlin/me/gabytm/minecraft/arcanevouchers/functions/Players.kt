@@ -19,6 +19,19 @@ fun Player.item(): ItemStack {
 }
 
 /**
+ * Set a [Player]'s item in hand using the right method for each game version
+ * @param item item to set
+ */
+@Suppress("DEPRECATION")
+fun Player.item(item: ItemStack?) {
+    if (ServerVersion.HAS_OFF_HAND) {
+        this.inventory.setItemInMainHand(item)
+    } else {
+        this.inventory.setItemInHand(item)
+    }
+}
+
+/**
  * Add items to a player inventory and drop on the ground the leftovers
  * @param items items to add
  */
