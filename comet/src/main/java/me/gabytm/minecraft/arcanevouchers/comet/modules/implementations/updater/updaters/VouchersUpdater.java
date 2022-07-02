@@ -166,10 +166,18 @@ public class VouchersUpdater {
         for (NodePath messagePath : messagePaths) {
             node.node(messagePath).act(messageNode -> {
                 if (messageNode.empty()) {
+                    messageNode.set(null); // Remove the key
                     return;
                 }
 
-                messageNode.set(Strings.upgradeColorsFormat(messageNode.getString()));
+                final String message = messageNode.getString();
+
+                if (message == null || message.trim().isEmpty()) {
+                    messageNode.set(null); // Remove the key
+                    return;
+                }
+
+                messageNode.set(Strings.upgradeColorsFormat(message));
             });
         }
     }
