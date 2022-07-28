@@ -1,6 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.voucher
 
 import de.tr7zw.nbtapi.NBTItem
+import dev.triumphteam.gui.builder.item.ItemBuilder
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant.NBT
 import me.gabytm.minecraft.arcanevouchers.cooldown.CooldownManager
@@ -8,7 +9,6 @@ import me.gabytm.minecraft.arcanevouchers.functions.*
 import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
 import me.gabytm.minecraft.arcanevouchers.message.Lang
 import org.apache.commons.lang.StringUtils
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.*
@@ -68,25 +68,28 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         compound.setReceiverUUID(player.uniqueId)
         // -----
 
-        val item = nbt.item
-        val meta = item.itemMeta ?: Bukkit.getItemFactory().getItemMeta(item.type) ?: return item
+        if (argsMap.isEmpty()) {
+            val item = nbt.item
+            item.amount = amount
+            return item;
+        }
+
+        val item = ItemBuilder.from(nbt.item).amount(amount)
 
         // Replace the arguments on item name and lore
         val keys = argsMap.keys.toTypedArray()
         val values = argsMap.values.toTypedArray()
 
-        if (argsMap.isNotEmpty() && meta.hasDisplayName()) {
-            meta.setDisplayName(StringUtils.replaceEach(meta.displayName, keys, values))
+        if (voucher.itemName.isNotBlank()) {
+            item.name(StringUtils.replaceEach(voucher.itemName, keys, values).mini(true))
         }
 
-        if (argsMap.isNotEmpty() && meta.hasLore()) {
-            meta.lore = meta.lore?.map { StringUtils.replaceEach(it, keys, values) }
+        if (voucher.itemLore.isNotEmpty()) {
+            item.lore(voucher.itemLore.map { StringUtils.replaceEach(it, keys, values).mini(true) })
         }
 
-        item.itemMeta = meta
-        item.amount = amount
-
-        return item
+        info("Voucher #2 = $item")
+        return item.build()
     }
 
     fun giveVoucher(player: Player, voucher: Voucher, amount: Int, args: Array<String>) {

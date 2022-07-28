@@ -5,6 +5,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
+    mavenLocal()
     maven {
         url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }

@@ -4,18 +4,17 @@ import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.arcanevouchers.commands.CommandManager
 import me.gabytm.minecraft.arcanevouchers.compatibility.CompatibilityHandler
 import me.gabytm.minecraft.arcanevouchers.config.Config
+import me.gabytm.minecraft.arcanevouchers.files.FileHandler
 import me.gabytm.minecraft.arcanevouchers.functions.color
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
 import me.gabytm.minecraft.arcanevouchers.listeners.DisableActionsListener
 import me.gabytm.minecraft.arcanevouchers.listeners.VoucherUseListener
 import me.gabytm.minecraft.arcanevouchers.message.Lang
-import me.gabytm.minecraft.arcanevouchers.files.FileHandler
 import me.gabytm.minecraft.arcanevouchers.utils.UtilsHandler
 import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
-import java.util.regex.Pattern
 
 class ArcaneVouchers : JavaPlugin() {
 

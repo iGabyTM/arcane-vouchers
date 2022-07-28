@@ -21,13 +21,16 @@ class Voucher private constructor(
     val id: String,
     val settings: VoucherSettings,
     val item: ItemStack,
+    val itemName: String,
+    val itemLore: List<String>,
     val actions: List<ArcaneAction>,
     val bulkActions: List<ArcaneAction>
 ) {
 
-    private fun handleBulkOpenLimit(player: Player, voucher: ItemStack,
-                                    args: MutableMap<String, String>, plugin: ArcaneVouchers,
-                                    increaseLimit: Boolean
+    private fun handleBulkOpenLimit(
+        player: Player, voucher: ItemStack,
+        args: MutableMap<String, String>, plugin: ArcaneVouchers,
+        increaseLimit: Boolean
     ) {
         val vouchers = voucher.amount
         val bulkLimit = this.settings.bulkOpen.limit
@@ -44,9 +47,10 @@ class Voucher private constructor(
         redeem(player, voucher, args, plugin, increaseLimit, true, amount)
     }
 
-    private fun redeem(player: Player, voucher: ItemStack, args: MutableMap<String, String>,
-                       plugin: ArcaneVouchers, increaseLimit: Boolean,
-                       isBulk: Boolean, amount: Int
+    private fun redeem(
+        player: Player, voucher: ItemStack, args: MutableMap<String, String>,
+        plugin: ArcaneVouchers, increaseLimit: Boolean,
+        isBulk: Boolean, amount: Int
     ) {
         val voucherManager = plugin.voucherManager
 
@@ -62,15 +66,16 @@ class Voucher private constructor(
             voucherManager.cooldownManager.addCooldown(player.uniqueId, this.id, this.settings.cooldown.cooldown)
         }
 
-        with (player.audience()) {
+        with(player.audience()) {
             settings.messages.redeemMessage.send(this, args.add("{amount}", amount.toString()))
             settings.sounds.redeemSound.play(this)
         }
     }
 
-    private fun executeActions(player: Player, amount: Int,
-                               args: MutableMap<String, String>, isBulk: Boolean,
-                               actionManager: ArcaneActionManager
+    private fun executeActions(
+        player: Player, amount: Int,
+        args: MutableMap<String, String>, isBulk: Boolean,
+        actionManager: ArcaneActionManager
     ) {
         if (isBulk) {
             // Execute actions n times (n = amount) if bulkActions is empty
@@ -102,7 +107,13 @@ class Voucher private constructor(
         player.item(voucher)
     }
 
-    fun redeem(player: Player, voucher: ItemStack, args: MutableMap<String, String>, plugin: ArcaneVouchers, isBulk: Boolean) {
+    fun redeem(
+        player: Player,
+        voucher: ItemStack,
+        args: MutableMap<String, String>,
+        plugin: ArcaneVouchers,
+        isBulk: Boolean
+    ) {
         val limitManager = plugin.voucherManager.limitManager
         val vouchers = voucher.amount
         val hasLimit = this.settings.limit.type != LimitType.NONE
@@ -181,7 +192,15 @@ class Voucher private constructor(
 
             val actions = actionManager.parseActions(config.getStringList("actions"))
             val bulkActions = actionManager.parseActions(config.getStringList("bulkActions"))
-            return Voucher(id, settings, item, actions, bulkActions)
+            return Voucher(
+                id,
+                settings,
+                item,
+                config.getString("item.name") ?: "",
+                config.getStringList("item.lore"),
+                actions,
+                bulkActions
+            )
         }
 
     }
