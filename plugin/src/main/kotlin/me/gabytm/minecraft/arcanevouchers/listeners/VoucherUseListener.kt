@@ -7,8 +7,10 @@ import me.gabytm.minecraft.arcanevouchers.Constant.NBT
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
 import me.gabytm.minecraft.arcanevouchers.functions.*
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
+import me.gabytm.minecraft.arcanevouchers.voucher.Voucher
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
@@ -26,6 +28,70 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
 
     private fun NBTCompound.getArgs(): MutableMap<String, String> {
         return keys.associateWith { getString(it) }.toMutableMap()
+    }
+
+    private fun hasReachedLimit(player: Player, voucher: Voucher, args: MutableMap<String, String>): Boolean {
+        val limit = voucher.settings.limit
+
+        if (!limit.enabled || limit.type == LimitType.NONE) {
+            return false;
+        }
+
+        val usages = limitManager.getUsages(player.uniqueId, voucher)
+
+        // The limit was reached and the player can't bypass it
+        if (usages >= limit.limit && !limitManager.bypassLimit(player, voucher)) {
+            val audience = audiences.player(player)
+            limit.message.send(audience, args)
+            limit.sound.play(audience)
+            return true
+        }
+
+        return false
+    }
+
+    private fun isOnCooldown(player: Player, voucher: Voucher, args: MutableMap<String, String>): Boolean {
+        val cooldown = voucher.settings.cooldown
+
+        if (!cooldown.enabled) {
+            return false
+        }
+
+        val cooldownManager = voucherManager.cooldownManager
+        val timeLeft = cooldownManager.getTimeLeft(player.uniqueId, voucher)
+
+        // The player is on cooldown, and they can't bypass it
+        if (timeLeft > 0L && !cooldownManager.bypassCooldown(player, voucher.id)) {
+            val audience = audiences.player(player)
+            cooldown.message.send(audience, args, mapOf("{left}" to cooldownManager.formatTimeLeft(timeLeft)))
+            cooldown.sound.play(audience)
+            return true
+        }
+
+        return false
+    }
+
+    private fun isNotAllowedInWorld(player: Player, voucher: Voucher, args: MutableMap<String, String>): Boolean {
+        val world = player.world
+        val worlds = voucher.settings.worlds
+        val (placeholders, values) = args
+        val audience = player.audience()
+
+        // Player's world is blacklisted
+        if (worlds.isBlacklisted(world, placeholders, values)) {
+            worlds.blacklistedMessage.send(audience, args.add("{world}", world.name))
+            worlds.blacklistedSound.play(audience)
+            return true
+        }
+
+        // Player's world is not whitelisted
+        if (!worlds.isWhitelisted(world, placeholders, values)) {
+            worlds.notWhitelistedMessage.send(audience, args.add("{world}", world.name))
+            worlds.notWhitelistedSound.play(audience)
+            return true
+        }
+
+        return false
     }
 
     @EventHandler
@@ -90,47 +156,15 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             }
         }
 
-        val limit = settings.limit
-
-        // Limit is enabled
-        if (limit.enabled && limit.type != LimitType.NONE) {
-            val usages = limitManager.getUsages(player.uniqueId, voucher)
-
-            // The limit was reached and the player can't bypass it
-            if (usages >= limit.limit && !limitManager.bypassLimit(player, voucher)) {
-                limit.message.send(audience, args)
-                limit.sound.play(audience)
-                return
-            }
-        }
-
-        // The voucher has a cooldown set
-        if (settings.cooldown.enabled) {
-            val cooldownManager = voucherManager.cooldownManager
-            val timeLeft = cooldownManager.getTimeLeft(player.uniqueId, voucher)
-
-            // The player is on cooldown, and they can't bypass it
-            if (timeLeft > 0L && !cooldownManager.bypassCooldown(player, voucherId)) {
-                settings.cooldown.message.send(audience, args, mapOf("{left}" to cooldownManager.formatTimeLeft(timeLeft)))
-                settings.cooldown.sound.play(audience)
-                return
-            }
-        }
-
-        val world = this.player.world
-        val worlds = settings.worlds
-
-        // Player's world is blacklisted
-        if (worlds.isBlacklisted(world, placeholders, values)) {
-            worlds.blacklistedMessage.send(audience, args.add("{world}", world.name))
-            worlds.blacklistedSound.play(audience)
+        if (hasReachedLimit(player, voucher, args)) {
             return
         }
 
-        // Player's world is not whitelisted
-        if (!worlds.isWhitelisted(world, placeholders, values)) {
-            worlds.notWhitelistedMessage.send(audience, args.add("{world}", world.name))
-            worlds.notWhitelistedSound.play(audience)
+        if (isOnCooldown(player, voucher, args)) {
+            return
+        }
+
+        if (isNotAllowedInWorld(player, voucher, args)) {
             return
         }
 
