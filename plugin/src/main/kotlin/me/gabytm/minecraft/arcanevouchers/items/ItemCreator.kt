@@ -71,10 +71,9 @@ class ItemCreator(plugin: ArcaneVouchers) {
             .name(config.getString("name")?.mini(true) ?: Component.empty())
             .lore(config.getStringList("lore").map { it.mini(true) })
             .flags(*flags)
+            .enchant(enchants, true)
             .unbreakable(config.getBoolean("unbreakable"))
             .apply {
-                enchants.forEach { (enchantment, level) -> enchant(enchantment, level, true) }
-
                 if (customModelData > 0) {
                     model(customModelData)
                 }
