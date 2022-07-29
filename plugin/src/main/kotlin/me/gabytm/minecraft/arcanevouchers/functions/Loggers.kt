@@ -2,7 +2,6 @@ package me.gabytm.minecraft.arcanevouchers.functions
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
-import me.gabytm.minecraft.arcanevouchers.Settings
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.logging.Level

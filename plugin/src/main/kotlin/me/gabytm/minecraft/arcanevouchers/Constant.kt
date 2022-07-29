@@ -1,7 +1,6 @@
 package me.gabytm.minecraft.arcanevouchers
 
 import me.gabytm.minecraft.arcanevouchers.functions.exception
-import me.gabytm.minecraft.arcanevouchers.functions.info
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Color
 import java.lang.reflect.Modifier
