@@ -88,7 +88,6 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
             item.lore(voucher.itemLore.map { StringUtils.replaceEach(it, keys, values).mini(true) })
         }
 
-        info("Voucher #2 = $item")
         return item.build()
     }
 
@@ -99,11 +98,10 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         // Add the voucher to player's inventory and drop the leftovers on the ground
         player.giveItems(item)
 
-        with (player.audience()) {
-            // Send the message to the player and also add the {amount} placeholder
-            voucher.settings.messages.receiveMessage.send(this, argsMap.add(Lang.Placeholder.AMOUNT, amount.toString()))
-            voucher.settings.sounds.receiveSound.play(this)
-        }
+        // Send the message to the player and also add the {amount} placeholder
+        val audience = player.audience()
+        voucher.settings.messages.receiveMessage.send(audience, argsMap.add(Lang.Placeholder.AMOUNT, amount.toString()))
+        voucher.settings.sounds.receiveSound.play(audience)
     }
 
     fun openConfirmation(player: Player, voucher: Voucher, voucherItem: ItemStack, args: MutableMap<String, String>, isBulk: Boolean) {
