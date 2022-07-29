@@ -21,7 +21,7 @@ fun String.color(): String {
 }
 
 fun String.replace(args: Map<String, String>): String {
-    return StringUtils.replaceEach(this, args.keys.toTypedArray(), args.values.toTypedArray())
+    return this.replace(args.keys.toTypedArray(), args.values.toTypedArray())
 }
 
 fun String.replace(placeholders: Array<String>, values: Array<String>): String {

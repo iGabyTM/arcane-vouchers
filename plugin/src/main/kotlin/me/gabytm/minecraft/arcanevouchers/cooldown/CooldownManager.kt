@@ -22,12 +22,12 @@ class CooldownManager(private val plugin: ArcaneVouchers) {
         this.activeCooldowns.putAll(this.storage.loadCooldowns())
     }
 
-    private fun TextComponent.Builder.append(value: Long, message1: Lang, message2: Lang): TextComponent.Builder {
+    private fun TextComponent.Builder.append(value: Long, singular: Lang, plural: Lang): TextComponent.Builder {
         if (value == 0L) {
             return this
         }
 
-        val message = if (value == 1L) message1 else message2
+        val message = if (value == 1L) singular else plural
         return append(message.format(value) ?: return this)
     }
 

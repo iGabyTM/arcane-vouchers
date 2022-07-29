@@ -8,7 +8,6 @@ import me.gabytm.minecraft.arcanevouchers.cooldown.CooldownManager
 import me.gabytm.minecraft.arcanevouchers.functions.*
 import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
 import me.gabytm.minecraft.arcanevouchers.message.Lang
-import org.apache.commons.lang.StringUtils
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.*
@@ -77,15 +76,15 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         val item = ItemBuilder.from(nbt.item).amount(amount)
 
         // Replace the arguments on item name and lore
-        val keys = argsMap.keys.toTypedArray()
+        val placeholders = argsMap.keys.toTypedArray()
         val values = argsMap.values.toTypedArray()
 
         if (voucher.itemName.isNotBlank()) {
-            item.name(StringUtils.replaceEach(voucher.itemName, keys, values).mini(true))
+            item.name(voucher.itemName.replace(placeholders, values).mini(true))
         }
 
         if (voucher.itemLore.isNotEmpty()) {
-            item.lore(voucher.itemLore.map { StringUtils.replaceEach(it, keys, values).mini(true) })
+            item.lore(voucher.itemLore.map { it.replace(placeholders, values).mini(true) })
         }
 
         return item.build()
