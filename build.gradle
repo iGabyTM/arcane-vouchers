@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'me.gabytm.minecraft'
-version '2.1.0-SNAPSHOT'
+version '2.1.1-SNAPSHOT'
 
 subprojects {
     if (project.name != 'comet') {
