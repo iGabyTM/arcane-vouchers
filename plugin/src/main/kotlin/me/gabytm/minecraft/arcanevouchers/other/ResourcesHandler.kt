@@ -4,6 +4,8 @@ import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
 import me.gabytm.minecraft.arcanevouchers.functions.exception
+import me.gabytm.minecraft.arcanevouchers.functions.info
+import me.gabytm.minecraft.arcanevouchers.functions.warning
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.sound.Sound
 import org.bukkit.Bukkit
@@ -27,6 +29,10 @@ class ResourcesHandler(plugin: ArcaneVouchers) {
     init {
         resourcesFolder.mkdirs()
         resourcesFolder.listFiles()?.forEach { it.delete() }
+
+        if (File(plugin.dataFolder, ".UTILS.yml").delete()) {
+            warning(".UTILS.yml was deleted, check the new files located in .RESOURCES")
+        }
 
         create("BossBar") {
             it["colors"] = BossBar.Color.NAMES.keys().toList().sorted()
