@@ -33,7 +33,7 @@ class ResourcesHandler(plugin: ArcaneVouchers) {
             it["flags"] = BossBar.Flag.NAMES.keys().toList().sorted()
             it["overlays"] = BossBar.Overlay.NAMES.keys().toList()
             it["progress.min"] = BossBar.MIN_PROGRESS
-            it["progress.max"] = BossBar.MIN_PROGRESS
+            it["progress.max"] = BossBar.MAX_PROGRESS
         }
 
         create("Colors") {
