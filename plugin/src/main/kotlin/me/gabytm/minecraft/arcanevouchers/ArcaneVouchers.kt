@@ -10,7 +10,7 @@ import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
 import me.gabytm.minecraft.arcanevouchers.listeners.DisableActionsListener
 import me.gabytm.minecraft.arcanevouchers.listeners.VoucherUseListener
 import me.gabytm.minecraft.arcanevouchers.message.Lang
-import me.gabytm.minecraft.arcanevouchers.utils.UtilsHandler
+import me.gabytm.minecraft.arcanevouchers.other.ResourcesHandler
 import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
@@ -72,7 +72,7 @@ class ArcaneVouchers : JavaPlugin() {
             VoucherUseListener(this)
         ).forEach { server.pluginManager.registerEvents(it, this) }
 
-        UtilsHandler(this)
+        ResourcesHandler(this)
     }
 
     fun reload() {

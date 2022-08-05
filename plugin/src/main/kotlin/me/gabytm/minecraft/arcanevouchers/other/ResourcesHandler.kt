@@ -1,4 +1,4 @@
-package me.gabytm.minecraft.arcanevouchers.utils
+package me.gabytm.minecraft.arcanevouchers.other
 
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
@@ -7,7 +7,6 @@ import me.gabytm.minecraft.arcanevouchers.functions.exception
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.sound.Sound
 import org.bukkit.Bukkit
-import org.bukkit.DyeColor
 import org.bukkit.Material
 import org.bukkit.block.banner.PatternType
 import org.bukkit.configuration.file.YamlConfiguration
@@ -16,65 +15,79 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.potion.PotionEffectType
 import java.io.File
 import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.StandardOpenOption
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Suppress("DEPRECATION")
-class UtilsHandler(plugin: ArcaneVouchers) {
+class ResourcesHandler(plugin: ArcaneVouchers) {
+
+    private val resourcesFolder = File(plugin.dataFolder, ".RESOURCES")
+    private val time = SimpleDateFormat("dd MMM yyyy, HH:mm z").format(Date())
 
     init {
-        val file = File(plugin.dataFolder, ".UTILS.yml")
+        resourcesFolder.mkdirs()
+        resourcesFolder.listFiles()?.forEach { it.delete() }
 
-        // If the file exists, delete its content
-        if (file.exists()) {
-            try {
-                Files.write(file.toPath(), ByteArray(0), StandardOpenOption.WRITE)
-            } catch (e: IOException) {
-                exception("Could not delete the content of $file", e)
-            }
-        } else {
-            // Otherwise, create it
-            try {
-                file.createNewFile()
-            } catch (e: IOException) {
-                exception("Could not create $file", e)
-            }
+        create("BossBar") {
+            it["colors"] = BossBar.Color.NAMES.keys().toList().sorted()
+            it["flags"] = BossBar.Flag.NAMES.keys().toList().sorted()
+            it["overlays"] = BossBar.Overlay.NAMES.keys().toList()
+            it["progress.min"] = BossBar.MIN_PROGRESS
+            it["progress.max"] = BossBar.MIN_PROGRESS
         }
 
-        val time = SimpleDateFormat("dd MMM yyyy, HH:mm z").format(Date())
+        create("Colors") {
+            it["list"] = Constant.NAMED_COLORS.keys.toList().sorted()
+        }
+
+        create("DyeColors") {
+            it["list"] = Constant.NAMED_COLORS.keys.toList().sorted()
+        }
+
+        // For some reason, on versions <= 1.12.2, the first value of the array is null (???)
+        create("Effects") { yaml ->
+            yaml["types"] = PotionEffectType.values().filterNotNull().map { it.name }.sorted()
+        }
+
+        create("Enchantments") { yaml ->
+            yaml["list"] = if (ServerVersion.HAS_KEYS) {
+                Enchantment.values().map { it.key.toString() }
+            } else {
+                Enchantment.values().map { it.name }
+            }.sorted()
+        }
+
+        create("ItemFlags") { yaml ->
+            yaml["list"] = ItemFlag.values().map { it.name }.sorted()
+        }
+
+        create("Materials") {
+            it["list"] = getMaterials()
+        }
+
+        create("PatternTypes") { yaml ->
+            yaml["list"] = PatternType.values().map { it.name }
+        }
+
+        create("Sounds") {
+            it["sounds"] = getSounds()
+            it["sources"] = Sound.Source.NAMES.keys().sorted().toList()
+        }
+    }
+
+    private fun create(fileName: String, action: (YamlConfiguration) -> Unit) {
+        val file = File(resourcesFolder, "$fileName.yml")
+
+        try {
+            file.createNewFile()
+        } catch (e: IOException) {
+            exception("Could not create $file", e)
+        }
+
         val yaml = YamlConfiguration.loadConfiguration(file)
         yaml.options()
             .header("\nHelpful lists of data generated for Minecraft ${Bukkit.getBukkitVersion()} at $time\n ")
-
-        yaml["bossBar.colors"] = BossBar.Color.NAMES.keys().toList()
-        yaml["bossBar.flags"] = BossBar.Flag.NAMES.keys().toList()
-        yaml["bossBar.overlays"] = BossBar.Overlay.NAMES.keys().toList()
-        yaml["bossBar.progress.min"] = BossBar.MIN_PROGRESS
-        yaml["bossBar.progress.max"] = BossBar.MAX_PROGRESS
-
-        yaml["colors"] = Constant.NAMED_COLORS.keys.toList()
-
-        yaml["dyeColors"] = DyeColor.values().map { it.name }
-
-        // For some reason, on versions <= 1.12.2, the first value of the array is null (???)
-        yaml["effect.types"] = PotionEffectType.values().filterNotNull().map { it.name }
-
-        yaml["enchantments"] = if (ServerVersion.HAS_KEYS) {
-            Enchantment.values().map { it.key.toString() }
-        } else {
-            Enchantment.values().map { it.name }
-        }
-
-        yaml["itemFlags"] = ItemFlag.values().map { it.name }
-
-        yaml["materials"] = getMaterials()
-
-        yaml["patternTypes"] = PatternType.values().map { it.name }
-
-        yaml["sound.sounds"] = getSounds()
-        yaml["sound.sources"] = Sound.Source.NAMES.keys().toList()
+        action(yaml)
 
         try {
             yaml.save(file)
@@ -143,6 +156,7 @@ class UtilsHandler(plugin: ArcaneVouchers) {
                 val soundsField = craftSound.getDeclaredField("sounds")
                 soundsField.isAccessible = true
 
+                @Suppress("UNCHECKED_CAST")
                 (soundsField.get(null) as Array<String>).toList()
             } catch (e: ReflectiveOperationException) {
                 exception("Could not retrieve sounds", e)
