@@ -224,7 +224,7 @@ class ItemCreator(plugin: ArcaneVouchers) {
 
                 "nbt" -> {
                     // Take everything that's after 'nbt:'
-                    val sNbt = string.substring(string.indexOf("$key:") + 4)
+                    val sNbt = string.substringAfter("$key:")
 
                     try {
                         return NBTItem(builder.build()).apply { mergeCompound(NBTContainer(sNbt)) }.item
