@@ -8,6 +8,7 @@ import me.gabytm.minecraft.arcanevouchers.ServerVersion
 import me.gabytm.minecraft.arcanevouchers.functions.*
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
 import me.gabytm.minecraft.arcanevouchers.voucher.Voucher
+import me.gabytm.minecraft.util.requirements.Arguments
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -200,6 +201,10 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
         if (!permissions.isWhitelisted(this.player, placeholders, values)) {
             permissions.notWhitelistedMessage.send(audience, args)
             permissions.notWhitelistedSound.play(audience)
+            return
+        }
+
+        if (!settings.requirementsList.check(player, Arguments.of(emptyMap()))) {
             return
         }
 

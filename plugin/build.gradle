@@ -25,6 +25,10 @@ repositories {
         name 'TimeAPI'
         url 'https://repo.piggypiglet.me/releases'
     }
+
+    maven {
+        url 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
 }
 
 dependencies {
@@ -33,6 +37,9 @@ dependencies {
     // Actions
     compileOnly 'me.gabytm.util:actions-core:1.0.0-SNAPSHOT'
     implementation('me.gabytm.util:actions-spigot:1.0.0-SNAPSHOT') { exclude group: 'com.google.guava' }
+
+    // Requirements
+    implementation 'me.gabytm.minecraft.util:requirements-bukkit:1.0.0-SNAPSHOT'
 
     compileOnly('com.github.MilkBowl:VaultAPI:1.7') { transitive false }
 
@@ -62,6 +69,9 @@ dependencies {
 
     // Other dependencies that don't have a repository or the release is old
     compileOnly fileTree(dir: './libs', includes: ['*.jar'])
+
+    // PAPI
+    compileOnly 'me.clip:placeholderapi:2.10.10'
 }
 
 compileKotlin {

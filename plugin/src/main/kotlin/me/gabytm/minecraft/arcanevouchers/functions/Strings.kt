@@ -2,12 +2,15 @@ package me.gabytm.minecraft.arcanevouchers.functions
 
 import com.google.common.base.Enums
 import com.google.common.primitives.Ints
+import me.clip.placeholderapi.PlaceholderAPI
 import me.gabytm.minecraft.arcanevouchers.Constant
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import net.md_5.bungee.api.ChatColor
 import org.apache.commons.lang.StringUtils
+import org.bukkit.Bukkit
 import org.bukkit.Color
+import org.bukkit.OfflinePlayer
 import sh.okx.timeapi.TimeAPI
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
@@ -33,6 +36,14 @@ fun String.mini(removeItalic: Boolean = false): Component {
         EMPTY_COMPONENT_WITHOUT_ITALIC.append(Constant.MINI.deserialize(this))
     } else {
         Constant.MINI.deserialize(this)
+    }
+}
+
+fun String.papi(player: OfflinePlayer?): String {
+    return if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+        PlaceholderAPI.setPlaceholders(player, this)
+    } else {
+        this
     }
 }
 

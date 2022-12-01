@@ -4,6 +4,9 @@ import me.gabytm.minecraft.arcanevouchers.functions.parseTime
 import me.gabytm.minecraft.arcanevouchers.functions.replace
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
 import me.gabytm.minecraft.arcanevouchers.message.Message
+import me.gabytm.minecraft.arcanevouchers.voucher.requirements.ArcaneRequirement
+import me.gabytm.minecraft.arcanevouchers.voucher.requirements.ArcaneRequirementProcessor
+import me.gabytm.minecraft.util.requirements.RequirementsList
 import org.bukkit.World
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
@@ -20,7 +23,8 @@ class VoucherSettings(
     val permissions: Permissions = Permissions(),
     val worlds: Worlds = Worlds(),
     val regions: Regions = Regions(),
-    val bindToReceiver: BindToReceiver = BindToReceiver()
+    val bindToReceiver: BindToReceiver = BindToReceiver(),
+    val requirementsList: RequirementsList<ArcaneRequirement, Player> = RequirementsList(emptyList())
 ) {
 
     data class BulkOpen(
@@ -142,7 +146,7 @@ class VoucherSettings(
 
     companion object {
 
-        fun from(config: ConfigurationSection?): VoucherSettings {
+        fun from(config: ConfigurationSection?, requirementProcessor: ArcaneRequirementProcessor): VoucherSettings {
             if (config == null) {
                 return VoucherSettings()
             }
@@ -212,8 +216,10 @@ class VoucherSettings(
                 SoundWrapper.from(config.getConfigurationSection("bindToReceiver.sound"))
             )
 
+            val requirementsList = requirementProcessor.processRequirements(config.getConfigurationSection("requirements"))
+
             return VoucherSettings(bulkOpen, messages, sounds, confirmationEnabled, limit, cooldown,permissions, worlds,
-                regions, bindToReceiver)
+                regions, bindToReceiver, requirementsList)
         }
 
     }

@@ -36,7 +36,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
             }
 
             val section = vouchersSection.getConfigurationSection(it) ?: continue
-            this.loadedVouchers[it] = Voucher.from(section, plugin.actionManager, plugin.itemCreator)
+            this.loadedVouchers[it] = Voucher.from(section, plugin.actionManager, plugin.itemCreator, plugin.requirementProcessor)
         }
 
         info("Loaded ${this.loadedVouchers.size} voucher(s): ${this.loadedVouchers.keys.joinToString(", ")}")

@@ -10,6 +10,7 @@ import java.nio.file.Files
 
 class Config(plugin: ArcaneVouchers, path: String, isResource: Boolean = true) {
 
+    @Transient
     private val file = File(plugin.dataFolder, path)
     var yaml: YamlConfiguration
         private set
