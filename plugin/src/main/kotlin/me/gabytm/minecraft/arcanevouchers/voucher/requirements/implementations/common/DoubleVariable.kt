@@ -3,7 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.
 import me.gabytm.minecraft.arcanevouchers.functions.papi
 import org.bukkit.entity.Player
 
-class DoubleVariable(val stringValue: String) {
+class DoubleVariable(private val stringValue: String) {
 
     private val numericValue = stringValue.toDoubleOrNull()
 
