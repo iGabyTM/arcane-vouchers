@@ -117,10 +117,11 @@ class Voucher private constructor(
     ) {
         val limitManager = plugin.voucherManager.limitManager
         val vouchers = voucher.amount
-        val hasLimit = this.settings.limit.type != LimitType.NONE
+        val limit = this.settings.limit
+        val hasLimit = limit.enabled && limit.type != LimitType.NONE
 
         if (hasLimit) {
-            debug(player, "[redeem] voucher $id has ${this.settings.limit.type} limit of ${this.settings.limit.limit}")
+            debug(player, "[redeem] voucher $id has ${limit.type} limit of ${limit.limit}")
         }
 
         if (isBulk) {
@@ -135,7 +136,7 @@ class Voucher private constructor(
             if (hasLimit) {
                 val usages = limitManager.getUsages(player.uniqueId, this)
                 // Calculate the usages left
-                val usagesLeft = (this.settings.limit.limit - usages).toInt()
+                val usagesLeft = (limit.limit - usages).toInt()
 
                 debug(player, "[redeem] (bulk) usages = $usages, usagesLeft = $usagesLeft")
 
@@ -162,7 +163,7 @@ class Voucher private constructor(
             // Get how many times the player has used this voucher
             val usages = limitManager.getUsages(player.uniqueId, this)
             // Calculate the usages left
-            val usagesLeft = (this.settings.limit.limit - usages).toInt()
+            val usagesLeft = (limit.limit - usages).toInt()
 
             debug(player, "[redeem] usages = $usages, usagesLeft = $usagesLeft")
 
