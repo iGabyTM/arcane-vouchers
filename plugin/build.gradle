@@ -58,7 +58,7 @@ dependencies {
     implementation 'org.bstats:bstats-bukkit:3.0.0'
 
     // TimeAPI - https://github.com/PiggyPiglet/TimeAPI
-    implementation 'me.piggypiglet:TimeAPI:+'
+    implementation 'sh.okx:TimeAPI:+'
 
     // Other dependencies that don't have a repository or the release is old
     compileOnly fileTree(dir: './libs', includes: ['*.jar'])
