@@ -73,7 +73,7 @@ class NumberRequirement(
             private val VALUES = EnumSet.allOf(Operation::class.java)
 
             fun find(string: String): Operation? {
-                return VALUES.firstOrNull { it.identifier.equals(string, true) }
+                return VALUES.firstOrNull { it.identifier == string }
             }
 
         }
