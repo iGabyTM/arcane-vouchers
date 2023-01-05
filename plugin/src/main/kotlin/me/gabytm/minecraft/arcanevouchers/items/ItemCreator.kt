@@ -18,6 +18,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.LeatherArmorMeta
 import java.util.*
 
 class ItemCreator(plugin: ArcaneVouchers) {
@@ -194,7 +195,8 @@ class ItemCreator(plugin: ArcaneVouchers) {
             return null
         }
 
-        val builder = ItemBuilder.from(parseBaseItem(tokenizer.nextToken().uppercase(), tokenizer.nextToken()) ?: return null)
+        val baseItem = parseBaseItem(tokenizer.nextToken().uppercase(), tokenizer.nextToken()) ?: return null
+        val builder = ItemBuilder.from(baseItem)
 
         while (tokenizer.hasMoreTokens()) {
             val parts = tokenizer.nextToken().split(Constant.Separator.COLON, 2)
@@ -221,6 +223,18 @@ class ItemCreator(plugin: ArcaneVouchers) {
                 "unbreakable" -> builder.unbreakable()
 
                 "model" -> value.toIntOrNull()?.let { builder.model(it) }
+
+                "color" -> {
+                    if (!baseItem.hasItemMeta()) {
+                        continue
+                    }
+
+                    val meta = baseItem.itemMeta ?: continue
+
+                    if (meta is LeatherArmorMeta) {
+                        meta.setColor(value.toColor())
+                    }
+                }
 
                 "nbt" -> {
                     // Take everything that's after 'nbt:'

@@ -39,8 +39,8 @@ general:
     voucher: '{prefix} <red>Unknown voucher <u>{input}</u>.'
 
 give:
-  all: '{prefix} <white>You gave everyone <light_purple>{amount}<white>x <dark_gray>''<r>{voucher}<dark_gray>''<white>.'
-  sender: '{prefix} <white>You gave <light_purple>{receiver} {amount}<white>x <dark_gray>''<r>{voucher}<dark_gray>''<white>.'
+  all: '{prefix} <white>You gave everyone <light_purple>{amount}<white>x <dark_gray>''<reset>{voucher}<dark_gray>''<white>.'
+  sender: '{prefix} <white>You gave <light_purple>{receiver} {amount}<white>x <dark_gray>''<reset>{voucher}<dark_gray>''<white>.'
   usage: '{prefix} <dark_purple>/av give <light_purple>[player/*] [voucher] [amount] <white>(arguments) <dark_gray>- <gray>Give a voucher'
 
 help: |-
