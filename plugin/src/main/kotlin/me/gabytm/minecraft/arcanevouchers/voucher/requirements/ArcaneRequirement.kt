@@ -13,7 +13,9 @@ abstract class ArcaneRequirement(
     negated: Boolean,
     @Transient private val failActions: List<ArcaneAction>,
     @Transient private val actionManager: ArcaneActionManager
-) : Requirement<Player>(name, optional, negated) {
+    // A requirement can not be 'optional' and 'required' at the same time
+    // So we consider a requirement 'required' if it is not 'optional'
+) : Requirement<Player>(name, !optional, optional, negated) {
 
     protected fun papi(player: Player?, string: String): String {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -23,9 +25,9 @@ abstract class ArcaneRequirement(
         return string
     }
 
-    override fun onFail(t: Player?) {
-        if (t != null && failActions.isNotEmpty()) {
-            actionManager.executeActions(t, failActions)
+    override fun onFail(player: Player?) {
+        if (player != null && failActions.isNotEmpty()) {
+            actionManager.executeActions(player, failActions)
         }
     }
 

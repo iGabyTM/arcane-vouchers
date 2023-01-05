@@ -16,7 +16,9 @@ class StringRequirement(
     private val left: String,
     private val right: String,
     private val operation: Operation
-) : ArcaneRequirement(name, optional, negated, failActions, actionManager) {
+) : ArcaneRequirement(
+    name, optional, negated, failActions, actionManager
+) {
 
     override fun check(player: Player?, arguments: Arguments): Boolean {
         return operation.check(papi(player, left), papi(player, right), !negated)

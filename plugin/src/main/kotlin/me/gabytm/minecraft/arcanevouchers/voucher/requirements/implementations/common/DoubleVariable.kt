@@ -3,12 +3,12 @@ package me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.
 import me.gabytm.minecraft.arcanevouchers.functions.papi
 import org.bukkit.entity.Player
 
-class DoubleVariable(private val stringValue: String) {
+data class DoubleVariable(private val stringValue: String) {
 
-    private val numericValue = stringValue.toDoubleOrNull()
+    private val doubleValue = stringValue.toDoubleOrNull()
 
     fun get(player: Player?): Double? {
-        return numericValue ?: stringValue.papi(player).toDoubleOrNull()
+        return doubleValue ?: stringValue.papi(player).toDoubleOrNull()
     }
 
 }

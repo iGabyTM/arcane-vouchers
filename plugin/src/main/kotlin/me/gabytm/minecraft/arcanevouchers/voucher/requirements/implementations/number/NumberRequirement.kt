@@ -18,8 +18,7 @@ class NumberRequirement(
     private val right: DoubleVariable,
     private val operation: Operation
 ) : ArcaneRequirement(
-    name, optional, negated,
-    failActions, actionManager
+    name, optional, negated, failActions, actionManager
 ) {
 
     override fun check(t: Player?, arguments: Arguments): Boolean {
