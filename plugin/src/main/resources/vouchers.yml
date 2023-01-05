@@ -78,3 +78,36 @@ vouchers:
     settings:
       bulkOpen:
         enabled: true
+  #
+  # If the built-in requirements don't fulfill your needs, you can create your own requirements using PlaceholderAPI
+  # placeholders
+  #
+  # ▪ Requirements: https://wiki.gabytm.me/resources/arcane/vouchers/requirements
+  #
+  requirementsExample:
+    item:
+      material: PLAYER_HEAD
+      texture: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjg2OWJkZDlhOGY3N2VlZmY3NWQ4ZjY3ZWQwMzIyYmQ5YzE2ZGQ0OTQ5NzIzMTRlZDcwN2RkMTBhMzEzOWE1OCJ9fX0=
+      name: '<red>Golden Heart'
+      lore:
+        - '<gray><i>Right click to consume and fill your health bar'
+    actions:
+      - '[console] heal %player_name%'
+    settings:
+      requirements:
+        list:
+          #
+          # Each requirement must have a unique name
+          #
+          health:
+            #
+            # Check if player has <= 10 HP
+            #
+            left: '%player_health%'
+            type: '<='
+            right: 10
+            #
+            # If the player has more than 10 HP, send a message
+            #
+            failActions:
+              - '[message] <red>You can only consume a Golden Heart if you have <= 10 HP'
