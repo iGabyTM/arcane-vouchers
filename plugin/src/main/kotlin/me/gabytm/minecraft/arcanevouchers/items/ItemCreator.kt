@@ -224,17 +224,7 @@ class ItemCreator(plugin: ArcaneVouchers) {
 
                 "model" -> value.toIntOrNull()?.let { builder.model(it) }
 
-                "color" -> {
-                    if (!baseItem.hasItemMeta()) {
-                        continue
-                    }
-
-                    val meta = baseItem.itemMeta ?: continue
-
-                    if (meta is LeatherArmorMeta) {
-                        meta.setColor(value.toColor())
-                    }
-                }
+                "color" -> value.toColor()?.let { builder.color(it) }
 
                 "nbt" -> {
                     // Take everything that's after 'nbt:'
