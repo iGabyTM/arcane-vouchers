@@ -17,6 +17,9 @@ abstract class ArcaneRequirement(
     // So we consider a requirement 'required' if it is not 'optional'
 ) : Requirement<Player>(name, !optional, optional, negated) {
 
+    @Suppress("unused")
+    protected val requirementType: String = this::class.java.simpleName
+
     protected fun papi(player: Player?, string: String): String {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             return PlaceholderAPI.setPlaceholders(player, string)
