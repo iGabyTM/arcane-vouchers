@@ -177,7 +177,7 @@ class VoucherSettings(
             )
 
             val cooldown = Cooldown(
-                config.getBoolean("cooldown.allowBulkOpen", true),
+                config.getBoolean("cooldown.enabled", true),
                 (config.getString("cooldown.cooldown") ?: "").parseTime(TimeUnit.MILLISECONDS),
                 Message.create(config.getString("cooldown.message") ?: ""),
                 SoundWrapper.from(config.getConfigurationSection("cooldown.sound"))
