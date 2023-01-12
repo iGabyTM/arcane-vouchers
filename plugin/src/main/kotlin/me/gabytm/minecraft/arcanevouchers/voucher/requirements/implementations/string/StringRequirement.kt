@@ -2,6 +2,7 @@ package me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.
 
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
+import me.gabytm.minecraft.arcanevouchers.functions.papi
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.ArcaneRequirement
 import me.gabytm.minecraft.util.requirements.Arguments
 import org.bukkit.entity.Player
@@ -21,7 +22,7 @@ class StringRequirement(
 ) {
 
     override fun check(player: Player?, arguments: Arguments): Boolean {
-        return operation.check(papi(player, left), papi(player, right), !negated)
+        return operation.check(left.papi(player), right.papi(player), !negated)
     }
 
     @Suppress("unused")

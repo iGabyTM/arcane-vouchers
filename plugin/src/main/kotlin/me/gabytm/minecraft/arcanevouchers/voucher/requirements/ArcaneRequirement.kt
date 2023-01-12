@@ -1,10 +1,8 @@
 package me.gabytm.minecraft.arcanevouchers.voucher.requirements
 
-import me.clip.placeholderapi.PlaceholderAPI
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.util.requirements.Requirement
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 abstract class ArcaneRequirement(
@@ -19,14 +17,6 @@ abstract class ArcaneRequirement(
 
     @Suppress("unused")
     protected val requirementType: String = this::class.java.simpleName
-
-    protected fun papi(player: Player?, string: String): String {
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            return PlaceholderAPI.setPlaceholders(player, string)
-        }
-
-        return string
-    }
 
     override fun onFail(player: Player?) {
         if (player != null && failActions.isNotEmpty()) {
