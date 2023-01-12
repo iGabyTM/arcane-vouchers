@@ -3,7 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.
 import org.bukkit.entity.Player
 
 abstract class Variable<T>(
-    private val transformer: (player: Player?) -> T?
+    @Transient private val transformer: (player: Player?) -> T?
 ) {
 
     @Suppress("unused")
