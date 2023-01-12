@@ -54,6 +54,15 @@ object Constant {
 
     }
 
+    object Requirement {
+
+        const val TYPE: String = "type"
+        const val OPTIONAL: String = "optional"
+        const val NEGATION: Char = '!'
+        const val FAIL_ACTIONS: String = "failActions"
+
+    }
+
     object Separator {
 
         val COLON = Regex(":")
