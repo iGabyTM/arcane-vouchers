@@ -1,6 +1,7 @@
 package me.gabytm.minecraft.arcanevouchers.voucher.requirements
 
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
+import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.location.DistanceRequirementFactory
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.number.NumberRequirementFactory
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.string.StringRequirementFactory
 import me.gabytm.minecraft.util.requirements.RequirementsList
@@ -13,6 +14,9 @@ class ArcaneRequirementProcessor(private val actionManager: ArcaneActionManager)
     private val requirementFactories = mutableSetOf<ArcaneRequirementFactory<out ArcaneRequirement>>()
 
     init {
+        // Location
+        registerFactory(DistanceRequirementFactory())
+
         registerFactory(NumberRequirementFactory())
         registerFactory(StringRequirementFactory())
     }
