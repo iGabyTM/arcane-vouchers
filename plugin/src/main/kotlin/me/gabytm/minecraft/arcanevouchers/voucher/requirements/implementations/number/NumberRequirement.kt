@@ -3,7 +3,7 @@ package me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.ArcaneRequirement
-import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.common.DoubleVariable
+import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.common.variable.DoubleVariable
 import me.gabytm.minecraft.util.requirements.Arguments
 import org.bukkit.entity.Player
 import java.util.*
