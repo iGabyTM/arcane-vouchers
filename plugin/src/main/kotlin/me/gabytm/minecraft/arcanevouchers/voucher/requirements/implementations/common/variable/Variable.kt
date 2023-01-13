@@ -12,4 +12,6 @@ abstract class Variable<T>(
 
     fun get(player: Player?): T? = parsed ?: transformer(player)
 
+    abstract fun warn(player: Player?, requirement: String)
+
 }

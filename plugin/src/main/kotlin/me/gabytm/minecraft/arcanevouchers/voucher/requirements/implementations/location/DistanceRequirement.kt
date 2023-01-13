@@ -26,8 +26,14 @@ class DistanceRequirement(
             return false
         }
 
-        val distance = distanceVariable.get(player) ?: return false
-        val location = locationVariable.get(player) ?: return false
+        val distance = distanceVariable.get(player) ?: kotlin.run {
+            distanceVariable.warn(player, getName())
+            return false
+        }
+        val location = locationVariable.get(player) ?: kotlin.run {
+            locationVariable.warn(player, getName())
+            return false
+        }
 
         if (player.world != location.world) {
             return false

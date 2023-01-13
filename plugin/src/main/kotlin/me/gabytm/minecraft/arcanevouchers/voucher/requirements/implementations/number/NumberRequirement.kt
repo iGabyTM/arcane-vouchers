@@ -21,11 +21,13 @@ class NumberRequirement(
     name, optional, negated, failActions, actionManager
 ) {
 
-    override fun check(t: Player?, arguments: Arguments): Boolean {
-        val leftNumber = left.get(t)
-        val rightNumber = right.get(t)
-
-        if (leftNumber == null || rightNumber == null) {
+    override fun check(player: Player?, arguments: Arguments): Boolean {
+        val leftNumber = left.get(player) ?: kotlin.run {
+            left.warn(player, getName())
+            return false
+        }
+        val rightNumber = right.get(player) ?: kotlin.run {
+            right.warn(player, getName())
             return false
         }
 
