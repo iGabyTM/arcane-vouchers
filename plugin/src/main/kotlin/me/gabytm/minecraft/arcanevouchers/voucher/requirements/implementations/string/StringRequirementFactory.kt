@@ -2,6 +2,7 @@ package me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.
 
 import me.gabytm.minecraft.arcanevouchers.Constant.Requirement
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
+import me.gabytm.minecraft.arcanevouchers.functions.warning
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.ArcaneRequirementFactory
 import org.bukkit.configuration.ConfigurationSection
 
@@ -27,8 +28,14 @@ class StringRequirementFactory : ArcaneRequirementFactory<StringRequirement>() {
         }
 
         val operation = StringRequirement.Operation.find(type) ?: return null
-        val left = source.getString("left") ?: return null
-        val right = source.getString("right") ?: return null
+        val left = source.getString("left") ?: kotlin.run {
+            warning("Could not load '${operation.identifier}' requirement from ${source.currentPath}: missing required property 'left'")
+            return null
+        }
+        val right = source.getString("right") ?: kotlin.run {
+            warning("Could not load '${operation.identifier}' requirement from ${source.currentPath}: missing required property 'right'")
+            return null
+        }
         val failActions = actionManager.parseActions(source.getStringList(Requirement.FAIL_ACTIONS))
         return StringRequirement(source.name, optional, negated, failActions, actionManager, left, right, operation)
     }

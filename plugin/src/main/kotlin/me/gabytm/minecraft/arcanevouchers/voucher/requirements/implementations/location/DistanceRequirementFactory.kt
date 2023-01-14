@@ -2,6 +2,7 @@ package me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.
 
 import me.gabytm.minecraft.arcanevouchers.Constant.Requirement
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
+import me.gabytm.minecraft.arcanevouchers.functions.warning
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.ArcaneRequirementFactory
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.common.variable.DoubleVariable
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.common.variable.LocationVariable
@@ -24,8 +25,18 @@ class DistanceRequirementFactory : ArcaneRequirementFactory<DistanceRequirement>
         val negated = type.startsWith(Requirement.NEGATION)
         val optional = source.getBoolean(Requirement.OPTIONAL)
 
-        val location = LocationVariable(source.getString("location") ?: return null)
-        val distance = DoubleVariable(source.getString("distance") ?: return null)
+        val location = LocationVariable(
+            source.getString("location") ?: kotlin.run {
+                warning("Could not load 'distance' requirement from ${source.currentPath}: missing required property 'location'")
+                return null
+            }
+        )
+        val distance = DoubleVariable(
+            source.getString("distance") ?: kotlin.run {
+                warning("Could not load 'distance' requirement from ${source.currentPath}: missing required property 'distance'")
+                return null
+            }
+        )
         val failActions = actionManager.parseActions(source.getStringList(Requirement.FAIL_ACTIONS))
         return DistanceRequirement(source.name, optional, negated, failActions, actionManager, location, distance)
     }

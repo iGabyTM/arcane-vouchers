@@ -26,7 +26,7 @@ class StringRequirement(
     }
 
     @Suppress("unused")
-    enum class Operation(private val identifier: String) {
+    enum class Operation(val identifier: String) {
 
         EQUALS("string equals") {
             override fun check(left: String?, right: String?, negated: Boolean): Boolean {

@@ -35,7 +35,7 @@ class NumberRequirement(
     }
 
     @Suppress("unused")
-    enum class Operation(private val identifier: String) {
+    enum class Operation(val identifier: String) {
 
         EQUAL("==") {
             override fun check(left: Double, right: Double, negated: Boolean): Boolean {

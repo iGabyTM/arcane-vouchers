@@ -2,6 +2,7 @@ package me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.
 
 import me.gabytm.minecraft.arcanevouchers.Constant.Requirement
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
+import me.gabytm.minecraft.arcanevouchers.functions.warning
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.ArcaneRequirementFactory
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.common.variable.DoubleVariable
 import org.bukkit.configuration.ConfigurationSection
@@ -27,9 +28,20 @@ class NumberRequirementFactory : ArcaneRequirementFactory<NumberRequirement>() {
             type = type.substring(1)
         }
 
+        // Not adding a warning for this because it won't get to this point if the factory couldn't find an Operation
         val operation = NumberRequirement.Operation.find(type) ?: return null
-        val left = DoubleVariable(source.getString("left") ?: return null)
-        val right = DoubleVariable(source.getString("right") ?: return null)
+        val left = DoubleVariable(
+            source.getString("left") ?: kotlin.run {
+                warning("Could not load '${operation.identifier}' requirement from ${source.currentPath}: missing required property 'left'")
+                return null
+            }
+        )
+        val right = DoubleVariable(
+            source.getString("right") ?: kotlin.run {
+                warning("Could not load '${operation.identifier}' requirement from ${source.currentPath}: missing required property 'right'")
+                return null
+            }
+        )
         val failActions = actionManager.parseActions(source.getStringList(Requirement.FAIL_ACTIONS))
         return NumberRequirement(source.name, optional, negated, failActions, actionManager, left, right, operation)
     }
