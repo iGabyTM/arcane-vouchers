@@ -101,7 +101,7 @@ vouchers:
           #
           health:
             #
-            # Check if player has <= 10 HP
+            # Check if player has ≤ 10 HP
             #
             left: '%player_health%'
             type: '<='
