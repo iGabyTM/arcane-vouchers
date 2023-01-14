@@ -8,6 +8,14 @@ import org.bukkit.configuration.ConfigurationSection
 
 class StringRequirementFactory : ArcaneRequirementFactory<StringRequirement>() {
 
+    private fun warnMissingProperty(
+        operation: StringRequirement.Operation,
+        source: ConfigurationSection,
+        property: String
+    ) {
+        warning("Could not load '${operation.identifier}' requirement from ${source.currentPath}: missing required property '${property}'")
+    }
+
     override fun matches(source: ConfigurationSection): Boolean {
         var type = source.getString(Requirement.TYPE)?.trim() ?: return false
 
@@ -29,11 +37,11 @@ class StringRequirementFactory : ArcaneRequirementFactory<StringRequirement>() {
 
         val operation = StringRequirement.Operation.find(type) ?: return null
         val left = source.getString("left") ?: kotlin.run {
-            warning("Could not load '${operation.identifier}' requirement from ${source.currentPath}: missing required property 'left'")
+            warnMissingProperty(operation, source, "left")
             return null
         }
         val right = source.getString("right") ?: kotlin.run {
-            warning("Could not load '${operation.identifier}' requirement from ${source.currentPath}: missing required property 'right'")
+            warnMissingProperty(operation, source, "right")
             return null
         }
         val failActions = actionManager.parseActions(source.getStringList(Requirement.FAIL_ACTIONS))

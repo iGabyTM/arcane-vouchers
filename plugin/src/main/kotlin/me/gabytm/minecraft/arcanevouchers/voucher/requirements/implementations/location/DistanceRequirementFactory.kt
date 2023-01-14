@@ -10,6 +10,10 @@ import org.bukkit.configuration.ConfigurationSection
 
 class DistanceRequirementFactory : ArcaneRequirementFactory<DistanceRequirement>() {
 
+    private fun warnMissingProperty(source: ConfigurationSection, property: String) {
+        warning("Could not load '${DistanceRequirement.TYPE}' requirement from ${source.currentPath}: missing required property '${property}'")
+    }
+
     override fun matches(source: ConfigurationSection): Boolean {
         var type = source.getString(Requirement.TYPE)?.trim() ?: return false
 
@@ -27,13 +31,13 @@ class DistanceRequirementFactory : ArcaneRequirementFactory<DistanceRequirement>
 
         val location = LocationVariable(
             source.getString("location") ?: kotlin.run {
-                warning("Could not load 'distance' requirement from ${source.currentPath}: missing required property 'location'")
+                warnMissingProperty(source, "location")
                 return null
             }
         )
         val distance = DoubleVariable(
             source.getString("distance") ?: kotlin.run {
-                warning("Could not load 'distance' requirement from ${source.currentPath}: missing required property 'distance'")
+                warnMissingProperty(source, "distance")
                 return null
             }
         )
