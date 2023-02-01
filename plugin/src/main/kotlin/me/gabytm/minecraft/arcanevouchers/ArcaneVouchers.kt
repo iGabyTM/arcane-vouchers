@@ -12,6 +12,7 @@ import me.gabytm.minecraft.arcanevouchers.listeners.VoucherUseListener
 import me.gabytm.minecraft.arcanevouchers.message.Lang
 import me.gabytm.minecraft.arcanevouchers.other.ResourcesHandler
 import me.gabytm.minecraft.arcanevouchers.voucher.VoucherManager
+import me.gabytm.minecraft.arcanevouchers.voucher.requirements.ArcaneRequirementProcessor
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -29,6 +30,7 @@ class ArcaneVouchers : JavaPlugin() {
     lateinit var actionManager: ArcaneActionManager private set
     lateinit var itemCreator: ItemCreator private set
     lateinit var voucherManager: VoucherManager private set
+    lateinit var requirementProcessor: ArcaneRequirementProcessor private set
 
     private fun sendLogo() {
         with (description) {
@@ -62,6 +64,7 @@ class ArcaneVouchers : JavaPlugin() {
         this.actionManager = ArcaneActionManager(this)
         this.itemCreator = ItemCreator(this)
         this.voucherManager = VoucherManager(this)
+        this.requirementProcessor = ArcaneRequirementProcessor(actionManager)
 
         reload()
         CommandManager(this) // register the commands

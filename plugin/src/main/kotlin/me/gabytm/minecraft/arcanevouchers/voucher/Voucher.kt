@@ -11,6 +11,7 @@ import me.gabytm.minecraft.arcanevouchers.functions.debug
 import me.gabytm.minecraft.arcanevouchers.functions.item
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
+import me.gabytm.minecraft.arcanevouchers.voucher.requirements.ArcaneRequirementProcessor
 import me.gabytm.minecraft.arcanevouchers.voucher.settings.VoucherSettings
 import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
@@ -179,9 +180,12 @@ class Voucher private constructor(
 
     companion object {
 
-        fun from(config: ConfigurationSection, actionManager: ArcaneActionManager, itemCreator: ItemCreator): Voucher {
+        fun from(
+            config: ConfigurationSection, actionManager: ArcaneActionManager,
+            itemCreator: ItemCreator, requirementProcessor: ArcaneRequirementProcessor
+        ): Voucher {
             val id = config.name
-            val settings = VoucherSettings.from(config.getConfigurationSection("settings"))
+            val settings = VoucherSettings.from(config.getConfigurationSection("settings"), requirementProcessor)
             val item = itemCreator.create(true, config.getConfigurationSection("item"), Material.PAPER).apply {
                 val nbtItem = NBTItem(this, true)
                 val compound = nbtItem.getOrCreateCompound(NBT.VOUCHER_COMPOUND)

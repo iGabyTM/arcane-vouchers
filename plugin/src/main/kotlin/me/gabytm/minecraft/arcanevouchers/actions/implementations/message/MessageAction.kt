@@ -19,6 +19,7 @@ class MessageAction(meta: ActionMeta<Player>, handler: PermissionHandler) : Arca
     private val messageType: MessageType = meta.getProperty("type", MessageType.CHAT) { MessageType.find(it) }
     private val broadcast: Broadcast = Broadcast.parse(meta.properties["broadcast"])
 
+    @Transient
     private val times: Title.Times = Title.Times.times(
         parseDuration("fadeIn", Title.DEFAULT_TIMES.fadeIn()),
         parseDuration("stay", Title.DEFAULT_TIMES.stay()),

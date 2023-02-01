@@ -6,6 +6,9 @@ import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.commands.ArcaneCommand
 import me.gabytm.minecraft.arcanevouchers.functions.exception
+import me.gabytm.minecraft.arcanevouchers.io.serializers.java.PatternSerializer
+import me.gabytm.minecraft.arcanevouchers.io.serializers.adventure.TextComponentSerializer
+import me.gabytm.minecraft.arcanevouchers.io.serializers.bukkit.LocationSerializer
 import me.gabytm.minecraft.arcanevouchers.message.implementations.ActionBarMessage
 import me.gabytm.minecraft.arcanevouchers.message.implementations.ChatMessage
 import me.gabytm.minecraft.arcanevouchers.message.implementations.TitleMessage
@@ -14,8 +17,8 @@ import me.gabytm.minecraft.arcanevouchers.voucher.settings.VoucherSettings
 import me.mattstudios.mf.annotations.Permission
 import me.mattstudios.mf.annotations.SubCommand
 import net.kyori.adventure.text.TextComponent
-import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import java.io.IOException
 import java.io.InputStreamReader
@@ -42,6 +45,7 @@ class DebugCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
             .registerTypeAdapter(TextComponent::class.java, TextComponentSerializer())
             .registerTypeAdapter(Voucher::class.java, VoucherSerializer.INSTANCE)
             .registerTypeAdapter(Pattern::class.java, PatternSerializer())
+            .registerTypeAdapter(Location::class.java, LocationSerializer.INSTANCE)
             // Messages
             .registerTypeAdapter(ActionBarMessage::class.java, ActionBarMessage.Serializer.INSTANCE)
             .registerTypeAdapter(ChatMessage::class.java, ChatMessage.Serializer.INSTANCE)
@@ -152,22 +156,6 @@ class DebugCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
 
         companion object {
             val INSTANCE = VoucherSerializer()
-        }
-
-    }
-
-    internal class TextComponentSerializer : JsonSerializer<TextComponent> {
-
-        override fun serialize(src: TextComponent?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
-            return if (src == null) JsonNull.INSTANCE else JsonPrimitive(MiniMessage.miniMessage().serialize(src))
-        }
-
-    }
-
-    internal class PatternSerializer : JsonSerializer<Pattern> {
-
-        override fun serialize(src: Pattern?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
-            return JsonPrimitive(src?.pattern())
         }
 
     }

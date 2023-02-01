@@ -9,6 +9,7 @@ import me.gabytm.minecraft.arcanevouchers.functions.warning
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.sound.Sound
 import org.bukkit.Bukkit
+import org.bukkit.DyeColor
 import org.bukkit.Material
 import org.bukkit.block.banner.PatternType
 import org.bukkit.configuration.file.YamlConfiguration
@@ -47,7 +48,7 @@ class ResourcesHandler(plugin: ArcaneVouchers) {
         }
 
         create("DyeColors") {
-            it["list"] = Constant.NAMED_COLORS.keys.toList().sorted()
+            it["list"] = DyeColor.values().map { it.name }.sorted()
         }
 
         // For some reason, on versions <= 1.12.2, the first value of the array is null (???)
