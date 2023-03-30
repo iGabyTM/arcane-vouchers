@@ -98,7 +98,7 @@ shadowJar {
     ].each { relocate(it.key, project.group + '.arcanevouchers.libs.' + it.value) }
 }
 
-task copyToServer(type: Copy) {
+tasks.register('copyToServer', Copy) {
     if (testServerVersion == '') {
         from shadowJar
         into '../server/plugins'
