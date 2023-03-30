@@ -47,8 +47,8 @@ class ResourcesHandler(plugin: ArcaneVouchers) {
             it["list"] = Constant.NAMED_COLORS.keys.toList().sorted()
         }
 
-        create("DyeColors") {
-            it["list"] = DyeColor.values().map { it.name }.sorted()
+        create("DyeColors") { yaml ->
+            yaml["list"] = DyeColor.values().map { it.name }.sorted()
         }
 
         // For some reason, on versions <= 1.12.2, the first value of the array is null (???)
