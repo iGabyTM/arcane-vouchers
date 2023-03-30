@@ -25,7 +25,7 @@ import java.util.*
 class ResourcesHandler(plugin: ArcaneVouchers) {
 
     private val resourcesFolder = File(plugin.dataFolder, ".RESOURCES")
-    private val time = SimpleDateFormat("dd MMM yyyy, HH:mm z").format(Date())
+    private val time = SimpleDateFormat("dd MMM yyyy, HH:mm").format(Date())
 
     init {
         resourcesFolder.mkdirs()
@@ -76,13 +76,16 @@ class ResourcesHandler(plugin: ArcaneVouchers) {
             yaml["list"] = PatternType.values().map { it.name }
         }
 
-        create("Sounds") {
+        create(
+            "Sounds",
+            "The sounds are formatted as '<Bukkit name> <Minecraft key>' for an easier search, the plugin accepts only the Minecraft key"
+        ) {
             it["sounds"] = getSounds()
             it["sources"] = Sound.Source.NAMES.keys().sorted().toList()
         }
     }
 
-    private fun create(fileName: String, action: (YamlConfiguration) -> Unit) {
+    private fun create(fileName: String, comment: String = "", action: (YamlConfiguration) -> Unit) {
         val file = File(resourcesFolder, "$fileName.yml")
 
         try {
@@ -93,7 +96,7 @@ class ResourcesHandler(plugin: ArcaneVouchers) {
 
         val yaml = YamlConfiguration.loadConfiguration(file)
         yaml.options()
-            .header("\nHelpful lists of data generated for Minecraft ${Bukkit.getBukkitVersion()} at $time\n ")
+            .header("\nHelpful lists of data generated for Minecraft ${Bukkit.getBukkitVersion()} at $time\n$comment\n ")
         action(yaml)
 
         try {
@@ -141,9 +144,12 @@ class ResourcesHandler(plugin: ArcaneVouchers) {
         }
     }
 
+    /**
+     * Get all the sounds available in the current version formatted as `<Bukkit Name> <Minecraft Key>`
+     */
     private fun getSounds(): List<String> {
         return if (ServerVersion.HAS_KEYS) {
-            org.bukkit.Sound.values().map { it.key.toString() }
+            org.bukkit.Sound.values().map { sound -> "$sound ${sound.key}" }
         } else if (ServerVersion.HAS_OFF_HAND) {
             // On 1.9 - 1.12.2, each Sound has a minecraftKey field
             try {
@@ -151,7 +157,7 @@ class ResourcesHandler(plugin: ArcaneVouchers) {
                 val minecraftKeyField = craftSound.getDeclaredField("minecraftKey")
                 minecraftKeyField.isAccessible = true
 
-                craftSound.enumConstants.map { minecraftKeyField.get(it) as String }
+                craftSound.enumConstants.map { sound -> "$sound ${minecraftKeyField.get(sound) as String}" }
             } catch (e: ReflectiveOperationException) {
                 exception("Could not retrieve sounds", e)
                 emptyList()
@@ -164,7 +170,8 @@ class ResourcesHandler(plugin: ArcaneVouchers) {
                 soundsField.isAccessible = true
 
                 @Suppress("UNCHECKED_CAST")
-                (soundsField.get(null) as Array<String>).toList()
+                val keys = soundsField.get(null) as Array<String>
+                org.bukkit.Sound.values().mapIndexed { i, sound -> "$sound ${keys[i]}" }
             } catch (e: ReflectiveOperationException) {
                 exception("Could not retrieve sounds", e)
                 emptyList()
