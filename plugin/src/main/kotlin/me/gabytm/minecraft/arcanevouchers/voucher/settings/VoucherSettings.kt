@@ -153,7 +153,7 @@ class VoucherSettings(
 
             val bulkOpen = BulkOpen(
                 config.getBoolean("bulkOpen.enabled"),
-                max(1, config.getInt("bulkOpen.limit"))
+                config.getInt("bulkOpen.limit", 64)
             )
 
             val messages = Messages(
