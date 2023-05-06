@@ -1,15 +1,20 @@
 package me.gabytm.minecraft.arcanevouchers.voucher.requirements
 
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
+import me.gabytm.minecraft.arcanevouchers.compatibility.CompatibilityHandler
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.location.DistanceRequirementFactory
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.number.NumberRequirementFactory
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.string.StringRequirementFactory
+import me.gabytm.minecraft.arcanevouchers.voucher.requirements.implementations.worldguard.WorldGuardRequirementFactory
 import me.gabytm.minecraft.util.requirements.RequirementsList
 import me.gabytm.minecraft.util.requirements.bukkit.BukkitRequirementProcessor
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 
-class ArcaneRequirementProcessor(private val actionManager: ArcaneActionManager) : BukkitRequirementProcessor<Player>() {
+class ArcaneRequirementProcessor(
+    private val actionManager: ArcaneActionManager,
+    compatibilityHandler: CompatibilityHandler
+) : BukkitRequirementProcessor<Player>() {
 
     private val requirementFactories = mutableSetOf<ArcaneRequirementFactory<out ArcaneRequirement>>()
 
@@ -19,6 +24,10 @@ class ArcaneRequirementProcessor(private val actionManager: ArcaneActionManager)
 
         registerFactory(NumberRequirementFactory())
         registerFactory(StringRequirementFactory())
+
+        if (compatibilityHandler.hasWorldGuardSupport) {
+            registerFactory(WorldGuardRequirementFactory(compatibilityHandler.worldGuardCompatibility))
+        }
     }
 
     private fun createRequirement(source: ConfigurationSection): ArcaneRequirement? {

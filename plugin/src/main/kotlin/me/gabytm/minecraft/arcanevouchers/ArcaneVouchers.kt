@@ -64,7 +64,7 @@ class ArcaneVouchers : JavaPlugin() {
         this.actionManager = ArcaneActionManager(this)
         this.itemCreator = ItemCreator(this)
         this.voucherManager = VoucherManager(this)
-        this.requirementProcessor = ArcaneRequirementProcessor(actionManager)
+        this.requirementProcessor = ArcaneRequirementProcessor(this.actionManager, this.compatibilityHandler)
 
         reload()
         CommandManager(this) // register the commands

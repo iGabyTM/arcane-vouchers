@@ -4,9 +4,11 @@ import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.compatibility.worldguard.WorldGuard6Compatibility
 import me.gabytm.minecraft.arcanevouchers.compatibility.worldguard.WorldGuard7Compatibility
 import me.gabytm.minecraft.arcanevouchers.compatibility.worldguard.WorldGuardCompatibility
+import me.gabytm.minecraft.arcanevouchers.functions.info
+import me.gabytm.minecraft.arcanevouchers.functions.warning
 import org.bukkit.Bukkit
 
-class CompatibilityHandler(plugin: ArcaneVouchers) {
+class CompatibilityHandler(private val plugin: ArcaneVouchers) {
 
     /**
      * **ALWAYS** check if [hasWorldGuardSupport] is true before accessing [worldGuardCompatibility]
@@ -22,11 +24,11 @@ class CompatibilityHandler(plugin: ArcaneVouchers) {
                 version.startsWith("6.") -> WorldGuard6Compatibility()
                 version.startsWith("7.") -> WorldGuard7Compatibility()
                 else -> {
-                    plugin.logger.warning("Found an unsupported WorldGuard version, $version")
+                    warning("Found an unsupported WorldGuard version, $version")
                     null
                 }
             }?.let {
-                plugin.logger.info("Added support for WorldGuard v${version[0]} ($version)")
+                info("Added support for WorldGuard v${version[0]} ($version)")
                 this.hasWorldGuardSupport = true
                 this.worldGuardCompatibility = it
             }
