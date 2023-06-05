@@ -70,6 +70,7 @@ class ConfirmationGui(private val plugin: ArcaneVouchers) {
             .disableAllInteractions()
             .create()
 
+        gui.setDefaultClickAction { it.isCancelled = true }
         this.otherButtons.forEach { gui.setItem(it.slots, it.item) }
 
         gui.setItem(this.cancelButton.slots, this.cancelButton.item)
