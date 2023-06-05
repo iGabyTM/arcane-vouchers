@@ -8,6 +8,7 @@ import me.gabytm.minecraft.arcanevouchers.cooldown.CooldownManager
 import me.gabytm.minecraft.arcanevouchers.functions.*
 import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
 import me.gabytm.minecraft.arcanevouchers.message.Lang
+import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.*
@@ -67,27 +68,27 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         compound.setReceiverUUID(player.uniqueId)
         // -----
 
-        if (argsMap.isEmpty()) {
-            val item = nbt.item
-            item.amount = amount
-            return item;
-        }
-
-        val item = ItemBuilder.from(nbt.item).amount(amount)
+        val itemBuilder = ItemBuilder.from(nbt.item).amount(amount)
 
         // Replace the arguments on item name and lore
-        val placeholders = argsMap.keys.toTypedArray()
+        val arguments = argsMap.keys.toTypedArray()
         val values = argsMap.values.toTypedArray()
 
+        val transformer: (String) -> Component = {
+            it.replace(arguments, values) // Replace arguments
+                .papi(player) // Set PAPI placeholders
+                .mini(true) // Parse mini tags
+        }
+
         if (voucher.itemName.isNotBlank()) {
-            item.name(voucher.itemName.replace(placeholders, values).mini(true))
+            itemBuilder.name(transformer(voucher.itemName))
         }
 
         if (voucher.itemLore.isNotEmpty()) {
-            item.lore(voucher.itemLore.map { it.replace(placeholders, values).mini(true) })
+            itemBuilder.lore(voucher.itemLore.map(transformer))
         }
 
-        return item.build()
+        return itemBuilder.build()
     }
 
     fun giveVoucher(player: Player, voucher: Voucher, amount: Int, args: Array<String>) {
