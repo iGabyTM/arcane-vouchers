@@ -44,12 +44,13 @@ dependencies {
     compileOnly('com.github.MilkBowl:VaultAPI:1.7') { transitive false }
 
     // NBT
-    compileOnly 'de.tr7zw:item-nbt-api-plugin:2.11.2'
+    compileOnly 'de.tr7zw:item-nbt-api-plugin:2.11.3'
 
     // Adventure
-    implementation 'net.kyori:adventure-api:4.13.0'
+    def adventureVersion = '4.14.0'
+    implementation "net.kyori:adventure-api:$adventureVersion"
     implementation 'net.kyori:adventure-platform-bukkit:4.3.0'
-    implementation 'net.kyori:adventure-text-minimessage:4.13.0'
+    implementation "net.kyori:adventure-text-minimessage:$adventureVersion"
 
     // GUis and commands
     implementation 'dev.triumphteam:triumph-gui:3.1.5'
