@@ -6,6 +6,8 @@ import me.clip.placeholderapi.PlaceholderAPI
 import me.gabytm.minecraft.arcanevouchers.Constant
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
+import net.kyori.adventure.text.minimessage.ParsingException
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.md_5.bungee.api.ChatColor
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
@@ -31,11 +33,16 @@ fun String.replace(placeholders: Array<String>, values: Array<String>): String {
     return StringUtils.replaceEach(this, placeholders, values)
 }
 
-fun String.mini(removeItalic: Boolean = false): Component {
-    return if (removeItalic) {
-        EMPTY_COMPONENT_WITHOUT_ITALIC.append(Constant.MINI.deserialize(this))
-    } else {
-        Constant.MINI.deserialize(this)
+fun String.mini(removeItalic: Boolean = false, vararg tagResolver: TagResolver): Component {
+    return try {
+        if (removeItalic) {
+            EMPTY_COMPONENT_WITHOUT_ITALIC.append(Constant.MINI.deserialize(this, *tagResolver))
+        } else {
+            Constant.MINI.deserialize(this, *tagResolver)
+        }
+    } catch (e: ParsingException) {
+        exception("Could not parse '$this'", e)
+        return Component.text(this)
     }
 }
 

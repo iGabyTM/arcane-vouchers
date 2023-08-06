@@ -8,6 +8,7 @@ import me.gabytm.minecraft.arcanevouchers.cooldown.CooldownManager
 import me.gabytm.minecraft.arcanevouchers.functions.*
 import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
 import me.gabytm.minecraft.arcanevouchers.message.Lang
+import me.gabytm.minecraft.arcanevouchers.util.PapiMiniMessageTag
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -77,7 +78,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         val transformer: (String) -> Component = {
             it.replace(arguments, values) // Replace arguments
                 .papi(player) // Set PAPI placeholders
-                .mini(true) // Parse mini tags
+                .mini(true, PapiMiniMessageTag(player)) // Parse mini tags
         }
 
         if (voucher.itemName.isNotBlank()) {
