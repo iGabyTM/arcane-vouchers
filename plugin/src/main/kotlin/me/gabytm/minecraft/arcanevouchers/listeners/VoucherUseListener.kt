@@ -123,8 +123,8 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             return
         }
 
-        val compound = nbt.getCompound(NBT.VOUCHER_COMPOUND)
-        val voucherId = compound.getString(NBT.VOUCHER_NAME)
+        val compound = nbt.getCompound(NBT.VOUCHER_COMPOUND) ?: return
+        val voucherId = compound.getString(NBT.VOUCHER_NAME) ?: return
         val voucher = voucherManager.getVoucher(voucherId) ?: return // it was probably removed from config
         val settings = voucher.settings
 
@@ -138,7 +138,7 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
 
         this.isCancelled = true
 
-        val args = compound.getCompound(NBT.ARGUMENTS_COMPOUND).getArgs()
+        val args = compound.getCompound(NBT.ARGUMENTS_COMPOUND)?.getArgs() ?: mutableMapOf()
         val (placeholders, values) = args
 
         val audience = audiences.player(this.player)
