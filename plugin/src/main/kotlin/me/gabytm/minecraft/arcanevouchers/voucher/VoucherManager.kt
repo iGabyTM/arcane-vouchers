@@ -78,7 +78,7 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         val transformer: (String) -> Component = {
             it.replace(arguments, values) // Replace arguments
                 .papi(player) // Set PAPI placeholders
-                .mini(true, PapiMiniMessageTag(player)) // Parse mini tags
+                .mini(true, setOf(PapiMiniMessageTag(player))) // Parse mini tags
         }
 
         if (voucher.itemName.isNotBlank()) {

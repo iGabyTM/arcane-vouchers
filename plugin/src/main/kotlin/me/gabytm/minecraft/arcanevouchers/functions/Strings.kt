@@ -33,12 +33,17 @@ fun String.replace(placeholders: Array<String>, values: Array<String>): String {
     return StringUtils.replaceEach(this, placeholders, values)
 }
 
-fun String.mini(removeItalic: Boolean = false, vararg tagResolver: TagResolver): Component {
+fun String.mini(removeItalic: Boolean = false, customTagResolvers: Set<TagResolver> = emptySet()): Component {
+    val allTagResolvers = TagResolver.builder()
+        .resolvers(TagResolver.standard())
+        .resolvers(customTagResolvers)
+        .build()
+
     return try {
         if (removeItalic) {
-            EMPTY_COMPONENT_WITHOUT_ITALIC.append(Constant.MINI.deserialize(this, *tagResolver))
+            EMPTY_COMPONENT_WITHOUT_ITALIC.append(Constant.MINI.deserialize(this, allTagResolvers))
         } else {
-            Constant.MINI.deserialize(this, *tagResolver)
+            Constant.MINI.deserialize(this, allTagResolvers)
         }
     } catch (e: ParsingException) {
         exception("Could not parse '$this'", e)

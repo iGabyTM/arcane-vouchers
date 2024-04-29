@@ -1,15 +1,15 @@
 package me.gabytm.minecraft.arcanevouchers
 
 import org.bukkit.Bukkit
+import org.bukkit.Server
 import java.util.regex.Pattern
 
 /**
- * @author [Matt (@ipsk)](https://github.com/ipsk)
+ * @author [Matt (@LichtHund)](https://github.com/LichtHund)
  */
 object ServerVersion {
 
     private val VERSION = getCurrentVersion()
-    private val NMS_VERSION = Bukkit.getServer().javaClass.`package`.name.substringAfterLast('.')
 
     private const val V_1_8 = 1_8_0
     private const val V_1_9 = 1_9_0
@@ -17,7 +17,7 @@ object ServerVersion {
 
     val CURRENT = getCurrentVersionAsString()
 
-    val IS_VERY_OLD = VERSION.toString().startsWith("17")
+    val IS_VERY_OLD = CURRENT.startsWith("1.7")
     val IS_ANCIENT = VERSION <= V_1_8
 
     /**
@@ -61,7 +61,7 @@ object ServerVersion {
      */
     private fun getCurrentVersion(): Int {
         // No need to cache since will only run once
-        val matcher = Pattern.compile("(?<version>\\d+\\.\\d+)(?<patch>\\.\\d+)?").matcher(Bukkit.getBukkitVersion())
+        val matcher = Pattern.compile("(?<version>\\d+\\.\\d+)(?<patch>\\.\\d+)?").matcher(getMinecraftVersion())
 
         return buildString {
             if (matcher.find()) {
@@ -72,8 +72,18 @@ object ServerVersion {
     }
 
     private fun getCurrentVersionAsString(): String {
-        val matcher = Pattern.compile("\\d+\\.\\d+(?:\\.\\d+)?").matcher(Bukkit.getBukkitVersion())
+        val matcher = Pattern.compile("\\d+\\.\\d+(?:\\.\\d+)?").matcher(getMinecraftVersion())
         return if (matcher.find()) matcher.group() else "unknown"
+    }
+
+    private fun getMinecraftVersion(): String {
+        try {
+            // Paper method
+            val method = Server::class.java.getDeclaredMethod("getMinecraftVersion")
+            return method.invoke(Bukkit.getServer()) as String
+        } catch (ignored: NoSuchMethodError) {
+            return Bukkit.getServer().javaClass.`package`.name.substringAfterLast('.');
+        }
     }
 
     /**
@@ -83,7 +93,7 @@ object ServerVersion {
      */
     @Throws(ClassNotFoundException::class)
     fun getCraftClass(name: String): Class<*> {
-        return Class.forName("org.bukkit.craftbukkit.$NMS_VERSION.$name")
+        return Class.forName("${Bukkit.getServer().javaClass.`package`.name}.$name")
     }
 
 }
