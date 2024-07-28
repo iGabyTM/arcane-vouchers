@@ -89,7 +89,7 @@ object ServerVersion {
             val method = Server::class.java.getDeclaredMethod("getMinecraftVersion")
             return method.invoke(Bukkit.getServer()) as String
         } catch (ignored: NoSuchMethodException) {
-            // Version is formatted as 'minor.major.patch-R0.1-SNAPSHOT'
+            // Version is formatted as 'major.minor.patch-R0.1-SNAPSHOT'
             return Bukkit.getServer().bukkitVersion.split('-')[0]
         }
     }
