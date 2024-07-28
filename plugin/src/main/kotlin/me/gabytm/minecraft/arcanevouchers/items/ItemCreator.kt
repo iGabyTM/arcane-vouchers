@@ -1,7 +1,8 @@
 package me.gabytm.minecraft.arcanevouchers.items
 
+import com.google.common.collect.ImmutableMultimap
+import de.tr7zw.nbtapi.NBT
 import de.tr7zw.nbtapi.NBTContainer
-import de.tr7zw.nbtapi.NBTItem
 import de.tr7zw.nbtapi.NbtApiException
 import dev.triumphteam.gui.builder.item.BaseItemBuilder
 import dev.triumphteam.gui.builder.item.ItemBuilder
@@ -18,7 +19,6 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.LeatherArmorMeta
 import java.util.*
 
 class ItemCreator(plugin: ArcaneVouchers) {
@@ -87,10 +87,18 @@ class ItemCreator(plugin: ArcaneVouchers) {
             .flags(*flags)
             .build()
 
+        // The HIDE_ATTRIBUTES flag requires additional logic starting with 1.20.5
+        if (flags.contains(ItemFlag.HIDE_ATTRIBUTES) && ServerVersion.HAS_ITEM_COMPONENTS) {
+            val meta = item.itemMeta ?: return item
+            meta.attributeModifiers = ImmutableMultimap.of()
+            item.itemMeta = meta
+        }
+
         if (isVoucher) {
             // Get the JSON of this voucher
             val nbt = nbtHandler.getNbt(config.parent?.name ?: "") ?: return item
-            return NBTItem(item).apply { mergeCompound(NBTContainer(nbt)) }.item
+            NBT.modify(item) { itemNbt -> itemNbt.mergeCompound(NBTContainer(nbt)) }
+            return item
         }
 
         return item
@@ -232,7 +240,9 @@ class ItemCreator(plugin: ArcaneVouchers) {
                     val sNbt = string.substringAfter("$key:")
 
                     try {
-                        return NBTItem(builder.build()).apply { mergeCompound(NBTContainer(sNbt)) }.item
+                        val item = builder.build()
+                        NBT.modify(item) { itemNbt -> itemNbt.mergeCompound(NBTContainer(sNbt)) }
+                        return item
                     } catch (e: NbtApiException) {
                         exception("Could not parse SNBT '$sNbt'", e)
                     }

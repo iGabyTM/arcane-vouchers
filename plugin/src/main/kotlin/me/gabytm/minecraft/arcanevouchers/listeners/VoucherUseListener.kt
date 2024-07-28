@@ -1,7 +1,6 @@
 package me.gabytm.minecraft.arcanevouchers.listeners
 
-import de.tr7zw.nbtapi.NBTCompound
-import de.tr7zw.nbtapi.NBTItem
+import de.tr7zw.nbtapi.iface.ReadableNBT
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant.NBT
 import me.gabytm.minecraft.arcanevouchers.ServerVersion
@@ -27,7 +26,7 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
     private val compatibilityHandler = plugin.compatibilityHandler
     private val audiences = plugin.audiences
 
-    private fun NBTCompound.getArgs(): MutableMap<String, String> {
+    private fun ReadableNBT.getArgs(): MutableMap<String, String> {
         return keys.associateWith { getString(it) }.toMutableMap()
     }
 
@@ -116,10 +115,10 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             return
         }
 
-        val nbt = NBTItem(item)
+        val nbt = de.tr7zw.nbtapi.NBT.readNbt(item)
 
         // The item doesn't have the NBT compound
-        if (!nbt.hasKey(NBT.VOUCHER_COMPOUND)) {
+        if (!nbt.hasTag(NBT.VOUCHER_COMPOUND)) {
             return
         }
 

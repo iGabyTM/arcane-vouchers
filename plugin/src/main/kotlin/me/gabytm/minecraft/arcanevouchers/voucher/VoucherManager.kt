@@ -1,9 +1,9 @@
 package me.gabytm.minecraft.arcanevouchers.voucher
 
-import de.tr7zw.nbtapi.NBTItem
+import de.tr7zw.nbtapi.NBT
 import dev.triumphteam.gui.builder.item.ItemBuilder
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
-import me.gabytm.minecraft.arcanevouchers.Constant.NBT
+import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.cooldown.CooldownManager
 import me.gabytm.minecraft.arcanevouchers.functions.*
 import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
@@ -59,17 +59,19 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         val argsMap = args.toArgsMap()
         argsMap[Lang.Placeholder.RECEIVER] = player.name
 
-        val nbt = NBTItem(voucher.item.clone())
+        val voucherItem = voucher.item.clone()
 
         // Set the arguments and player's name inside the item
-        val compound = nbt.getOrCreateCompound(NBT.VOUCHER_COMPOUND)
-        val argumentsCompound = compound.getOrCreateCompound(NBT.ARGUMENTS_COMPOUND)
+        NBT.modify(voucherItem) { itemNbt ->
+            val compound = itemNbt.getOrCreateCompound(Constant.NBT.VOUCHER_COMPOUND)
+            val argumentsCompound = compound.getOrCreateCompound(Constant.NBT.ARGUMENTS_COMPOUND)
 
-        argsMap.entries.forEach { (key, value) -> argumentsCompound.setString(key, value) }
-        compound.setReceiverUUID(player.uniqueId)
+            argsMap.entries.forEach { (key, value) -> argumentsCompound.setString(key, value) }
+            compound.setReceiverUUID(player.uniqueId)
+        }
         // -----
 
-        val itemBuilder = ItemBuilder.from(nbt.item).amount(amount)
+        val itemBuilder = ItemBuilder.from(voucherItem).amount(amount)
 
         // Replace the arguments on item name and lore
         val arguments = argsMap.keys.toTypedArray()

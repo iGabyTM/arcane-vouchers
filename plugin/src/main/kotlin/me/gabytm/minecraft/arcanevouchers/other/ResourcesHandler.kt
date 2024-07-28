@@ -72,9 +72,12 @@ class ResourcesHandler(plugin: ArcaneVouchers) {
             it["list"] = getMaterials()
         }
 
-        create("PatternTypes") { yaml ->
+        // FIXME: find a way to read the pattern types, spigot defined the class as
+        //     public interface PatternType extends OldEnum<PatternType>, Keyed
+        //     but paper is still using an enum in 1.21 🤷‍♂️
+        /*create("PatternTypes") { yaml ->
             yaml["list"] = PatternType.values().map { it.name }
-        }
+        }*/
 
         create(
             "Sounds",

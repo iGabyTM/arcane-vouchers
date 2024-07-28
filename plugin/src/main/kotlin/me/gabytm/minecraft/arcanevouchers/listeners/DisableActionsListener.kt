@@ -1,6 +1,6 @@
 package me.gabytm.minecraft.arcanevouchers.listeners
 
-import de.tr7zw.nbtapi.NBTItem
+import de.tr7zw.nbtapi.NBT
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
 import org.bukkit.Material
@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack
 class DisableActionsListener(private val plugin: ArcaneVouchers) : Listener {
 
     private fun ItemStack?.isVoucher(): Boolean {
-        return (this != null && type != Material.AIR) && NBTItem(this).hasKey(Constant.NBT.VOUCHER_COMPOUND)
+        return (this != null && type != Material.AIR) && NBT.readNbt(this).hasTag(Constant.NBT.VOUCHER_COMPOUND)
     }
 
     @EventHandler

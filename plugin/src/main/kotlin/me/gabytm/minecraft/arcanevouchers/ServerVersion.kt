@@ -57,6 +57,11 @@ object ServerVersion {
     val HAS_UUID_NBT_COMPOUND = VERSION >= 1_16_1
 
     /**
+     * Whether in the current version [org.bukkit.inventory.meta.components] exists (>= 1.20.5)
+     */
+    val HAS_ITEM_COMPONENTS = VERSION >= 1_20_5
+
+    /**
      * Gets the current server version
      * @return A protocol like number representing the version, for example 1.16.5 - 1165
      */

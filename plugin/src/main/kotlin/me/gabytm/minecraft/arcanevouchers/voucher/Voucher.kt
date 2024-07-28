@@ -1,8 +1,8 @@
 package me.gabytm.minecraft.arcanevouchers.voucher
 
-import de.tr7zw.nbtapi.NBTItem
+import de.tr7zw.nbtapi.NBT
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
-import me.gabytm.minecraft.arcanevouchers.Constant.NBT
+import me.gabytm.minecraft.arcanevouchers.Constant
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneAction
 import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.arcanevouchers.functions.add
@@ -102,7 +102,7 @@ class Voucher private constructor(
         }
 
         // Otherwise, subtract one
-        voucher.amount = voucher.amount - amount
+        voucher.amount -= amount
         // FIXME for some reason, when confirmation is enabled, on certain game versions the item is not updated by the
         //       code that's above this line, a workaround I found is to set player's item in hand
         player.item(voucher)
@@ -186,13 +186,13 @@ class Voucher private constructor(
         ): Voucher {
             val id = config.name
             val settings = VoucherSettings.from(config.getConfigurationSection("settings"), requirementProcessor)
-            val item = itemCreator.create(true, config.getConfigurationSection("item"), Material.PAPER).apply {
-                val nbtItem = NBTItem(this, true)
-                val compound = nbtItem.getOrCreateCompound(NBT.VOUCHER_COMPOUND)
+            val item = itemCreator.create(true, config.getConfigurationSection("item"), Material.PAPER)
 
-                compound.addCompound(NBT.ARGUMENTS_COMPOUND)
-                compound.setString(NBT.VOUCHER_NAME, id)
-                nbtItem.item
+            NBT.modify(item) { itemNbt ->
+                val compound = itemNbt.getOrCreateCompound(Constant.NBT.VOUCHER_COMPOUND)
+
+                compound.resolveOrCreateCompound(Constant.NBT.ARGUMENTS_COMPOUND)
+                compound.setString(Constant.NBT.VOUCHER_NAME, id)
             }
 
             val actions = actionManager.parseActions(config.getStringList("actions"))
