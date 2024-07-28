@@ -9,7 +9,7 @@ import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.ParsingException
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.md_5.bungee.api.ChatColor
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.OfflinePlayer
