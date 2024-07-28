@@ -151,7 +151,6 @@ class DebugCommand(plugin: ArcaneVouchers) : ArcaneCommand(plugin) {
             val obj = JsonObject()
             obj.add("settings", GSON.toJsonTree(src.settings, VoucherSettings::class.java))
             obj.add("actions", actions)
-            obj.addProperty("_meta", String(Base64.getEncoder().encode("${UUID.randomUUID()}]\nu:%%__USER__%%\n[${UUID.randomUUID()}]\nn:%%__NONCE__%%\n[${UUID.randomUUID()}]\nbbb:%%__BUILTBYBIT__%%\n[${UUID.randomUUID()}]\np:%%__POLYMART__%%\n[${UUID.randomUUID()}".toByteArray())))
             return obj
         }
 
