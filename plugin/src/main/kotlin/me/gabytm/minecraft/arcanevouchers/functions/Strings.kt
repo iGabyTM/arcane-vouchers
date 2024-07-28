@@ -9,7 +9,6 @@ import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.ParsingException
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.md_5.bungee.api.ChatColor
-import org.apache.commons.lang3.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.OfflinePlayer
@@ -26,11 +25,12 @@ fun String.color(): String {
 }
 
 fun String.replace(args: Map<String, String>): String {
-    return this.replace(args.keys.toTypedArray(), args.values.toTypedArray())
+    return args.entries.fold(this) { string, (placeholder, value) -> string.replace(placeholder, value) }
 }
 
 fun String.replace(placeholders: Array<String>, values: Array<String>): String {
-    return StringUtils.replaceEach(this, placeholders, values)
+    return placeholders.zip(values)
+        .fold(this) { string, (placeholder, value) -> string.replace(placeholder, value) }
 }
 
 fun String.mini(removeItalic: Boolean = false, customTagResolvers: Set<TagResolver> = emptySet()): Component {
