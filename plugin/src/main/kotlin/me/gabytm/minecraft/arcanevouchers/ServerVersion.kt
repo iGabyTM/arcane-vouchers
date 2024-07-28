@@ -1,5 +1,6 @@
 package me.gabytm.minecraft.arcanevouchers
 
+import me.gabytm.minecraft.arcanevouchers.functions.info
 import org.bukkit.Bukkit
 import org.bukkit.Server
 import java.util.regex.Pattern
@@ -72,8 +73,9 @@ object ServerVersion {
     }
 
     private fun getCurrentVersionAsString(): String {
-        val matcher = Pattern.compile("\\d+\\.\\d+(?:\\.\\d+)?").matcher(getMinecraftVersion())
-        return if (matcher.find()) matcher.group() else "unknown"
+        val minecraftVersion = getMinecraftVersion()
+        val matcher = Pattern.compile("\\d+\\.\\d+(?:\\.\\d+)?").matcher(minecraftVersion)
+        return if (matcher.find()) matcher.group() else minecraftVersion
     }
 
     private fun getMinecraftVersion(): String {
@@ -81,8 +83,9 @@ object ServerVersion {
             // Paper method
             val method = Server::class.java.getDeclaredMethod("getMinecraftVersion")
             return method.invoke(Bukkit.getServer()) as String
-        } catch (ignored: NoSuchMethodError) {
-            return Bukkit.getServer().javaClass.`package`.name.substringAfterLast('.');
+        } catch (ignored: NoSuchMethodException) {
+            // Version is formatted as 'minor.major.patch-R0.1-SNAPSHOT'
+            return Bukkit.getServer().bukkitVersion.split('-')[0]
         }
     }
 

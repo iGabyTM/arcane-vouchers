@@ -71,7 +71,6 @@ class ItemCreator(plugin: ArcaneVouchers) {
         val item = this
             .name(config.getString("name")?.mini(true) ?: Component.empty())
             .lore(config.getStringList("lore").map { it.mini(true) })
-            .flags(*flags)
             .enchant(enchants, true)
             .unbreakable(config.getBoolean("unbreakable"))
             .apply {
@@ -84,7 +83,9 @@ class ItemCreator(plugin: ArcaneVouchers) {
                 }
 
                 config.getString("color")?.toColor()?.let { color(it) }
-            }.build()
+            }
+            .flags(*flags)
+            .build()
 
         if (isVoucher) {
             // Get the JSON of this voucher
