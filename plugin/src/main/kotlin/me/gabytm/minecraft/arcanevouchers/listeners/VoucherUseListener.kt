@@ -104,7 +104,7 @@ class VoucherUseListener(private val plugin: ArcaneVouchers) : Listener {
             return
         }
 
-        val item = this.player.item()
+        val item = this.player.itemInHand()
 
         if (item.type == Material.AIR) {
             return

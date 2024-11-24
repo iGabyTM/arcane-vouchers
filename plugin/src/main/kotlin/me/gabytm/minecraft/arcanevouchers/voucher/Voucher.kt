@@ -8,7 +8,7 @@ import me.gabytm.minecraft.arcanevouchers.actions.ArcaneActionManager
 import me.gabytm.minecraft.arcanevouchers.functions.add
 import me.gabytm.minecraft.arcanevouchers.functions.audience
 import me.gabytm.minecraft.arcanevouchers.functions.debug
-import me.gabytm.minecraft.arcanevouchers.functions.item
+import me.gabytm.minecraft.arcanevouchers.functions.itemInHand
 import me.gabytm.minecraft.arcanevouchers.items.ItemCreator
 import me.gabytm.minecraft.arcanevouchers.limit.LimitType
 import me.gabytm.minecraft.arcanevouchers.voucher.requirements.ArcaneRequirementProcessor
@@ -97,7 +97,7 @@ class Voucher private constructor(
     private fun removeVouchers(player: Player, voucher: ItemStack, amount: Int) {
         // Remove the item completely if it has the same amount as the amount of redeemed vouchers
         if (voucher.amount == amount) {
-            player.item(ItemStack(Material.AIR))
+            player.itemInHand(ItemStack(Material.AIR))
             return
         }
 
@@ -105,7 +105,7 @@ class Voucher private constructor(
         voucher.amount -= amount
         // FIXME for some reason, when confirmation is enabled, on certain game versions the item is not updated by the
         //       code that's above this line, a workaround I found is to set player's item in hand
-        player.item(voucher)
+        player.itemInHand(voucher)
     }
 
     fun redeem(

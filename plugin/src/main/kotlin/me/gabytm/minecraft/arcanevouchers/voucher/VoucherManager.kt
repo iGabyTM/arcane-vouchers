@@ -4,6 +4,7 @@ import de.tr7zw.nbtapi.NBT
 import dev.triumphteam.gui.builder.item.ItemBuilder
 import me.gabytm.minecraft.arcanevouchers.ArcaneVouchers
 import me.gabytm.minecraft.arcanevouchers.Constant
+import me.gabytm.minecraft.arcanevouchers.ServerVersion
 import me.gabytm.minecraft.arcanevouchers.cooldown.CooldownManager
 import me.gabytm.minecraft.arcanevouchers.functions.*
 import me.gabytm.minecraft.arcanevouchers.limit.LimitManager
@@ -59,7 +60,13 @@ class VoucherManager(private val plugin: ArcaneVouchers) {
         val argsMap = args.toArgsMap()
         argsMap[Lang.Placeholder.RECEIVER] = player.name
 
-        val voucherItem = voucher.item.clone()
+        val voucherItem = if (ServerVersion.IS_LEGACY) {
+            // Gabi: on 1.8-1.12.x ItemStack#clone doesn't create a PROPER clone. Setting the NBT updates the original item as well.
+            //       This alternative was suggested by tr7ze, author of NBT API
+            NBT.itemStackFromNBT(NBT.itemStackToNBT(voucher.item)) ?: throw NullPointerException("Could not transform voucher item to NBT and back to ItemStack")
+        } else {
+            voucher.item.clone()
+        }
 
         // Set the arguments and player's name inside the item
         NBT.modify(voucherItem) { itemNbt ->

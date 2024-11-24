@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack
  * @return the [ItemStack] that the player is holding
  */
 @Suppress("DEPRECATION")
-fun Player.item(): ItemStack {
+fun Player.itemInHand(): ItemStack {
     return if (ServerVersion.HAS_OFF_HAND) {
         this.inventory.itemInMainHand
     } else {
@@ -23,7 +23,7 @@ fun Player.item(): ItemStack {
  * @param item item to set
  */
 @Suppress("DEPRECATION")
-fun Player.item(item: ItemStack?) {
+fun Player.itemInHand(item: ItemStack?) {
     if (ServerVersion.HAS_OFF_HAND) {
         this.inventory.setItemInMainHand(item)
     } else {
