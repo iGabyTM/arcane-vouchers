@@ -27,7 +27,8 @@ repositories {
     }
 
     maven {
-        url 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+        name 'PlaceholderAPI'
+        url 'https://repo.helpch.at/releases'
     }
 }
 
@@ -44,7 +45,7 @@ dependencies {
     compileOnly('com.github.MilkBowl:VaultAPI:1.7') { transitive false }
 
     // NBT
-    compileOnly 'de.tr7zw:item-nbt-api-plugin:2.13.1'
+    compileOnly 'de.tr7zw:item-nbt-api-plugin:2.14.0'
 
     // Adventure
     def adventureVersion = '4.17.0'
@@ -67,13 +68,13 @@ dependencies {
     implementation 'org.bstats:bstats-bukkit:3.0.0'
 
     // TimeAPI - https://github.com/PiggyPiglet/TimeAPI
-    implementation 'me.piggypiglet:TimeAPI:+'
+    implementation 'me.piggypiglet:TimeAPI:1.3'
 
     // Other dependencies that don't have a repository or the release is old
     compileOnly fileTree(dir: './libs', includes: ['*.jar'])
 
     // PAPI
-    compileOnly 'me.clip:placeholderapi:2.10.10'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
 }
 
 compileKotlin {
